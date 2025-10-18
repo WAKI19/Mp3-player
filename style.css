@@ -1,0 +1,585 @@
+:root {
+    --main-color: #00BFFF;
+    --accent-color: #7B68EE;
+    --bg-color: #0D1117;
+    --bg-color2: #1E232B;
+    --text-color: #EAEAEA; 
+    --text-color2: #A0A0A0;
+    --active-color: #40E0D0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+button{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+}
+
+.tab-content {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    display: none;
+    padding-top: calc(env(safe-area-inset-top) + 58px); /* ヘッダーの高さ分の余白 */
+    padding-bottom: 300px; /* フッター、ミニプレーヤー分の余白 */
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* 全ページ共通 */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: calc(env(safe-area-inset-top) + 58px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-color2);
+    padding: env(safe-area-inset-top) 17px 0px 17px;
+    box-shadow: 0 5px 20px black;
+    z-index: 10;
+}
+
+.header-btn {
+    font-size: 20px;
+    color: var(--text-color);
+}
+
+.header-btn:active {
+    color: var(--accent-color);
+}
+
+/* 曲一覧ページ */
+#all-songs .search-box {
+    position: relative;
+    display: inline-block;
+    margin-top: 15px;
+    margin-left: 10px;
+}
+
+#all-songs .search-box input {
+    font-size: 15px;
+    padding: 3px 2em 3px 8px;
+    color: var(--text-color);
+    background-color: var(--bg-color2);
+    border: 1px solid var(--bg-color2);
+    border-radius: 5px;
+    caret-color: var(--main-color);
+}
+
+#all-songs .search-box input::placeholder {
+    color: var(--text-color2);
+}
+
+#all-songs .search-box input:focus {
+    outline: none;
+}
+
+#all-songs .search-box .clear-btn {
+  position: absolute;
+  right: 0.3em;
+  top: 50%;
+  display: none;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  color: var(--text-color2);
+}
+
+#all-songs .search-box .clear-btn:active {
+    opacity: 0.5;
+}
+
+#all-songs .song-list {
+    list-style: none;
+    margin-top: 25px;
+}
+
+#all-songs .song-list li {
+    display: flex;
+    padding: 12px 30px;
+    border-bottom: 2px solid var(--bg-color2);
+    align-items: center;
+}
+
+#all-songs .active .icon,
+#all-songs .active .song-title {
+    color: var(--active-color);
+}
+
+#all-songs .song-list .icon {
+    margin-right: 15px;
+}
+
+#all-songs .song-list .song-length {
+    font-size: 12px;
+    color: var(--text-color2);
+}
+
+/* プレイリストページ */
+.playlist-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 15px;
+    justify-content: start;
+}
+
+.playlist-list li {
+    list-style: none;
+    width: 28%;
+    margin: 15px 2.65%;
+}
+
+.playlist-list .playlist-img {
+    width: 100%;
+    aspect-ratio: 1;
+    background-color: var(--text-color2);
+    vertical-align: bottom;
+    border-radius: 3px;
+}
+
+.playlist-list .playlist-name {
+    font-size: 13px;
+}
+
+/* プレイリスト作成モーダル */
+#new-playlist-modal {
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    align-items: center;
+    justify-content: center;
+    transition: 1s;
+}
+
+#new-playlist-modal.hidden {
+    display: none;
+}
+
+#new-playlist-modal.active {
+    display: inline-block;
+}
+
+#new-playlist-modal .modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: var(--bg-color);
+    padding: 20px;
+    border-radius: 10px;
+    width: 85%;
+    box-shadow: 0 0 8px var(--main-color);
+    text-align: center;
+}
+
+#new-playlist-modal .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 16px;
+    color: var(--text-color2);
+}
+
+#new-playlist-modal input {
+    display: inline-block;
+    width: 100%;
+    font-size: 16px;
+    color: var(--text-color);
+    margin-top: 35px;
+    margin-bottom: 16px;
+    caret-color: var(--main-color);
+    background-color: var(--bg-color2);
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#new-playlist-modal input:focus {
+    outline: none;
+}
+
+#new-playlist-modal .create-btn {
+    font-size: 14px;
+    padding: 6px 15px;
+    background: var(--main-color);
+    color: white;
+    border-radius: 10px;
+}
+
+#new-playlist-modal .create-btn:active {
+    opacity: 0.7;
+}
+
+/* プレイリスト詳細画面 */
+#playlist-detail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    overflow-y: scroll;
+    transition: 0.3s ease;
+    padding-bottom: 300px;
+    z-index: 20;
+}
+
+#playlist-detail.hidden {
+    transform: translateX(100%);
+}
+
+#playlist-detail.active {
+    transform: translateX(0);
+}
+
+#playlist-detail .header {
+    position: sticky;
+    top: env(safe-area-inset-top);
+    width: 100%;
+    height: 40px;
+    background-color: var(--bg-color);
+    z-index: 1;
+    opacity: 0.95;
+}
+
+#playlist-detail .playlist-info {
+    padding-top: calc(env(safe-area-inset-top) + 70px);
+    padding-bottom: 60px;
+}
+
+#playlist-detail .close-btn {
+    position: absolute;
+    left: 10px;
+    line-height: 40px;
+    color: var(--text-color);
+    font-size: 25px;
+}
+
+#playlist-detail .playlist-img {
+    width: 40%;
+    aspect-ratio: 1;
+    margin: 0 auto;
+    background-color: var(--text-color2);
+}
+
+#playlist-detail .playlist-title {
+    position: sticky;
+    top: env(safe-area-inset-top);
+    font-size: 20px;
+    padding: 4px 0;
+    text-align: center;
+    z-index: 1;
+    pointer-events: none;
+}
+
+#playlist-detail .playlist-length {
+    font-size: 13px;
+    color: var(--text-color2);
+    text-align: center;
+}
+
+#playlist-detail .play-btn {
+    display: block;
+    margin: 0 auto;
+    font-size: 50px;
+    color: var(--main-color);
+    margin-top: 15px;
+}
+
+#playlist-detail .actions {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 30px;
+}
+
+#playlist-detail .actions .action-btn {
+    font-size: 15px;
+    color: var(--bg-color);
+    background-color: var(--text-color2);
+    padding: 3px 12px;
+    margin-right: 5px;
+    border-radius: 15px;
+    opacity: 0.6;
+}
+
+#playlist-detail .song-list {
+    list-style: none;
+    border-top: 1px solid var(--text-color2);
+    background-color: var(--bg-color);
+}
+
+#playlist-detail .song-list li {
+    display: flex;
+    padding: 12px 30px;
+    border-bottom: 2px solid var(--bg-color2);
+    align-items: center;
+}
+
+#playlist-detail .song-list .icon {
+    margin-right: 15px;
+}
+
+#playlist-detail .song-list .song-length {
+    font-size: 12px;
+    color: var(--text-color2);
+}
+
+/* 設定ページ */
+.setting-genre {
+    color: var(--text-color2);
+    font-size: 14px;
+    margin-top: 30px;
+    margin-left: 20px;
+}
+
+.setting-item {
+    padding: 10px 25px;
+    border-bottom: 1px solid var(--bg-color2);
+}
+
+/* ミニプレーヤー */
+#mini-player {
+    position: fixed;
+    left: 2%;
+    bottom: calc(env(safe-area-inset-bottom) + 59px);
+    display: flex;
+    width: 96%;
+    padding: 10px 25px;
+    align-items: center;
+    background-color: var(--bg-color2);
+    border: 0.5px solid var(--active-color);
+    border-radius: 10px;
+    box-shadow: 0 0 20px black;
+    transition: 0.3s ease;
+    z-index: 30;
+}
+
+#mini-player.active {
+    opacity: 1;
+}
+
+#mini-player.hidden {
+    opacity: 0;
+}
+
+#mini-player .icon {
+    font-size: 16px;
+    margin-right: 15px;
+}
+
+#mini-player .song-title {
+    font-size: 15px;
+}
+
+#mini-player .song-length {
+    font-size: 11px;
+    color: var(--text-color2);
+}
+
+#mini-player .play-btn {
+    position: absolute;
+    right: 25px;
+    color: var(--text-color);
+    font-size: 15px;
+}
+
+/* フルプレーヤー */
+#full-player {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color2);
+    transition: 0.3s ease;
+}
+
+#full-player.hidden {
+    transform: translateY(100%);
+    z-index: -50;
+}
+
+#full-player.active {
+    transform: translateY(0);
+    z-index: 50;
+}
+
+#full-player .safe-area-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: env(safe-area-inset-top);
+    background-color: var(--active-color);
+}
+
+#full-player.hidden .full-player-content {
+    display: none;
+}
+
+#full-player .close-btn {
+    position: absolute;
+    top: calc(env(safe-area-inset-top) + 10px);
+    left: 10px;
+    font-size: 25px;
+    color: var(--text-color);
+}
+
+.full-player-content {
+    width: 85%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-55%);
+}
+
+#full-player .music-img {
+    display: flex;
+    width: 60%;
+    aspect-ratio: 1;
+    color: var(--active-color);
+    font-size: 70px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    background-color: var(--bg-color2);
+    border: 1px solid var(--active-color);
+    box-shadow: 0 0 8px var(--active-color);
+}
+
+#full-player .music-title {
+    text-align: center;
+    font-size: 22px;
+    margin-top: 4px;
+}
+
+#full-player .progress-container {
+    margin-top: 70px;
+    font-size: 0;
+}
+
+#full-player .progress-bar {
+    appearance: none;
+    width: 100%;
+    height: 7px;
+    margin-bottom: 2px;
+    font-size: 13px;
+    border-radius: 9999px;
+    background-color: var(--bg-color);
+}
+
+#full-player .progress-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 13px;
+    height: 13px;
+    border: 1px solid var(--active-color);
+    border-radius: 9999px;
+    background: var(--bg-color2);
+    box-shadow: none;
+}
+
+#full-player .song-length {
+    font-size: 12px;
+    color: var(--text-color2);
+}
+
+#full-player .controlls {
+    display: flex;
+    width: 70%;
+    margin: 0 auto;
+    margin-top: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#full-player .prev-btn,
+#full-player .next-btn {
+    color: var(--text-color);
+    font-size: 30px;
+}
+
+#full-player .play-btn {
+    color: var(--main-color);
+    font-size: 60px;
+}
+
+#full-player .play-btn:active {
+    color: var(--active-color);
+}
+
+#full-player .safe-area-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: env(safe-area-inset-top);
+    background-color: var(--active-color);
+}
+
+/* タブバー */
+.tab-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: calc(env(safe-area-inset-bottom) + 58px);
+    padding-bottom: env(safe-area-inset-bottom);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: var(--bg-color);
+    color: var(--text-color2);
+    z-index: 40;
+}
+
+.tab-button {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: var(--text-color2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.tab-button i {
+    font-size: 20px;
+}
+
+.tab-button.active {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.tab-button span {
+    font-size: 10px;
+}

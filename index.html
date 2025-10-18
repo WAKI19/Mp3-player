@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>MP3プレイヤー</title>
+  <link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- トップページ（曲一覧）ページ -->
+    <section id="all-songs" class="tab-content active">
+        <header>
+            <h2 class="header-title">全曲</h2>
+            <button class="header-btn fa-solid fa-file-import"></button>
+        </header>
+
+        <div class="search-box">
+            <input type="text" id="all-songs-search-input" placeholder="検索：" autocomplete="off">
+            <button id="all-songs-search-clear-btn" class="clear-btn" type="button">×</button>
+        </div>
+
+        <ul id="all-songs-song-list" class="song-list">
+          <li>
+            <i class="icon fa-solid fa-music"></i>
+            <div>
+                <p class="song-title">ハピラブルー！</p>
+                <p class="song-length">3:24</p>
+            </div>
+          </li>
+          <li class="active">
+            <i class="icon fa-solid fa-music"></i>
+            <div>
+                <p class="song-title">ラヴなのっ♡</p>
+                <p class="song-length">2:58</p>
+            </div>
+          </li>
+          <li>
+            <i class="icon fa-solid fa-music"></i>
+            <div>
+                <p class="song-title">エンドレス</p>
+                <p class="song-length">4:37</p>
+            </div>
+          </li>
+          <li>
+            <i class="icon fa-solid fa-music"></i>
+            <div>
+                <p class="song-title">トゥモロー最強説！</p>
+                <p class="song-length">4:35</p>
+            </div>
+          </li>
+          <li>
+            <i class="icon fa-solid fa-music"></i>
+            <div>
+                <p class="song-title">すきっ！〜超ver〜</p>
+                <p class="song-length">5:14</p>
+            </div>
+          </li>
+          <li>
+            <i class="icon fa-solid fa-music"></i>
+            <div>
+                <p class="song-title">こんなあたしはいかがですか</p>
+                <p class="song-length">3:26</p>
+            </div>
+          </li>
+          <li>
+            <i class="icon fa-solid fa-music"></i>
+            <div>
+                <p class="song-title">恋のシェイプアップ♡</p>
+                <p class="song-length">4:41</p>
+            </div>
+          </li>
+          <li>
+            <i class="icon fa-solid fa-music"></i>
+            <div>
+                <p class="song-title">ときめき♡宣伝部のVICTORY STORY</p>
+                <p class="song-length">4:36</p>
+            </div>
+          </li>
+          <li>
+            <i class="icon fa-solid fa-music"></i>
+            <div>
+                <p class="song-title">かわいいメモリアル</p>
+                <p class="song-length">3:24</p>
+            </div>
+          </li>
+        </ul>
+    </section>
+
+    <!-- プレイリストページ -->
+    <section id="playlist" class="tab-content">
+        <header>
+            <h2>プレイリスト</h2>
+            <button id="new-playlist-modal-open-btn" class="header-btn fa-solid fa-plus"></button>
+        </header>
+        <ul id="playlist-list" class="playlist-list">
+            <li>
+                <canvas class="playlist-img"></canvas>
+                <p class="playlist-name">とき宣</p>
+            </li>
+            <li>
+                <canvas class="playlist-img"></canvas>
+                <p class="playlist-name">お気に入り</p>
+            </li>
+            <li>
+                <canvas class="playlist-img"></canvas>
+                <p class="playlist-name">ドライブ</p>
+            </li>
+            <li>
+                <canvas class="playlist-img"></canvas>
+                <p class="playlist-name">chill</p>
+            </li>
+        </ul>
+
+        <!-- プレイリスト詳細画面 -->
+        <div id="playlist-detail" class="hidden">
+            <div class="header">
+                <button id="playlist-detail-close-btn" class="close-btn fa-solid fa-angle-left"></button>
+            </div>
+            <div class="playlist-info">
+                <div class="playlist-img"></div>
+                <h3 class="playlist-title">とき宣</h3>
+                <p class="playlist-length">18曲、 1時間2分</p>
+
+                <button class="play-btn fa-solid fa-circle-play"></button>
+                <div class="actions">
+                    <button class="action-btn"><i class="fa-solid fa-plus"></i> 追加</button>
+                    <button class="action-btn"><i class="fa-solid fa-bars"></i> 編集</button>
+                    <button class="action-btn"><i class="fa-solid fa-pen"></i> 名称</button>
+                </div>
+            </div>
+
+            <ul class="song-list">
+                <li>
+                    <i class="icon fa-solid fa-music"></i>
+                    <div>
+                        <p class="song-title">ハピラブルー！</p>
+                        <p class="song-length">3:24</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="icon fa-solid fa-music" style="color: var(--active-color);"></i>
+                    <div>
+                        <p class="song-title" style="color: var(--active-color);">ラヴなのっ♡</p>
+                        <p class="song-length">2:58</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="icon fa-solid fa-music"></i>
+                    <div>
+                        <p class="song-title">エンドレス</p>
+                        <p class="song-length">4:37</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="icon fa-solid fa-music"></i>
+                    <div>
+                        <p class="song-title">LOVEイヤイヤ期</p>
+                        <p class="song-length">2:46</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <!-- プレイリスト作成モーダル -->
+    <div id="new-playlist-modal" class="hidden">
+        <div class="modal-content">
+            <button id="new-playlist-modal-close-btn" class="close-btn fa-solid fa-xmark"></button>
+            <h3>新規プレイリスト</h3>
+            <input type="text" autocomplete="off" placeholder="プレイリスト名を入力..." />
+            <button class="create-btn" id="createPlaylistBtn">作成する</button>
+        </div>
+    </div>
+
+    <!-- 設定ページ -->
+    <section id="setting" class="tab-content">
+        <header>
+            <h2>設定</h2>
+        </header>
+
+        <p class="setting-genre">設定項目</p>
+        <ul class="setting-list">
+            <li class="setting-item">
+                <span>カラーテーマ</span>
+            </li>
+        </ul>
+    </section>
+
+    <!-- ミニプレーヤー -->
+    <div id="mini-player">
+        <i class="icon fa-solid fa-music" style="color: var(--active-color);"></i>
+        <div>
+            <p class="song-title" style="color: var(--active-color);">ラヴなのっ♡</p>
+            <p class="song-length">2:58</p>
+        </div>
+        <button id="mini-player-play-pause-btn" class="play-btn fa-solid fa-play"></button>
+    </div>
+
+    <!-- フルプレーヤー -->
+    <div id="full-player" class="hidden">
+        <div class="safe-area-top"></div>
+
+        <button id="full-player-close-btn" class="close-btn"><i class="fa-solid fa-chevron-down"></i></button>
+        <div class="full-player-content">
+            <div class="music-img">♬</div>
+            <h3 class="music-title">ラヴなのっ♡</h3>
+            <div class="progress-container">
+                <input type="range" class="progress-bar" min="0" max="100" value="0">
+                <span class="song-length">2:58</span>
+            </div>
+            <div class="controlls">
+                <button class="prev-btn fa-solid fa-backward"></button>
+                <button class="play-btn fa-solid fa-circle-play"></button>
+                <button class="next-btn fa-solid fa-forward"></button>
+            </div>
+        </div>
+
+        <div class="safe-area-bottom"></div>
+    </div> 
+
+    <!-- タブバー -->
+    <nav class="tab-bar">
+        <button class="tab-button active" data-target="all-songs">
+            <i class="fa-solid fa-music"></i>
+            <span>全曲</span>
+        </button>
+        <button class="tab-button" data-target="playlist">
+            <i class="fa-solid fa-folder"></i>
+            <span>プレイリスト</span>
+        </button>
+        <button class="tab-button" data-target="setting">
+            <i class="fa-solid fa-gear"></i>
+            <span>設定</span>
+        </button>
+    </nav>
+
+    <script src="main.js"></script>
+</body>
+</html>
