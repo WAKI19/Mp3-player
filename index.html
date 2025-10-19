@@ -12,8 +12,11 @@
     <section id="all-songs" class="tab-content active">
         <header>
             <h2 class="header-title">全曲</h2>
-            <button class="header-btn fa-solid fa-file-import"></button>
+            <button id="file-import-btn" class="header-btn fa-solid fa-file-import"></button>
         </header>
+
+        <!-- ファイルインポート用（非表示） -->
+         <input id="file-input" type="file" accept="audio/mpeg" multiple style="display: none;">
 
         <div class="search-box">
             <input type="text" id="all-songs-search-input" placeholder="検索：" autocomplete="off">
@@ -116,6 +119,7 @@
         <div id="playlist-detail" class="hidden">
             <div class="header">
                 <button id="playlist-detail-close-btn" class="close-btn fa-solid fa-angle-left"></button>
+                <h3 class="playlist-title">とき宣</h3>
             </div>
             <div class="playlist-info">
                 <div class="playlist-img"></div>
