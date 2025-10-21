@@ -51,25 +51,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
   fileInput.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files);
+
     for (const file of files) {
       if (!file.type.startsWith('audio/')) continue;
 
       const arrayBuffer = await file.arrayBuffer();
       const base64Data = arrayBufferToBase64(arrayBuffer);
-      const safeName = file.name.replace(/[^a-zA-Z0-9_\-.]/g, '_');
-      const path = `music/${safeName}`;
+      const path = `music/${file.name}`;
 
-      // Capacitor Filesystemへ保存
+      // Preferencesから既存の曲リストを取得
+      const stored = await Preferences.get({ key: 'importedSongs' });
+      const importedSongs = stored.value ? JSON.parse(stored.value) : [];
+
+      // 🔍 既に同じ名前の曲が存在するかチェック
+      const existingIndex = importedSongs.findIndex(song => song.title === file.name.replace(/\.mp3$/i, ''));
+
+      // 🎵 すでに存在する場合は確認ダイアログを表示
+      if (existingIndex !== -1) {
+        const shouldReplace = confirm(`「${file.name}」はすでに登録されています。ファイルを置き換えますか？`);
+        if (!shouldReplace) {
+          // ユーザーが「キャンセル」した場合は次のファイルへ
+          continue;
+        }
+      }
+
+      // ファイルをCapacitor Filesystemに保存（上書き含む）
       await Filesystem.writeFile({
         path,
         data: base64Data,
         directory: Directory.Data,
       });
 
-      // メタ情報をPreferencesに保存
-      const stored = await Preferences.get({ key: 'importedSongs' });
-      const importedSongs = stored.value ? JSON.parse(stored.value) : [];
-      importedSongs.push({ title: file.name.replace(/\.mp3$/i, ''), path });
+      // 🧾 曲リストの更新
+      if (existingIndex !== -1) {
+        // 既存のデータを置き換え
+        importedSongs[existingIndex] = { title: file.name.replace(/\.mp3$/i, ''), path };
+      } else {
+        // 新規追加
+        importedSongs.push({ title: file.name.replace(/\.mp3$/i, ''), path });
+      }
+
+      // あいうえお順にソート
+      importedSongs.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
+
+      // 保存
       await Preferences.set({ key: 'importedSongs', value: JSON.stringify(importedSongs) });
 
       // 表示更新
@@ -78,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fileInput.value = ''; // 選択リセット
   });
+
 
   allSongsSearchInput.addEventListener('input', () => {
     if (allSongsSearchInput.value.trim() !== '') {
@@ -172,9 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const stored = await Preferences.get({ key: 'importedSongs' });
     const importedSongs = stored.value ? JSON.parse(stored.value) : [];
 
-    // 🎵 あいうえお順にソート（titleを日本語順で比較）
-    importedSongs.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
-
+    allSongsSongList.innerHTML = "";
     for (const song of importedSongs) {
       await addSongToList(song.title, song.path);
     }
