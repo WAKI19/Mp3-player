@@ -1,3 +1,6 @@
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Preferences } from '@capacitor/preferences';
+
 //関数
 function active(elem) {
   elem.classList.remove("hidden");
@@ -44,6 +47,36 @@ document.addEventListener("DOMContentLoaded", () => {
     //全曲ページ
   importBtn.addEventListener('click', () => {
     fileInput.click();
+  });
+
+  fileInput.addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files);
+    for (const file of files) {
+      if (!file.type.startsWith('audio/')) continue;
+
+      const arrayBuffer = await file.arrayBuffer();
+      const base64Data = arrayBufferToBase64(arrayBuffer);
+      const safeName = file.name.replace(/[^a-zA-Z0-9_\-.]/g, '_');
+      const path = `music/${safeName}`;
+
+      // Capacitor Filesystemへ保存
+      await Filesystem.writeFile({
+        path,
+        data: base64Data,
+        directory: Directory.Data,
+      });
+
+      // メタ情報をPreferencesに保存
+      const stored = await Preferences.get({ key: 'importedSongs' });
+      const importedSongs = stored.value ? JSON.parse(stored.value) : [];
+      importedSongs.push({ title: file.name.replace(/\.mp3$/i, ''), path });
+      await Preferences.set({ key: 'importedSongs', value: JSON.stringify(importedSongs) });
+
+      // 表示更新
+      loadSavedSongs();
+    }
+
+    fileInput.value = ''; // 選択リセット
   });
 
   allSongsSearchInput.addEventListener('input', () => {
@@ -132,4 +165,60 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+
+
+  //関数
+  async function loadSavedSongs() {
+    const stored = await Preferences.get({ key: 'importedSongs' });
+    const importedSongs = stored.value ? JSON.parse(stored.value) : [];
+
+    // 🎵 あいうえお順にソート（titleを日本語順で比較）
+    importedSongs.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
+
+    for (const song of importedSongs) {
+      await addSongToList(song.title, song.path);
+    }
+  }
+
+  async function addSongToList(title, path) {
+    // ファイルをBase64形式で読み込む
+    const { data } = await Filesystem.readFile({
+      path,
+      directory: Directory.Data,
+    });
+
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <i class="icon fa-solid fa-music"></i>
+      <div>
+        <p class="song-title">${title}</p>
+        <p class="song-length">--:--</p>
+      </div>
+    `;
+
+    // Data URLとしてAudioを生成
+    const audio = new Audio(`data:audio/mp3;base64,${data}`);
+    audio.addEventListener('loadedmetadata', () => {
+      const minutes = Math.floor(audio.duration / 60);
+      const seconds = Math.floor(audio.duration % 60);
+      li.querySelector(".song-length").textContent =
+        `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    });
+
+    allSongsSongList.appendChild(li);
+  }
+
+
+  function arrayBufferToBase64(buffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  }
+
+  //起動時処理
+  loadSavedSongs();
 });
