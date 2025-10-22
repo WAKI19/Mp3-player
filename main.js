@@ -1,20 +1,23 @@
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
 
-//関数
-function active(elem) {
-  elem.classList.remove("hidden");
-  elem.classList.add("active");
+//グローバル変数
+let allSongsList = [];
+
+
+//グローバル関数
+async function loadAllSongsList() {
+  const stored = await Preferences.get({ key: 'importedSongs' });
+  allSongsList = stored.value ? JSON.parse(stored.value) : [];
+
+  allSongsList.sort((a, b) => a.title.localeCompare(b.title, 'ja')); //あいうえお順にソート
 }
 
-function hide(elem) {
-  elem.classList.remove("active");
-  elem.classList.add("hidden");
+function getAllSongsList() {
+  return allSongsList;
 }
 
 
-// イベントはここにまとめる
-document.addEventListener("DOMContentLoaded", () => {
   //要素取得
     //全曲ページ
   const deleteModeBtn = document.getElementById("delete-mode-btn");
@@ -86,8 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const path = `music/${file.name}`;
 
       // Preferencesから既存の曲リストを取得
-      const stored = await Preferences.get({ key: 'importedSongs' });
-      const importedSongs = stored.value ? JSON.parse(stored.value) : [];
+      const importedSongs = getAllSongsList();
 
       // 既に同じ名前の曲が存在するかチェック
       const existingIndex = importedSongs.findIndex(song => song.title === file.name.replace(/\.mp3$/i, ''));
@@ -122,9 +124,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // 保存
       await Preferences.set({ key: 'importedSongs', value: JSON.stringify(importedSongs) });
+      loadAllSongsList();
 
       // 表示更新
-      loadSavedSongs();
+      loadSongs(getAllSongsList());
     }
 
     fileInput.value = ''; // 選択リセット
@@ -155,13 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
         active.classList.remove("active");
       }
       li.classList.add("active");
-    }
-  });
-
-  //曲の削除ボタン押下時（動的に生成される要素のため特殊なコードで対応）
-  document.getElementById("all-songs-song-list").addEventListener('click', (e) => {
-    if (e.target.classList.contains('delete-btn')) {
-      console.log('delete (delegated)');
     }
   });
 
@@ -247,29 +243,28 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       // 🧾 Preferences から削除
-      const stored = await Preferences.get({ key: 'importedSongs' });
-      const importedSongs = stored.value ? JSON.parse(stored.value) : [];
+      const importedSongs = getAllSongsList();
       const updated = importedSongs.filter(song => song.path !== path);
 
       await Preferences.set({
         key: 'importedSongs',
         value: JSON.stringify(updated),
       });
+      await loadAllSongsList();
 
       // 🖥️ UI更新
-      loadSavedSongs();
+      loadSongs(getAllSongsList());
     } catch (error) {
       console.error('削除に失敗しました:', error);
       alert('削除に失敗しました。');
     }
   }
 
-  async function loadSavedSongs() {
-    const stored = await Preferences.get({ key: 'importedSongs' });
-    const importedSongs = stored.value ? JSON.parse(stored.value) : [];
+  async function loadSongs(songList) {
+    const songs = songList;
 
     allSongsSongList.innerHTML = "";
-    for (const song of importedSongs) {
+    for (const song of songs) {
       await addSongToList(song.title, song.path);
     }
   }
@@ -328,6 +323,16 @@ document.addEventListener("DOMContentLoaded", () => {
     return btoa(binary);
   }
 
+  function active(elem) {
+    elem.classList.remove("hidden");
+    elem.classList.add("active");
+  }
+
+  function hide(elem) {
+    elem.classList.remove("active");
+    elem.classList.add("hidden");
+  }
+
 
 
 
@@ -339,5 +344,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   //起動時処理
-  loadSavedSongs();
-});
+  async function initApp() {
+    await loadAllSongsList();            // Preferencesから曲リストを読み込む
+    loadSongs(getAllSongsList());        // 読み込み完了後に描画
+  }
+
+  initApp();
