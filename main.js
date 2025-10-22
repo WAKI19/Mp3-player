@@ -17,6 +17,7 @@ function hide(elem) {
 document.addEventListener("DOMContentLoaded", () => {
   //要素取得
     //全曲ページ
+  const deleteModeBtn = document.getElementById("delete-mode-btn");
   const importBtn = document.getElementById("import-btn");
   const fileInput = document.getElementById("file-input");
   const allSongsSearchInput = document.getElementById('all-songs-search-input');
@@ -45,6 +46,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //イベント
     //全曲ページ
+  deleteModeBtn.addEventListener('click', () => {
+    const songDeleteBtns = document.querySelectorAll("#all-songs .delete-btn");
+
+    deleteModeBtn.classList.toggle("active");
+
+    if (deleteModeBtn.classList.contains("active")) {
+      songDeleteBtns.forEach(songDeleteBtn => {
+        songDeleteBtn.classList.add("active");
+      });
+    } else {
+      songDeleteBtns.forEach(songDeleteBtn => {
+        songDeleteBtn.classList.remove("active");
+      });
+    }
+  });
+
   importBtn.addEventListener('click', () => {
     fileInput.click();
   });
@@ -63,10 +80,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const stored = await Preferences.get({ key: 'importedSongs' });
       const importedSongs = stored.value ? JSON.parse(stored.value) : [];
 
-      // 🔍 既に同じ名前の曲が存在するかチェック
+      // 既に同じ名前の曲が存在するかチェック
       const existingIndex = importedSongs.findIndex(song => song.title === file.name.replace(/\.mp3$/i, ''));
 
-      // 🎵 すでに存在する場合は確認ダイアログを表示
+      // すでに存在する場合は確認ダイアログを表示
       if (existingIndex !== -1) {
         const shouldReplace = confirm(`「${file.name}」はすでに登録されています。ファイルを置き換えますか？`);
         if (!shouldReplace) {
@@ -104,7 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fileInput.value = ''; // 選択リセット
   });
 
-
   allSongsSearchInput.addEventListener('input', () => {
     if (allSongsSearchInput.value.trim() !== '') {
       allSongsSearchClearBtn.style.display = 'block';
@@ -120,8 +136,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   allSongsSongList.addEventListener('click', (e) => {
+    if (e.target.classList.contains("delete-btn")) return;
+
     const li = e.target.closest('li');
-    const active = document.querySelector("#all-songs-song-list .active")
+    const active = document.querySelector("#all-songs-song-list li.active")
 
     if (li && allSongsSongList.contains(li)) {
       if (active) {
@@ -130,6 +148,14 @@ document.addEventListener("DOMContentLoaded", () => {
       li.classList.add("active");
     }
   });
+
+  //曲の削除ボタン押下時（動的に生成される要素のため特殊なコードで対応）
+  document.getElementById("all-songs-song-list").addEventListener('click', (e) => {
+    if (e.target.classList.contains('delete-btn')) {
+      console.log('delete (delegated)');
+    }
+  });
+
 
     //プレイリストページ
   newPlaylistModalOpenBtn.addEventListener('click', () => {
@@ -193,6 +219,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
+
+
+
+
+
+
+
+
+
   //関数
   async function loadSavedSongs() {
     const stored = await Preferences.get({ key: 'importedSongs' });
@@ -213,6 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const li = document.createElement('li');
     li.innerHTML = `
+      <button class="delete-btn fa-solid fa-circle-minus"></button>
       <i class="icon fa-solid fa-music"></i>
       <div>
         <p class="song-title">${title}</p>

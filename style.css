@@ -39,7 +39,7 @@ button{
 }
 
 .tab-content.active {
-  display: block;
+    display: block;
 }
 
 /* 全ページ共通 */
@@ -60,10 +60,19 @@ header {
 .header-btn {
     font-size: 20px;
     color: var(--text-color);
+    margin-left: 10px;
 }
 
 .header-btn:active {
     color: var(--accent-color);
+}
+
+#delete-mode-btn:active {
+    color: red;
+}
+
+#delete-mode-btn.active {
+    color: red;
 }
 
 /* 曲一覧ページ */
@@ -123,6 +132,21 @@ header {
 #all-songs .active .icon,
 #all-songs .active .song-title {
     color: var(--active-color);
+}
+
+#all-songs .song-list .delete-btn {
+    display: none;
+    color: red;
+    font-size: 20px;
+    margin-right: 30px;
+}
+
+#all-songs .song-list .delete-btn:active {
+    opacity: 0.5;
+}
+
+#all-songs .song-list .delete-btn.active {
+    display: inline-block;
 }
 
 #all-songs .song-list .icon {
