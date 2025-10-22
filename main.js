@@ -17,6 +17,16 @@ function getAllSongsList() {
   return allSongsList;
 }
 
+//曲のリストから、titleにkeywordが含まれるものだけを抽出して返す
+function filterSongsByTitle(songs, keyword) {
+  if (!keyword) return songs;
+
+  // 部分一致（大文字・小文字を区別せず）
+  return songs.filter(song =>
+    song.title.toLowerCase().includes(keyword.toLowerCase())
+  );
+}
+
 
   //要素取得
     //全曲ページ
@@ -134,7 +144,12 @@ function getAllSongsList() {
   });
 
   allSongsSearchInput.addEventListener('input', () => {
-    if (allSongsSearchInput.value.trim() !== '') {
+    const val = allSongsSearchInput.value;
+    const filtered = filterSongsByTitle(getAllSongsList(), val);
+
+    loadSongs(filtered);
+
+    if (val.trim() !== '') {
       allSongsSearchClearBtn.style.display = 'block';
     } else {
       allSongsSearchClearBtn.style.display = 'none';
@@ -145,6 +160,8 @@ function getAllSongsList() {
     allSongsSearchInput.value = '';
     allSongsSearchInput.focus();
     allSongsSearchClearBtn.style.display = 'none';
+
+    loadSongs(getAllSongsList());
   });
 
   allSongsSongList.addEventListener('click', (e) => {
@@ -260,9 +277,7 @@ function getAllSongsList() {
     }
   }
 
-  async function loadSongs(songList) {
-    const songs = songList;
-
+  async function loadSongs(songs) {
     allSongsSongList.innerHTML = "";
     for (const song of songs) {
       await addSongToList(song.title, song.path);
