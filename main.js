@@ -2,6 +2,11 @@ import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
 
 //グローバル変数
+const selectedAudio = document.getElementById("selected-audio"); //曲再生用audioタグ
+
+let currentPlaylist = [];
+let currentIndex = 0;
+
 let allSongsList = [];
 
 
@@ -17,14 +22,54 @@ function getAllSongsList() {
   return allSongsList;
 }
 
-//曲のリストから、titleにkeywordが含まれるものだけを抽出して返す
+function setCurrentPlaylist(songs) {
+  currentPlaylist = songs;
+}
+
+function setCurrentIndex(index) {
+  currentIndex = index;
+}
+
+async function setAudio() {
+  const path = currentPlaylist[currentIndex].path;
+
+  // ファイルをBase64形式で読み込む
+  const { data } = await Filesystem.readFile({
+    path,
+    directory: Directory.Data,
+  });
+
+  selectedAudio.src = `data:audio/mp3;base64,${data}`;
+}
+
+/**
+ * 曲リストと検索文字列を受け取り、
+ * タイトルに文字列を含む曲だけを返す関数
+ * 
+ * @param {Array} songs - 曲リスト（例: [{ title: "track1", path: "music/track1.mp3" }, ...]）
+ * @param {string} keyword - 検索文字列
+ * @returns {Array} 条件に一致する曲リスト
+ */
 function filterSongsByTitle(songs, keyword) {
-  if (!keyword) return songs;
+  if (!keyword) return songs; // 空文字なら全件返す
 
   // 部分一致（大文字・小文字を区別せず）
   return songs.filter(song =>
     song.title.toLowerCase().includes(keyword.toLowerCase())
   );
+}
+
+
+/**
+ * 曲リストとタイトルを受け取り、
+ * 一致するタイトルの曲のインデックス番号を返す関数
+ * 
+ * @param {Array} songs - 曲リスト（例: [{ title: "track1", path: "music/track1.mp3" }, ...]）
+ * @param {string} title - 探したい曲のタイトル
+ * @returns {number} 見つかった曲のインデックス（見つからなければ -1）
+ */
+function findSongIndexByTitle(songs, title) {
+  return songs.findIndex(song => song.title === title);
 }
 
 
@@ -168,7 +213,12 @@ function filterSongsByTitle(songs, keyword) {
     if (e.target.classList.contains("delete-btn")) return;
 
     const li = e.target.closest('li');
-    const active = document.querySelector("#all-songs-song-list li.active")
+    const index = li.dataset.index;
+    const active = document.querySelector("#all-songs-song-list li.active");
+
+    setCurrentPlaylist(getAllSongsList());
+    setCurrentIndex(index);
+    setAudio();
 
     if (li && allSongsSongList.contains(li)) {
       if (active) {
@@ -290,6 +340,7 @@ function filterSongsByTitle(songs, keyword) {
       path,
       directory: Directory.Data,
     });
+    const index = findSongIndexByTitle(getAllSongsList(), title);
 
     const li = document.createElement('li');
     li.innerHTML = `
@@ -300,6 +351,7 @@ function filterSongsByTitle(songs, keyword) {
         <p class="song-length">--:--</p>
       </div>
     `;
+    li.dataset.index = index;
     li.querySelector('.delete-btn').addEventListener('click', () => {
       deleteSong(path);
     });
