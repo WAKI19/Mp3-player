@@ -44,20 +44,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const contents = document.querySelectorAll(".tab-content");
 
 
+
+
+
+
+
+
+
+
+
   //イベント
     //全曲ページ
   deleteModeBtn.addEventListener('click', () => {
-    const songDeleteBtns = document.querySelectorAll("#all-songs .delete-btn");
+    const songDeleteBtns = document.querySelectorAll("#all-songs-song-list li .delete-btn");
 
-    deleteModeBtn.classList.toggle("active");
+    toggleDeleteMode();
 
-    if (deleteModeBtn.classList.contains("active")) {
-      songDeleteBtns.forEach(songDeleteBtn => {
-        songDeleteBtn.classList.add("active");
+    if (isDeleteMode()) {
+      songDeleteBtns.forEach(btn => {
+        btn.classList.add("active");
       });
     } else {
-      songDeleteBtns.forEach(songDeleteBtn => {
-        songDeleteBtn.classList.remove("active");
+      songDeleteBtns.forEach(btn => {
+        btn.classList.remove("active");
       });
     }
   });
@@ -229,6 +238,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   //関数
+  async function deleteSong(path) {
+    try {
+      // 🎵 ファイル削除
+      await Filesystem.deleteFile({
+        path,
+        directory: Directory.Data,
+      });
+
+      // 🧾 Preferences から削除
+      const stored = await Preferences.get({ key: 'importedSongs' });
+      const importedSongs = stored.value ? JSON.parse(stored.value) : [];
+      const updated = importedSongs.filter(song => song.path !== path);
+
+      await Preferences.set({
+        key: 'importedSongs',
+        value: JSON.stringify(updated),
+      });
+
+      // 🖥️ UI更新
+      loadSavedSongs();
+    } catch (error) {
+      console.error('削除に失敗しました:', error);
+      alert('削除に失敗しました。');
+    }
+  }
+
   async function loadSavedSongs() {
     const stored = await Preferences.get({ key: 'importedSongs' });
     const importedSongs = stored.value ? JSON.parse(stored.value) : [];
@@ -255,6 +290,13 @@ document.addEventListener("DOMContentLoaded", () => {
         <p class="song-length">--:--</p>
       </div>
     `;
+    li.querySelector('.delete-btn').addEventListener('click', () => {
+      deleteSong(path);
+    });
+    //削除モード中だったら削除用のUIを表示
+    if (isDeleteMode()) {
+      li.querySelector(".delete-btn").classList.add("active");    
+    };
 
     // Data URLとしてAudioを生成
     const audio = new Audio(`data:audio/mp3;base64,${data}`);
@@ -268,6 +310,13 @@ document.addEventListener("DOMContentLoaded", () => {
     allSongsSongList.appendChild(li);
   }
 
+  function toggleDeleteMode() {
+    deleteModeBtn.classList.toggle("active");
+  }
+
+  function isDeleteMode() {
+    return deleteModeBtn.classList.contains("active");
+  }
 
   function arrayBufferToBase64(buffer) {
     let binary = '';
@@ -278,6 +327,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     return btoa(binary);
   }
+
+
+
+
+
+
+
+
+
+
 
   //起動時処理
   loadSavedSongs();
