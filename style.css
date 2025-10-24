@@ -198,9 +198,6 @@ header {
     align-items: center;
     justify-content: center;
     transition: 1s;
-}
-
-#new-playlist-modal.hidden {
     display: none;
 }
 
@@ -272,9 +269,6 @@ header {
     transition: 0.3s ease;
     padding-bottom: 300px;
     z-index: 20;
-}
-
-#playlist-detail.hidden {
     transform: translateX(100%);
 }
 
@@ -398,7 +392,7 @@ header {
     position: fixed;
     left: 2%;
     bottom: calc(env(safe-area-inset-bottom) + 59px);
-    display: flex;
+    display: none;
     width: 96%;
     padding: 10px 25px;
     align-items: center;
@@ -411,11 +405,7 @@ header {
 }
 
 #mini-player.active {
-    opacity: 1;
-}
-
-#mini-player.hidden {
-    opacity: 0;
+    display: flex;
 }
 
 #mini-player .icon {
@@ -453,9 +443,6 @@ header {
     height: 100%;
     background-color: var(--bg-color2);
     transition: 0.3s ease;
-}
-
-#full-player.hidden {
     transform: translateY(100%);
     z-index: -50;
 }
@@ -577,7 +564,7 @@ header {
 }
 
 #full-player .play-btn:active {
-    color: var(--active-color);
+    background-color: var(--active-color);
 }
 
 #full-player .safe-area-bottom {

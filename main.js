@@ -168,6 +168,7 @@ currentAudio.addEventListener('loadedmetadata', (e) => {
   const audioLength = formatAudioDuration(e.target.duration);
 
   setupMiniPlayer(audioLength);
+  activate(miniPlayer);
 });
 
 currentAudio.addEventListener('play', () => {
@@ -304,22 +305,22 @@ allSongsSongList.addEventListener('click', (e) => {
 
   //プレイリストページ
 newPlaylistModalOpenBtn.addEventListener('click', () => {
-  active(newPlaylistModal);
+  activate(newPlaylistModal);
 });
 
 newPlaylistModalCloseBtn.addEventListener('click', () => {
-  hide(newPlaylistModal);
+  deactivate(newPlaylistModal);
 });
 
 playlistList.addEventListener('click', (e) => {
   const li = e.target.closest('li');
   if (li && playlistList.contains(li)) {
-    active(playlistDetail);
+    activate(playlistDetail);
   }
 });
 
 playlistDetailCloseBtn.addEventListener('click', () => {
-  hide(playlistDetail);
+  deactivate(playlistDetail);
   playlistDetail.scrollTo(0, 0);
 });
 
@@ -336,8 +337,8 @@ playlistDetail.addEventListener('scroll', () => {
 
   //ミニプレーヤー
 miniPlayer.addEventListener('click', (e) => {
-  active(fullPlayer);
-  hide(miniPlayer);
+  activate(fullPlayer);
+  deactivate(miniPlayer);
 });
 
 playBtns.forEach(playBtn => {
@@ -349,8 +350,8 @@ playBtns.forEach(playBtn => {
 
   //フルプレーヤー
 fullPlayerCloseBtn.addEventListener('click', () => {
-  hide(fullPlayer);
-  active(miniPlayer);
+  deactivate(fullPlayer);
+  activate(miniPlayer);
 });
 
   //タブ
@@ -469,16 +470,17 @@ function arrayBufferToBase64(buffer) {
   return btoa(binary);
 }
 
-function active(elem) {
-  elem.classList.remove("hidden");
+function activate(elem) {
   elem.classList.add("active");
 }
 
-function hide(elem) {
+function deactivate(elem) {
   elem.classList.remove("active");
-  elem.classList.add("hidden");
 }
 
+function toggleActive(elem) {
+  elem.classList.toggle("active");
+}
 
 
 

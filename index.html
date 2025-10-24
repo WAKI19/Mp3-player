@@ -64,7 +64,7 @@
         </ul>
 
         <!-- プレイリスト詳細画面 -->
-        <div id="playlist-detail" class="hidden">
+        <div id="playlist-detail">
             <div class="header">
                 <button id="playlist-detail-close-btn" class="close-btn fa-solid fa-angle-left"></button>
                 <h3 class="playlist-title">とき宣</h3>
@@ -104,18 +104,11 @@
                         <p class="song-length">4:37</p>
                     </div>
                 </li>
-                <li>
-                    <i class="icon fa-solid fa-music"></i>
-                    <div>
-                        <p class="song-title">LOVEイヤイヤ期</p>
-                        <p class="song-length">2:46</p>
-                    </div>
-                </li>
             </ul>
         </div>
     </section>
     <!-- プレイリスト作成モーダル -->
-    <div id="new-playlist-modal" class="hidden">
+    <div id="new-playlist-modal">
         <div class="modal-content">
             <button id="new-playlist-modal-close-btn" class="close-btn fa-solid fa-xmark"></button>
             <h3>新規プレイリスト</h3>
@@ -142,28 +135,28 @@
     <div id="mini-player">
         <i class="icon fa-solid fa-music" style="color: var(--active-color);"></i>
         <div>
-            <p class="song-title" style="color: var(--active-color);">ラヴなのっ♡</p>
-            <p class="song-length">2:58</p>
+            <p class="song-title" style="color: var(--active-color);">Song Title</p>
+            <p class="song-length">00:00</p>
         </div>
         <button class="play-btn"><i class="fa-solid fa-play"></i></button>
     </div>
 
     <!-- フルプレーヤー -->
-    <div id="full-player" class="hidden">
+    <div id="full-player">
         <div class="safe-area-top"></div>
 
         <button id="full-player-close-btn" class="close-btn"><i class="fa-solid fa-chevron-down"></i></button>
         <div class="full-player-content">
             <div class="music-img">♬</div>
-            <h3 class="music-title">ラヴなのっ♡</h3>
+            <h3 class="music-title">Song Title</h3>
             <div class="progress-container">
                 <input type="range" class="progress-bar" min="0" max="100" value="0">
-                <span class="song-length">2:58</span>
+                <span class="song-length">00:00</span>
             </div>
             <div class="controlls">
-                <button class="prev-btn"><i class="fa-solid fa-backward"></i></button>
+                <button class="prev-btn"><i class="fa-solid fa-backward-step"></i></button>
                 <button class="play-btn"><i class="fa-solid fa-play"></i></button>
-                <button class="next-btn"><i class="fa-solid fa-forward"></i></button>
+                <button class="next-btn"><i class="fa-solid fa-forward-step"></i></button>
             </div>
         </div>
 
