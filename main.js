@@ -2,7 +2,7 @@ import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
 
 //グローバル変数
-const selectedAudio = document.getElementById("selected-audio"); //曲再生用audioタグ
+const currentAudio = document.getElementById("current-audio"); //曲再生用audioタグ
 
 let currentPlaylist = [];
 let currentIndex = 0;
@@ -10,7 +10,7 @@ let currentIndex = 0;
 let allSongsList = [];
 
 
-//グローバル関数
+//関数
 async function loadAllSongsList() {
   const stored = await Preferences.get({ key: 'importedSongs' });
   allSongsList = stored.value ? JSON.parse(stored.value) : [];
@@ -39,16 +39,45 @@ async function setAudio() {
     directory: Directory.Data,
   });
 
-  selectedAudio.src = `data:audio/mp3;base64,${data}`;
+  currentAudio.src = `data:audio/mp3;base64,${data}`;
 }
 
 function playAudio() {
-  selectedAudio.play();
+  currentAudio.play();
 }
 
 function pauseAudio() {
-  selectedAudio.pause();
+  currentAudio.pause();
 }
+
+function setupMiniPlayer(songLength) {
+  const miniPlayerTitle = miniPlayer.querySelector('.song-title');
+  const miniPlayerSongLength = miniPlayer.querySelector('.song-length');
+
+  const currentTitle = currentPlaylist[currentIndex].title;
+
+  miniPlayerTitle.textContent = currentTitle;
+  miniPlayerSongLength.textContent = songLength;
+}
+
+function formatAudioDuration(duration) {
+  if (isNaN(duration) || duration < 0) return "0:00";
+
+  const hours = Math.floor(duration / 3600);
+  const minutes = Math.floor((duration % 3600) / 60);
+  const seconds = Math.floor(duration % 60);
+
+  // 2桁ゼロ埋め（秒・分）
+  const mm = String(minutes).padStart(2, "0");
+  const ss = String(seconds).padStart(2, "0");
+
+  if (hours > 0) {
+    return `${hours}:${mm}:${ss}`; // 1時間以上 → hh:mm:ss
+  } else {
+    return `${minutes}:${ss}`; // 1時間未満 → m:ss
+  }
+}
+
 
 /**
  * 曲リストと検索文字列を受け取り、
@@ -79,6 +108,7 @@ function filterSongsByTitle(songs, keyword) {
 function findSongIndexByTitle(songs, title) {
   return songs.findIndex(song => song.title === title);
 }
+
 
 
 //要素取得
@@ -120,6 +150,13 @@ const contents = document.querySelectorAll(".tab-content");
 
 
 //イベント
+  //currentAudioが読み込まれた（変更された際の処理）
+  currentAudio.addEventListener('loadedmetadata', (e) => {
+    const audioLength = formatAudioDuration(e.target.duration);
+
+    setupMiniPlayer(audioLength);
+  });
+
   //全曲ページ
 deleteModeBtn.addEventListener('click', () => {
   const songDeleteBtns = document.querySelectorAll("#all-songs-song-list li .delete-btn");
@@ -217,6 +254,8 @@ allSongsSearchClearBtn.addEventListener('click', () => {
   loadSongs(getAllSongsList());
 });
 
+
+
 allSongsSongList.addEventListener('click', (e) => {
   if (e.target.classList.contains("delete-btn")) return;
 
@@ -225,7 +264,7 @@ allSongsSongList.addEventListener('click', (e) => {
   const active = document.querySelector("#all-songs-song-list li.active");
 
   if (currentPlaylist === getAllSongsList() && index === currentIndex) {
-    if (selectedAudio.paused) {
+    if (currentAudio.paused) {
       playAudio();
     } else {
       pauseAudio();
@@ -243,6 +282,7 @@ allSongsSongList.addEventListener('click', (e) => {
     li.classList.add("active");
   }
 });
+
 
 
   //プレイリストページ
