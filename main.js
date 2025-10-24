@@ -42,12 +42,24 @@ async function setAudio() {
   currentAudio.src = `data:audio/mp3;base64,${data}`;
 }
 
-function playAudio() {
-  currentAudio.play();
+function toggleAudioPlay() {
+  if (currentAudio.paused) {
+    currentAudio.play();  // 停止中なら再生
+  } else {
+    currentAudio.pause(); // 再生中なら一時停止
+  }
 }
 
-function pauseAudio() {
-  currentAudio.pause();
+function togglePlayBtn() {
+  playBtns.forEach(playBtn => {
+    playBtn.innerHTML = "";
+
+    if (currentAudio.paused) {
+      playBtn.innerHTML = `<i class="fa-solid fa-play"></i>`;
+    } else {
+      playBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
+    }
+  });
 }
 
 function setupMiniPlayer(songLength) {
@@ -132,6 +144,7 @@ const playlistDetailHeaderTitle = document.querySelector("#playlist-detail .head
 const playlistDetailPlaylistTitle = document.querySelector("#playlist-detail .playlist-info .playlist-title")
 
 const miniPlayer = document.getElementById("mini-player");
+const playBtns = document.querySelectorAll(".play-btn");
 
 const fullPlayer = document.getElementById("full-player");
 const fullPlayerCloseBtn = document.getElementById("full-player-close-btn");
@@ -151,11 +164,19 @@ const contents = document.querySelectorAll(".tab-content");
 
 //イベント
   //currentAudioが読み込まれた（変更された際の処理）
-  currentAudio.addEventListener('loadedmetadata', (e) => {
-    const audioLength = formatAudioDuration(e.target.duration);
+currentAudio.addEventListener('loadedmetadata', (e) => {
+  const audioLength = formatAudioDuration(e.target.duration);
 
-    setupMiniPlayer(audioLength);
-  });
+  setupMiniPlayer(audioLength);
+});
+
+currentAudio.addEventListener('play', () => {
+  togglePlayBtn();
+});
+
+currentAudio.addEventListener('pause', () => {
+  togglePlayBtn();
+});
 
   //全曲ページ
 deleteModeBtn.addEventListener('click', () => {
@@ -264,11 +285,7 @@ allSongsSongList.addEventListener('click', (e) => {
   const active = document.querySelector("#all-songs-song-list li.active");
 
   if (currentPlaylist === getAllSongsList() && index === currentIndex) {
-    if (currentAudio.paused) {
-      playAudio();
-    } else {
-      pauseAudio();
-    }
+    toggleAudioPlay();
   } else {
     setCurrentPlaylist(getAllSongsList());
     setCurrentIndex(index);
@@ -319,9 +336,15 @@ playlistDetail.addEventListener('scroll', () => {
 
   //ミニプレーヤー
 miniPlayer.addEventListener('click', (e) => {
-  if (e.target.id === "mini-player-play-pause-btn") return;
   active(fullPlayer);
   hide(miniPlayer);
+});
+
+playBtns.forEach(playBtn => {
+  playBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleAudioPlay();
+  });
 });
 
   //フルプレーヤー

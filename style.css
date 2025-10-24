@@ -435,8 +435,13 @@ header {
 #mini-player .play-btn {
     position: absolute;
     right: 25px;
+    display: inline-flex; /* 中央揃えが簡単 */
+    align-items: center;
+    justify-content: center;
     color: var(--text-color);
     font-size: 15px;
+    width: 15px;
+    height: 15px;
 }
 
 /* フルプレーヤー */
@@ -555,8 +560,20 @@ header {
 }
 
 #full-player .play-btn {
-    color: var(--main-color);
-    font-size: 60px;
+    font-size: 27px;
+    width: 60px;
+    height: 60px;
+    display: inline-flex; /* 中央揃えが簡単 */
+    align-items: center;
+    justify-content: center;
+    color: var(--bg-color2);
+    background-color: var(--main-color);
+    border-radius: 30px;
+}
+
+#full-player .play-btn .fa-play::before {
+    position: relative;
+    right: -1.5px; /* アイコンのずれ調整用 */
 }
 
 #full-player .play-btn:active {
