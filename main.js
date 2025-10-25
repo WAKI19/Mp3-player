@@ -1,13 +1,11 @@
-import { Filesystem, Directory } from '@capacitor/filesystem';
-import { Preferences } from '@capacitor/preferences';
+import { StorageManager } from './classes/StorageManager';
+import { AudioPlayer } from "./classes/AudioPlayer";
 
-//グローバル変数
-const currentAudio = document.getElementById("current-audio"); //曲再生用audioタグ
 
-let currentPlaylist = [];
-let currentIndex = 0;
+const player = new AudioPlayer(document.getElementById("audio"));
+const storage = new StorageManager();
 
-let allSongsList = [];
+let allSongs = [];
 
 
 //要素取得
@@ -43,50 +41,11 @@ const contents = document.querySelectorAll(".tab-content");
 
 
 //関数
-async function loadAllSongsList() {
-  const stored = await Preferences.get({ key: 'importedSongs' });
-  allSongsList = stored.value ? JSON.parse(stored.value) : [];
-
-  allSongsList.sort((a, b) => a.title.localeCompare(b.title, 'ja')); //あいうえお順にソート
-}
-
-function getAllSongsList() {
-  return allSongsList;
-}
-
-function setCurrentPlaylist(songs) {
-  currentPlaylist = songs;
-}
-
-function setCurrentIndex(index) {
-  currentIndex = index;
-}
-
-async function setAudio() {
-  const path = currentPlaylist[currentIndex].path;
-
-  // ファイルをBase64形式で読み込む
-  const { data } = await Filesystem.readFile({
-    path,
-    directory: Directory.Data,
-  });
-
-  currentAudio.src = `data:audio/mp3;base64,${data}`;
-}
-
-function toggleAudioPlay() {
-  if (currentAudio.paused) {
-    currentAudio.play();  // 停止中なら再生
-  } else {
-    currentAudio.pause(); // 再生中なら一時停止
-  }
-}
-
 function togglePlayBtn() {
   playBtns.forEach(playBtn => {
     playBtn.innerHTML = "";
 
-    if (currentAudio.paused) {
+    if (player.audio.paused) {
       playBtn.innerHTML = `<i class="fa-solid fa-play"></i>`;
     } else {
       playBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
@@ -98,7 +57,7 @@ function setupMiniPlayer(duration) {
   const miniPlayerTitle = miniPlayer.querySelector('.song-title');
   const miniPlayerSongLength = miniPlayer.querySelector('.song-length');
 
-  const currentTitle = currentPlaylist[currentIndex].title;
+  const currentTitle = player.getCurrentTrack().title;
 
   miniPlayerTitle.textContent = currentTitle;
   miniPlayerSongLength.textContent = formatAudioDuration(duration);
@@ -108,7 +67,7 @@ function setupFullPlayer(duration) {
   const fullPlayerTitle = fullPlayer.querySelector('.song-title');
   const fullPlayerSongLength = fullPlayer.querySelector('.song-length');
 
-  const currentTitle = currentPlaylist[currentIndex].title;
+  const currentTitle = player.getCurrentTrack().title;
 
   fullPlayerTitle.textContent = currentTitle;
   fullPlayerSongLength.textContent = formatAudioDuration(duration);
@@ -176,27 +135,25 @@ function findSongIndexByTitle(songs, title) {
 
 
 //イベント
-  //currentAudioが読み込まれた（変更された際の処理）
-currentAudio.addEventListener('loadedmetadata', (e) => {
-  const duration = e.target.duration;
-
+ //audioロード時
+player.onLoaded = (duration) => {
   setupMiniPlayer(duration);
   setupFullPlayer(duration);
   activate(miniPlayer);
-});
+};
 
-currentAudio.addEventListener('play', () => {
+player.onPlay = () => {
   togglePlayBtn();
-});
+}
 
-currentAudio.addEventListener('pause', () => {
+player.onPause = () => {
   togglePlayBtn();
-});
+};
 
-currentAudio.addEventListener("timeupdate", () => {
-  progressBar.value = currentAudio.currentTime; // 現在の再生位置を反映
+player.onTimeUpdate = () => {
+  progressBar.value = player.audio.currentTime; // 現在の再生位置を反映
   updateProgressColor();
-});
+};
 
   //全曲ページ
 deleteModeBtn.addEventListener('click', () => {
@@ -223,52 +180,10 @@ fileInput.addEventListener('change', async (e) => {
   const files = Array.from(e.target.files);
 
   for (const file of files) {
-    if (!file.type.startsWith('audio/')) continue;
-
-    const arrayBuffer = await file.arrayBuffer();
-    const base64Data = arrayBufferToBase64(arrayBuffer);
-    const path = `music/${file.name}`;
-
-    // Preferencesから既存の曲リストを取得
-    const importedSongs = getAllSongsList();
-
-    // 既に同じ名前の曲が存在するかチェック
-    const existingIndex = importedSongs.findIndex(song => song.title === file.name.replace(/\.mp3$/i, ''));
-
-    // すでに存在する場合は確認ダイアログを表示
-    if (existingIndex !== -1) {
-      const shouldReplace = confirm(`「${file.name}」はすでに登録されています。ファイルを置き換えますか？`);
-      if (!shouldReplace) {
-        // ユーザーが「キャンセル」した場合は次のファイルへ
-        continue;
-      }
-    }
-
-    // ファイルをCapacitor Filesystemに保存（上書き含む）
-    await Filesystem.writeFile({
-      path,
-      data: base64Data,
-      directory: Directory.Data,
-    });
-
-    // 🧾 曲リストの更新
-    if (existingIndex !== -1) {
-      // 既存のデータを置き換え
-      importedSongs[existingIndex] = { title: file.name.replace(/\.mp3$/i, ''), path };
-    } else {
-      // 新規追加
-      importedSongs.push({ title: file.name.replace(/\.mp3$/i, ''), path });
-    }
-
-    // あいうえお順にソート
-    importedSongs.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
-
-    // 保存
-    await Preferences.set({ key: 'importedSongs', value: JSON.stringify(importedSongs) });
-    loadAllSongsList();
+    storage.importSong(file);
 
     // 表示更新
-    loadSongs(getAllSongsList());
+    loadSongs(allSongs);
   }
 
   fileInput.value = ''; // 選択リセット
@@ -276,7 +191,7 @@ fileInput.addEventListener('change', async (e) => {
 
 allSongsSearchInput.addEventListener('input', () => {
   const val = allSongsSearchInput.value;
-  const filtered = filterSongsByTitle(getAllSongsList(), val);
+  const filtered = filterSongsByTitle(allSongs, val);
 
   loadSongs(filtered);
 
@@ -292,7 +207,7 @@ allSongsSearchClearBtn.addEventListener('click', () => {
   allSongsSearchInput.focus();
   allSongsSearchClearBtn.style.display = 'none';
 
-  loadSongs(getAllSongsList());
+  loadSongs(storage.loadSongs());
 });
 
 
@@ -304,12 +219,11 @@ allSongsSongList.addEventListener('click', (e) => {
   const index = li.dataset.index;
   const active = document.querySelector("#all-songs-song-list li.active");
 
-  if (currentPlaylist === getAllSongsList() && index === currentIndex) {
-    toggleAudioPlay();
+  if (allSongs[index] === player.getCurrentTrack()) {
+    player.togglePlay();
   } else {
-    setCurrentPlaylist(getAllSongsList());
-    setCurrentIndex(index);
-    setAudio();
+    player.setPlaylist(allSongs);
+    player.playTrack(index);
   }
 
   if (li && allSongsSongList.contains(li)) {
@@ -363,7 +277,7 @@ miniPlayer.addEventListener('click', (e) => {
 playBtns.forEach(playBtn => {
   playBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    toggleAudioPlay();
+    player.togglePlay();
   });
 });
 
@@ -374,7 +288,7 @@ fullPlayerCloseBtn.addEventListener('click', () => {
 });
 
 progressBar.addEventListener("input", () => {
-  currentAudio.currentTime = progressBar.value;
+  player.seek(progressBar.value);
   updateProgressColor();
 });
 
@@ -405,32 +319,6 @@ tabs.forEach(tab => {
 
 
 //関数
-async function deleteSong(path) {
-  try {
-    // 🎵 ファイル削除
-    await Filesystem.deleteFile({
-      path,
-      directory: Directory.Data,
-    });
-
-    // 🧾 Preferences から削除
-    const importedSongs = getAllSongsList();
-    const updated = importedSongs.filter(song => song.path !== path);
-
-    await Preferences.set({
-      key: 'importedSongs',
-      value: JSON.stringify(updated),
-    });
-    await loadAllSongsList();
-
-    // 🖥️ UI更新
-    loadSongs(getAllSongsList());
-  } catch (error) {
-    console.error('削除に失敗しました:', error);
-    alert('削除に失敗しました。');
-  }
-}
-
 async function loadSongs(songs) {
   allSongsSongList.innerHTML = "";
   for (const song of songs) {
@@ -440,11 +328,8 @@ async function loadSongs(songs) {
 
 async function addSongToList(title, path) {
   // ファイルをBase64形式で読み込む
-  const { data } = await Filesystem.readFile({
-    path,
-    directory: Directory.Data,
-  });
-  const index = findSongIndexByTitle(getAllSongsList(), title);
+  const data = await storage.readFileAsBase64(path);
+  const index = findSongIndexByTitle(await storage.loadSongs(), title);
 
   const li = document.createElement('li');
   li.classList.add("song-list__item")
@@ -458,7 +343,7 @@ async function addSongToList(title, path) {
   `;
   li.dataset.index = index;
   li.querySelector('.song-list__delete-button').addEventListener('click', () => {
-    deleteSong(path);
+    storage.deleteSong(path);
   });
   //削除モード中だったら削除用のUIを表示
   if (isDeleteMode()) {
@@ -485,26 +370,12 @@ function isDeleteMode() {
   return deleteModeBtn.classList.contains("active");
 }
 
-function arrayBufferToBase64(buffer) {
-  let binary = '';
-  const bytes = new Uint8Array(buffer);
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return btoa(binary);
-}
-
 function activate(elem) {
   elem.classList.add("active");
 }
 
 function deactivate(elem) {
   elem.classList.remove("active");
-}
-
-function toggleActive(elem) {
-  elem.classList.toggle("active");
 }
 
 
@@ -518,8 +389,8 @@ function toggleActive(elem) {
 
 //起動時処理
 async function initApp() {
-  await loadAllSongsList();            // Preferencesから曲リストを読み込む
-  loadSongs(getAllSongsList());        // 読み込み完了後に描画
+  allSongs = await storage.loadSongs();
+  loadSongs(allSongs);        // 読み込み完了後に描画
 }
 
 initApp();
