@@ -28,24 +28,27 @@
         </div>
 
         <ul id="all-songs-song-list" class="song-list">
-          <!-- <li>
-            <i class="icon fa-solid fa-music"></i>
+          <!-- <li class="song-list__item">
+            <button class="song-list__delete-button fa-solid fa-circle-minus"></button>
+            <i class="song-list__icon fa-solid fa-music"></i>
             <div>
-                <p class="song-title">ハピラブルー！</p>
-                <p class="song-length">3:24</p>
+                <p class="song-list__title">ハピラブルー！</p>
+                <p class="song-list__length">3:24</p>
             </div>
           </li> -->
         </ul>
     </section>
 
+
     <!-- プレイリストページ -->
     <section id="playlist" class="tab-content">
         <header class="header">
-            <h2>プレイリスト</h2>
+            <h2 class="header__title">プレイリスト</h2>
             <div class="header__buttons">
                 <button id="new-playlist-modal-open-btn" class="header__button"><i class="fa-solid fa-plus"></i></button>
             </div>
         </header>
+        
         <ul id="playlist-list" class="playlist-list">
             <li>
                 <canvas class="playlist-img"></canvas>
@@ -64,6 +67,7 @@
                 <p class="playlist-name">chill</p>
             </li>
         </ul>
+
 
         <!-- プレイリスト詳細画面 -->
         <div id="playlist-detail">

@@ -10,6 +10,38 @@ let currentIndex = 0;
 let allSongsList = [];
 
 
+//要素取得
+  //全曲ページ
+const deleteModeBtn = document.getElementById("delete-mode-btn");
+const importBtn = document.getElementById("import-btn");
+const fileInput = document.getElementById("file-input");
+const allSongsSearchInput = document.getElementById('all-songs-search-input');
+const allSongsSearchClearBtn = document.getElementById("all-songs-search-clear-btn");
+const allSongsSongList = document.getElementById("all-songs-song-list");
+
+  //プレイリストページ
+const newPlaylistModalOpenBtn = document.getElementById("new-playlist-modal-open-btn");
+const newPlaylistModalCloseBtn = document.getElementById("new-playlist-modal-close-btn");
+const newPlaylistModal = document.getElementById("new-playlist-modal");
+const playlistList = document.getElementById("playlist-list");
+const playlistDetail = document.getElementById("playlist-detail");
+const playlistDetailCloseBtn = document.getElementById("playlist-detail-close-btn");
+const playlistDetailHeader = document.querySelector("#playlist-detail .mini-header");
+const playlistDetailHeaderTitle = document.querySelector("#playlist-detail .mini-header .playlist-title");
+const playlistDetailPlaylistTitle = document.querySelector("#playlist-detail .playlist-info .playlist-title");
+
+const miniPlayer = document.getElementById("mini-player");
+const playBtns = document.querySelectorAll(".play-btn");
+
+const fullPlayer = document.getElementById("full-player");
+const fullPlayerCloseBtn = document.getElementById("full-player-close-btn");
+const progressBar = document.querySelector("#full-player .progress-bar");
+
+const tabs = document.querySelectorAll(".tab-button");
+const contents = document.querySelectorAll(".tab-content");
+
+
+
 //関数
 async function loadAllSongsList() {
   const stored = await Preferences.get({ key: 'importedSongs' });
@@ -139,42 +171,6 @@ function findSongIndexByTitle(songs, title) {
 
 
 
-//要素取得
-  //全曲ページ
-const deleteModeBtn = document.getElementById("delete-mode-btn");
-const importBtn = document.getElementById("import-btn");
-const fileInput = document.getElementById("file-input");
-const allSongsSearchInput = document.getElementById('all-songs-search-input');
-const allSongsSearchClearBtn = document.getElementById("all-songs-search-clear-btn");
-const allSongsSongList = document.getElementById("all-songs-song-list");
-
-  //プレイリストページ
-const newPlaylistModalOpenBtn = document.getElementById("new-playlist-modal-open-btn");
-const newPlaylistModalCloseBtn = document.getElementById("new-playlist-modal-close-btn");
-const newPlaylistModal = document.getElementById("new-playlist-modal");
-const playlistList = document.getElementById("playlist-list");
-const playlistDetail = document.getElementById("playlist-detail");
-const playlistDetailCloseBtn = document.getElementById("playlist-detail-close-btn");
-const playlistDetailHeader = document.querySelector("#playlist-detail .mini-header");
-const playlistDetailHeaderTitle = document.querySelector("#playlist-detail .mini-header .playlist-title");
-const playlistDetailPlaylistTitle = document.querySelector("#playlist-detail .playlist-info .playlist-title");
-
-const miniPlayer = document.getElementById("mini-player");
-const playBtns = document.querySelectorAll(".play-btn");
-
-const fullPlayer = document.getElementById("full-player");
-const fullPlayerCloseBtn = document.getElementById("full-player-close-btn");
-const progressBar = document.querySelector("#full-player .progress-bar");
-
-const tabs = document.querySelectorAll(".tab-button");
-const contents = document.querySelectorAll(".tab-content");
-
-
-
-
-
-
-
 
 
 
@@ -204,7 +200,7 @@ currentAudio.addEventListener("timeupdate", () => {
 
   //全曲ページ
 deleteModeBtn.addEventListener('click', () => {
-  const songDeleteBtns = document.querySelectorAll("#all-songs-song-list li .delete-btn");
+  const songDeleteBtns = document.querySelectorAll("#all-songs-song-list .song-list__delete-button");
 
   toggleDeleteMode();
 
@@ -451,16 +447,17 @@ async function addSongToList(title, path) {
   const index = findSongIndexByTitle(getAllSongsList(), title);
 
   const li = document.createElement('li');
+  li.classList.add("song-list__item")
   li.innerHTML = `
-    <button class="delete-btn fa-solid fa-circle-minus"></button>
-    <i class="icon fa-solid fa-music"></i>
+    <button class="song-list__delete-button fa-solid fa-circle-minus"></button>
+    <i class="song-list__icon fa-solid fa-music"></i>
     <div>
-      <p class="song-title">${title}</p>
-      <p class="song-length">--:--</p>
+      <p class="song-list__title">${title}</p>
+      <p class="song-list__length">--:--</p>
     </div>
   `;
   li.dataset.index = index;
-  li.querySelector('.delete-btn').addEventListener('click', () => {
+  li.querySelector('.song-list__delete-button').addEventListener('click', () => {
     deleteSong(path);
   });
   //削除モード中だったら削除用のUIを表示
@@ -473,7 +470,7 @@ async function addSongToList(title, path) {
   audio.addEventListener('loadedmetadata', () => {
     const minutes = Math.floor(audio.duration / 60);
     const seconds = Math.floor(audio.duration % 60);
-    li.querySelector(".song-length").textContent =
+    li.querySelector(".song-list__length").textContent =
       `${minutes}:${seconds.toString().padStart(2, "0")}`;
   });
 
