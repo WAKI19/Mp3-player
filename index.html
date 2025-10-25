@@ -12,11 +12,11 @@
 
     <!-- トップページ（曲一覧）ページ -->
     <section id="all-songs" class="tab-content active">
-        <header>
-            <h2 class="header-title">全曲</h2>
-            <div class="header-btns">
-                <button id="delete-mode-btn" class="header-btn fa-solid fa-trash-can"></button>
-                <button id="import-btn" class="header-btn fa-solid fa-file-import"></button>
+        <header class="header">
+            <h2 class="header__title">全曲</h2>
+            <div class="header__buttons">
+                <button id="delete-mode-btn" class="header__button"><i class="fa-solid fa-trash-can"></i></button>
+                <button id="import-btn" class="header__button"><i class="fa-solid fa-file-import"></i></button>
             </div>
         </header>
 
@@ -40,9 +40,11 @@
 
     <!-- プレイリストページ -->
     <section id="playlist" class="tab-content">
-        <header>
+        <header class="header">
             <h2>プレイリスト</h2>
-            <button id="new-playlist-modal-open-btn" class="header-btn fa-solid fa-plus"></button>
+            <div class="header__buttons">
+                <button id="new-playlist-modal-open-btn" class="header__button"><i class="fa-solid fa-plus"></i></button>
+            </div>
         </header>
         <ul id="playlist-list" class="playlist-list">
             <li>
@@ -65,7 +67,7 @@
 
         <!-- プレイリスト詳細画面 -->
         <div id="playlist-detail">
-            <div class="header">
+            <div class="mini-header">
                 <button id="playlist-detail-close-btn" class="close-btn fa-solid fa-angle-left"></button>
                 <h3 class="playlist-title">とき宣</h3>
             </div>
@@ -119,7 +121,7 @@
 
     <!-- 設定ページ -->
     <section id="setting" class="tab-content">
-        <header>
+        <header class="header">
             <h2>設定</h2>
         </header>
 

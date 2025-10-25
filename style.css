@@ -43,7 +43,7 @@ button{
 }
 
 /* 全ページ共通 */
-header {
+.header {
     position: fixed;
     top: 0;
     width: 100%;
@@ -57,13 +57,13 @@ header {
     z-index: 10;
 }
 
-.header-btn {
+.header__button {
     font-size: 20px;
     color: var(--text-color);
     margin-left: 10px;
 }
 
-.header-btn:active {
+.header__button:active {
     color: var(--accent-color);
 }
 
@@ -276,7 +276,7 @@ header {
     transform: translateX(0);
 }
 
-#playlist-detail .header {
+#playlist-detail .mini-header {
     position: sticky;
     top: 0;
     width: 100%;
@@ -287,7 +287,7 @@ header {
     opacity: 0.97;
 }
 
-#playlist-detail .header .playlist-title {
+#playlist-detail .mini-header .playlist-title {
     font-size: 20px;
     line-height: 40px;
     text-align: center;

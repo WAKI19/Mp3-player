@@ -155,8 +155,8 @@ const newPlaylistModal = document.getElementById("new-playlist-modal");
 const playlistList = document.getElementById("playlist-list");
 const playlistDetail = document.getElementById("playlist-detail");
 const playlistDetailCloseBtn = document.getElementById("playlist-detail-close-btn");
-const playlistDetailHeader = document.querySelector("#playlist-detail .header");
-const playlistDetailHeaderTitle = document.querySelector("#playlist-detail .header .playlist-title");
+const playlistDetailHeader = document.querySelector("#playlist-detail .mini-header");
+const playlistDetailHeaderTitle = document.querySelector("#playlist-detail .mini-header .playlist-title");
 const playlistDetailPlaylistTitle = document.querySelector("#playlist-detail .playlist-info .playlist-title");
 
 const miniPlayer = document.getElementById("mini-player");
