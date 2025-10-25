@@ -400,7 +400,7 @@ button{
 }
 
 /* ミニプレーヤー */
-#mini-player {
+.mini-player {
     position: fixed;
     left: 2%;
     bottom: calc(env(safe-area-inset-bottom) + 59px);
@@ -416,25 +416,25 @@ button{
     z-index: 30;
 }
 
-#mini-player.active {
+.mini-player.active {
     display: flex;
 }
 
-#mini-player .icon {
+.mini-player__icon {
     font-size: 16px;
     margin-right: 15px;
 }
 
-#mini-player .song-title {
+.mini-player__song-title {
     font-size: 15px;
 }
 
-#mini-player .song-length {
+.mini-player__song-length {
     font-size: 11px;
     color: var(--text-color2);
 }
 
-#mini-player .play-btn {
+.mini-player__play-btn {
     position: absolute;
     right: 25px;
     display: inline-flex; /* 中央揃えが簡単 */
@@ -447,7 +447,7 @@ button{
 }
 
 /* フルプレーヤー */
-#full-player {
+.full-player {
     position: fixed;
     top: 0;
     left: 0;
@@ -459,12 +459,12 @@ button{
     z-index: -50;
 }
 
-#full-player.active {
+.full-player.active {
     transform: translateY(0);
     z-index: 50;
 }
 
-#full-player .safe-area-top {
+.full-player__safe-area-top {
     position: fixed;
     top: 0;
     width: 100%;
@@ -472,11 +472,11 @@ button{
     background-color: var(--active-color);
 }
 
-#full-player.hidden .full-player-content {
+.full-player.hidden .full-player__content {
     display: none;
 }
 
-#full-player .close-btn {
+.full-player__close-btn {
     position: absolute;
     top: calc(env(safe-area-inset-top) + 10px);
     left: 10px;
@@ -484,7 +484,7 @@ button{
     color: var(--text-color);
 }
 
-.full-player-content {
+.full-player__content {
     width: 85%;
     position: absolute;
     top: 50%;
@@ -492,7 +492,7 @@ button{
     transform: translate(-50%,-55%);
 }
 
-#full-player .music-img {
+.full-player__img {
     display: flex;
     width: 60%;
     aspect-ratio: 1;
@@ -506,18 +506,18 @@ button{
     box-shadow: 0 0 8px var(--active-color);
 }
 
-#full-player .song-title {
+.full-player__song-title {
     text-align: center;
     font-size: 22px;
     margin-top: 4px;
 }
 
-#full-player .progress-container {
+.full-player__progress-container {
     margin-top: 70px;
     font-size: 0;
 }
 
-#full-player .progress-bar {
+.full-player__progress-bar {
     appearance: none;
     width: 100%;
     height: 7px;
@@ -527,13 +527,13 @@ button{
     background: linear-gradient(to right, var(--active-color) 0%, var(--bg-color) 0%);
 }
 
-.progress-bar::-moz-range-progress {
+.full-player__progress-bar::-moz-range-progress {
     background: var(--active-color);
     height: 7px;
     border-radius: 4px;
 }
 
-#full-player .progress-bar::-webkit-slider-thumb {
+.full-player__progress-bar::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 13px;
@@ -544,12 +544,12 @@ button{
     box-shadow: none;
 }
 
-#full-player .song-length {
+.full-player__song-length {
     font-size: 12px;
     color: var(--text-color2);
 }
 
-#full-player .controlls {
+.full-player__controlls {
     display: flex;
     width: 70%;
     margin: 0 auto;
@@ -558,13 +558,13 @@ button{
     justify-content: space-between;
 }
 
-#full-player .prev-btn,
-#full-player .next-btn {
+.full-player__prev-btn,
+.full-player__next-btn {
     color: var(--text-color);
     font-size: 30px;
 }
 
-#full-player .play-btn {
+.full-player__play-btn {
     font-size: 27px;
     width: 60px;
     height: 60px;
@@ -576,16 +576,16 @@ button{
     border-radius: 30px;
 }
 
-#full-player .play-btn .fa-play::before {
+.full-player__play-btn .fa-play::before {
     position: relative;
     right: -1.5px; /* アイコンのずれ調整用 */
 }
 
-#full-player .play-btn:active {
+.full-player__play-btn:active {
     background-color: var(--active-color);
 }
 
-#full-player .safe-area-bottom {
+.full-player__safe-area-bottom {
     position: fixed;
     bottom: 0;
     width: 100%;

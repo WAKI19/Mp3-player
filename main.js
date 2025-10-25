@@ -1,9 +1,15 @@
 import { StorageManager } from './classes/StorageManager';
 import { AudioPlayer } from "./classes/AudioPlayer";
 
+import { MiniPlayerUI } from './ui/miniPlayerUI';
+import { FullPlayerUI } from './ui/FullPlayerUI';
+
 
 const player = new AudioPlayer(document.getElementById("audio"));
 const storage = new StorageManager();
+
+const miniPlayerUI = new MiniPlayerUI(document.getElementById("mini-player"));
+const fullPlayerUI = new FullPlayerUI(document.getElementById("full-player"));
 
 let allSongs = [];
 
@@ -28,55 +34,15 @@ const playlistDetailHeader = document.querySelector("#playlist-detail .mini-head
 const playlistDetailHeaderTitle = document.querySelector("#playlist-detail .mini-header .playlist-title");
 const playlistDetailPlaylistTitle = document.querySelector("#playlist-detail .playlist-info .playlist-title");
 
-const miniPlayer = document.getElementById("mini-player");
-const playBtns = document.querySelectorAll(".play-btn");
-
-const fullPlayer = document.getElementById("full-player");
-const fullPlayerCloseBtn = document.getElementById("full-player-close-btn");
-const progressBar = document.querySelector("#full-player .progress-bar");
-
 const tabs = document.querySelectorAll(".tab-button");
 const contents = document.querySelectorAll(".tab-content");
 
 
 
 //関数
-function togglePlayBtn() {
-  playBtns.forEach(playBtn => {
-    playBtn.innerHTML = "";
-
-    if (player.audio.paused) {
-      playBtn.innerHTML = `<i class="fa-solid fa-play"></i>`;
-    } else {
-      playBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
-    }
-  });
-}
-
-function setupMiniPlayer(duration) {
-  const miniPlayerTitle = miniPlayer.querySelector('.song-title');
-  const miniPlayerSongLength = miniPlayer.querySelector('.song-length');
-
-  const currentTitle = player.getCurrentTrack().title;
-
-  miniPlayerTitle.textContent = currentTitle;
-  miniPlayerSongLength.textContent = formatAudioDuration(duration);
-}
-
-function setupFullPlayer(duration) {
-  const fullPlayerTitle = fullPlayer.querySelector('.song-title');
-  const fullPlayerSongLength = fullPlayer.querySelector('.song-length');
-
-  const currentTitle = player.getCurrentTrack().title;
-
-  fullPlayerTitle.textContent = currentTitle;
-  fullPlayerSongLength.textContent = formatAudioDuration(duration);
-  progressBar.max = duration;
-}
-
 function updateProgressColor() {
-  const percentage = (progressBar.value / progressBar.max) * 100 || 0;
-  progressBar.style.background = `linear-gradient(to right, var(--active-color) ${percentage}%, var(--bg-color) ${percentage}%)`;
+  const percentage = (fullPlayerUI.progressBar.value / fullPlayerUI.progressBar.max) * 100 || 0;
+  fullPlayerUI.progressBar.style.background = `linear-gradient(to right, var(--active-color) ${percentage}%, var(--bg-color) ${percentage}%)`;
 }
 
 function formatAudioDuration(duration) {
@@ -137,21 +103,26 @@ function findSongIndexByTitle(songs, title) {
 //イベント
  //audioロード時
 player.onLoaded = (duration) => {
-  setupMiniPlayer(duration);
-  setupFullPlayer(duration);
-  activate(miniPlayer);
+  const title = player.getCurrentTrack().title;
+  const length = formatAudioDuration(duration);
+
+  miniPlayerUI.setup(title, length);
+  fullPlayerUI.setup(title, length, duration);
+  miniPlayerUI.show();
 };
 
 player.onPlay = () => {
-  togglePlayBtn();
+  miniPlayerUI.setPauseBtn();
+  fullPlayerUI.setPauseBtn();
 }
 
 player.onPause = () => {
-  togglePlayBtn();
+  miniPlayerUI.setPlayBtn();
+  fullPlayerUI.setPlayBtn();
 };
 
 player.onTimeUpdate = () => {
-  progressBar.value = player.audio.currentTime; // 現在の再生位置を反映
+  fullPlayerUI.progressBar.value = player.audio.currentTime; // 現在の再生位置を反映
   updateProgressColor();
 };
 
@@ -207,7 +178,7 @@ allSongsSearchClearBtn.addEventListener('click', () => {
   allSongsSearchInput.focus();
   allSongsSearchClearBtn.style.display = 'none';
 
-  loadSongs(storage.loadSongs());
+  loadSongs(allSongs);
 });
 
 
@@ -269,27 +240,29 @@ playlistDetail.addEventListener('scroll', () => {
 });
 
   //ミニプレーヤー
-miniPlayer.addEventListener('click', (e) => {
-  activate(fullPlayer);
-  deactivate(miniPlayer);
+miniPlayerUI.root.addEventListener('click', () => {
+  fullPlayerUI.show();
+  miniPlayerUI.hide();
 });
 
-playBtns.forEach(playBtn => {
-  playBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    player.togglePlay();
-  });
+miniPlayerUI.playBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  player.togglePlay();
 });
 
   //フルプレーヤー
-fullPlayerCloseBtn.addEventListener('click', () => {
-  deactivate(fullPlayer);
-  activate(miniPlayer);
+fullPlayerUI.closeBtn.addEventListener('click', () => {
+  fullPlayerUI.hide();
+  miniPlayerUI.show();
 });
 
-progressBar.addEventListener("input", () => {
-  player.seek(progressBar.value);
+fullPlayerUI.progressBar.addEventListener("input", () => {
+  player.seek(fullPlayerUI.progressBar.value);
   updateProgressColor();
+});
+
+fullPlayerUI.playBtn.addEventListener('click', (e) => {
+  player.togglePlay();
 });
 
   //タブ
@@ -377,9 +350,6 @@ function activate(elem) {
 function deactivate(elem) {
   elem.classList.remove("active");
 }
-
-
-
 
 
 

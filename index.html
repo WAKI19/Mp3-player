@@ -138,35 +138,35 @@
     </section>
 
     <!-- ミニプレーヤー -->
-    <div id="mini-player">
-        <i class="icon fa-solid fa-music" style="color: var(--active-color);"></i>
+    <div class="mini-player" id="mini-player">
+        <i class="mini-player__icon fa-solid fa-music" style="color: var(--active-color);"></i>
         <div>
-            <p class="song-title" style="color: var(--active-color);">Song Title</p>
-            <p class="song-length">00:00</p>
+            <p class="mini-player__song-title" style="color: var(--active-color);">Song Title</p>
+            <p class="mini-player__song-length">00:00</p>
         </div>
-        <button class="play-btn"><i class="fa-solid fa-play"></i></button>
+        <button class="mini-player__play-btn"><i class="fa-solid fa-play"></i></button>
     </div>
 
     <!-- フルプレーヤー -->
-    <div id="full-player">
-        <div class="safe-area-top"></div>
+    <div class="full-player" id="full-player">
+        <div class="full-player__safe-area-top"></div>
 
-        <button id="full-player-close-btn" class="close-btn"><i class="fa-solid fa-chevron-down"></i></button>
-        <div class="full-player-content">
-            <div class="music-img">♬</div>
-            <h3 class="song-title">Song Title</h3>
-            <div class="progress-container">
-                <input type="range" class="progress-bar" step="0.1">
-                <span class="song-length">00:00</span>
+        <button class="full-player__close-btn"><i class="fa-solid fa-chevron-down"></i></button>
+        <div class="full-player__content">
+            <div class="full-player__img">♬</div>
+            <h3 class="full-player__song-title">Song Title</h3>
+            <div class="full-player__progress-container">
+                <input class="full-player__progress-bar" type="range" step="0.1">
+                <span class="full-player__song-length">00:00</span>
             </div>
-            <div class="controlls">
-                <button class="prev-btn"><i class="fa-solid fa-backward-step"></i></button>
-                <button class="play-btn"><i class="fa-solid fa-play"></i></button>
-                <button class="next-btn"><i class="fa-solid fa-forward-step"></i></button>
+            <div class="full-player__controlls">
+                <button class="full-player__prev-btn"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="full-player__play-btn"><i class="fa-solid fa-play"></i></button>
+                <button class="full-player__next-btn"><i class="fa-solid fa-forward-step"></i></button>
             </div>
         </div>
 
-        <div class="safe-area-bottom"></div>
+        <div class="full-player__safe-area-bottom"></div>
     </div> 
 
     <!-- タブバー -->
