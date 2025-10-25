@@ -494,7 +494,7 @@ header {
     box-shadow: 0 0 8px var(--active-color);
 }
 
-#full-player .music-title {
+#full-player .song-title {
     text-align: center;
     font-size: 22px;
     margin-top: 4px;
@@ -511,8 +511,14 @@ header {
     height: 7px;
     margin-bottom: 2px;
     font-size: 13px;
-    border-radius: 9999px;
-    background-color: var(--bg-color);
+    border-radius: 4px;
+    background: linear-gradient(to right, var(--active-color) 0%, var(--bg-color) 0%);
+}
+
+.progress-bar::-moz-range-progress {
+    background: var(--active-color);
+    height: 7px;
+    border-radius: 4px;
 }
 
 #full-player .progress-bar::-webkit-slider-thumb {

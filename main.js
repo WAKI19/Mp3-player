@@ -62,14 +62,30 @@ function togglePlayBtn() {
   });
 }
 
-function setupMiniPlayer(songLength) {
+function setupMiniPlayer(duration) {
   const miniPlayerTitle = miniPlayer.querySelector('.song-title');
   const miniPlayerSongLength = miniPlayer.querySelector('.song-length');
 
   const currentTitle = currentPlaylist[currentIndex].title;
 
   miniPlayerTitle.textContent = currentTitle;
-  miniPlayerSongLength.textContent = songLength;
+  miniPlayerSongLength.textContent = formatAudioDuration(duration);
+}
+
+function setupFullPlayer(duration) {
+  const fullPlayerTitle = fullPlayer.querySelector('.song-title');
+  const fullPlayerSongLength = fullPlayer.querySelector('.song-length');
+
+  const currentTitle = currentPlaylist[currentIndex].title;
+
+  fullPlayerTitle.textContent = currentTitle;
+  fullPlayerSongLength.textContent = formatAudioDuration(duration);
+  progressBar.max = duration;
+}
+
+function updateProgressColor() {
+  const percentage = (progressBar.value / progressBar.max) * 100 || 0;
+  progressBar.style.background = `linear-gradient(to right, var(--active-color) ${percentage}%, var(--bg-color) ${percentage}%)`;
 }
 
 function formatAudioDuration(duration) {
@@ -141,13 +157,14 @@ const playlistDetail = document.getElementById("playlist-detail");
 const playlistDetailCloseBtn = document.getElementById("playlist-detail-close-btn");
 const playlistDetailHeader = document.querySelector("#playlist-detail .header");
 const playlistDetailHeaderTitle = document.querySelector("#playlist-detail .header .playlist-title");
-const playlistDetailPlaylistTitle = document.querySelector("#playlist-detail .playlist-info .playlist-title")
+const playlistDetailPlaylistTitle = document.querySelector("#playlist-detail .playlist-info .playlist-title");
 
 const miniPlayer = document.getElementById("mini-player");
 const playBtns = document.querySelectorAll(".play-btn");
 
 const fullPlayer = document.getElementById("full-player");
 const fullPlayerCloseBtn = document.getElementById("full-player-close-btn");
+const progressBar = document.querySelector("#full-player .progress-bar");
 
 const tabs = document.querySelectorAll(".tab-button");
 const contents = document.querySelectorAll(".tab-content");
@@ -165,9 +182,10 @@ const contents = document.querySelectorAll(".tab-content");
 //イベント
   //currentAudioが読み込まれた（変更された際の処理）
 currentAudio.addEventListener('loadedmetadata', (e) => {
-  const audioLength = formatAudioDuration(e.target.duration);
+  const duration = e.target.duration;
 
-  setupMiniPlayer(audioLength);
+  setupMiniPlayer(duration);
+  setupFullPlayer(duration);
   activate(miniPlayer);
 });
 
@@ -177,6 +195,11 @@ currentAudio.addEventListener('play', () => {
 
 currentAudio.addEventListener('pause', () => {
   togglePlayBtn();
+});
+
+currentAudio.addEventListener("timeupdate", () => {
+  progressBar.value = currentAudio.currentTime; // 現在の再生位置を反映
+  updateProgressColor();
 });
 
   //全曲ページ
@@ -352,6 +375,11 @@ playBtns.forEach(playBtn => {
 fullPlayerCloseBtn.addEventListener('click', () => {
   deactivate(fullPlayer);
   activate(miniPlayer);
+});
+
+progressBar.addEventListener("input", () => {
+  currentAudio.currentTime = progressBar.value;
+  updateProgressColor();
 });
 
   //タブ
