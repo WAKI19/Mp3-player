@@ -1,13 +1,22 @@
 import { StorageManager } from './classes/StorageManager';
 import { AudioPlayer } from "./classes/AudioPlayer";
+import { PlaylistManager } from './classes/PlaylistManager';
 
+import { AllSongsUI } from './ui/AllSongsUI';
 import { MiniPlayerUI } from './ui/miniPlayerUI';
 import { FullPlayerUI } from './ui/FullPlayerUI';
+
+import { activate } from './classes/Utils';
+import { deactivate } from './classes/Utils';
+import { formatAudioDuration } from './classes/Utils';
+import { filterSongsByTitle } from './classes/Utils';
 
 
 const player = new AudioPlayer(document.getElementById("audio"));
 const storage = new StorageManager();
+const playlistManager = new PlaylistManager(storage);
 
+const allSongsUI = new AllSongsUI(document.getElementById("all-songs"));
 const miniPlayerUI = new MiniPlayerUI(document.getElementById("mini-player"));
 const fullPlayerUI = new FullPlayerUI(document.getElementById("full-player"));
 
@@ -15,14 +24,6 @@ let allSongs = [];
 
 
 //要素取得
-  //全曲ページ
-const deleteModeBtn = document.getElementById("delete-mode-btn");
-const importBtn = document.getElementById("import-btn");
-const fileInput = document.getElementById("file-input");
-const allSongsSearchInput = document.getElementById('all-songs-search-input');
-const allSongsSearchClearBtn = document.getElementById("all-songs-search-clear-btn");
-const allSongsSongList = document.getElementById("all-songs-song-list");
-
   //プレイリストページ
 const newPlaylistModalOpenBtn = document.getElementById("new-playlist-modal-open-btn");
 const newPlaylistModalCloseBtn = document.getElementById("new-playlist-modal-close-btn");
@@ -37,62 +38,6 @@ const playlistDetailPlaylistTitle = document.querySelector("#playlist-detail .pl
 const tabs = document.querySelectorAll(".tab-button");
 const contents = document.querySelectorAll(".tab-content");
 
-
-
-//関数
-function updateProgressColor() {
-  const percentage = (fullPlayerUI.progressBar.value / fullPlayerUI.progressBar.max) * 100 || 0;
-  fullPlayerUI.progressBar.style.background = `linear-gradient(to right, var(--active-color) ${percentage}%, var(--bg-color) ${percentage}%)`;
-}
-
-function formatAudioDuration(duration) {
-  if (isNaN(duration) || duration < 0) return "0:00";
-
-  const hours = Math.floor(duration / 3600);
-  const minutes = Math.floor((duration % 3600) / 60);
-  const seconds = Math.floor(duration % 60);
-
-  // 2桁ゼロ埋め（秒・分）
-  const mm = String(minutes).padStart(2, "0");
-  const ss = String(seconds).padStart(2, "0");
-
-  if (hours > 0) {
-    return `${hours}:${mm}:${ss}`; // 1時間以上 → hh:mm:ss
-  } else {
-    return `${minutes}:${ss}`; // 1時間未満 → m:ss
-  }
-}
-
-
-/**
- * 曲リストと検索文字列を受け取り、
- * タイトルに文字列を含む曲だけを返す関数
- * 
- * @param {Array} songs - 曲リスト（例: [{ title: "track1", path: "music/track1.mp3" }, ...]）
- * @param {string} keyword - 検索文字列
- * @returns {Array} 条件に一致する曲リスト
- */
-function filterSongsByTitle(songs, keyword) {
-  if (!keyword) return songs; // 空文字なら全件返す
-
-  // 部分一致（大文字・小文字を区別せず）
-  return songs.filter(song =>
-    song.title.toLowerCase().includes(keyword.toLowerCase())
-  );
-}
-
-
-/**
- * 曲リストとタイトルを受け取り、
- * 一致するタイトルの曲のインデックス番号を返す関数
- * 
- * @param {Array} songs - 曲リスト（例: [{ title: "track1", path: "music/track1.mp3" }, ...]）
- * @param {string} title - 探したい曲のタイトル
- * @returns {number} 見つかった曲のインデックス（見つからなければ -1）
- */
-function findSongIndexByTitle(songs, title) {
-  return songs.findIndex(song => song.title === title);
-}
 
 
 
@@ -122,68 +67,56 @@ player.onPause = () => {
 };
 
 player.onTimeUpdate = () => {
-  fullPlayerUI.progressBar.value = player.audio.currentTime; // 現在の再生位置を反映
-  updateProgressColor();
+  fullPlayerUI.setProgressValue(player.audio.currentTime); // 現在の再生位置を反映
 };
 
   //全曲ページ
-deleteModeBtn.addEventListener('click', () => {
-  const songDeleteBtns = document.querySelectorAll("#all-songs-song-list .song-list__delete-button");
-
-  toggleDeleteMode();
-
-  if (isDeleteMode()) {
-    songDeleteBtns.forEach(btn => {
-      btn.classList.add("active");
-    });
-  } else {
-    songDeleteBtns.forEach(btn => {
-      btn.classList.remove("active");
-    });
-  }
+allSongsUI.deleteModeBtn.addEventListener('click', () => {
+  allSongsUI.toggleDeleteMode();
 });
 
-importBtn.addEventListener('click', () => {
-  fileInput.click();
+allSongsUI.importBtn.addEventListener('click', () => {
+  allSongsUI.fileInput.click();
 });
 
-fileInput.addEventListener('change', async (e) => {
+allSongsUI.fileInput.addEventListener('change', async (e) => {
   const files = Array.from(e.target.files);
 
   for (const file of files) {
     storage.importSong(file);
 
     // 表示更新
-    loadSongs(allSongs);
+    allSongs = storage.loadSongs();
+    allSongsUI.renderSongList(allSongs, storage);
   }
 
-  fileInput.value = ''; // 選択リセット
+  allSongsUI.fileInput.value = ''; // 選択リセット
 });
 
-allSongsSearchInput.addEventListener('input', () => {
-  const val = allSongsSearchInput.value;
+allSongsUI.searchInput.addEventListener('input', () => {
+  const val = allSongsUI.getSearchValue();
   const filtered = filterSongsByTitle(allSongs, val);
 
-  loadSongs(filtered);
+  allSongsUI.renderSongList(filtered, storage);
 
   if (val.trim() !== '') {
-    allSongsSearchClearBtn.style.display = 'block';
+    allSongsUI.searchClearBtn.style.display = 'block';
   } else {
-    allSongsSearchClearBtn.style.display = 'none';
+    allSongsUI.searchClearBtn.style.display = 'none';
   }
 });
 
-allSongsSearchClearBtn.addEventListener('click', () => {
-  allSongsSearchInput.value = '';
-  allSongsSearchInput.focus();
-  allSongsSearchClearBtn.style.display = 'none';
+allSongsUI.searchClearBtn.addEventListener('click', () => {
+  allSongsUI.searchInput.value = '';
+  allSongsUI.searchInput.focus();
+  allSongsUI.searchClearBtn.style.display = 'none';
 
-  loadSongs(allSongs);
+  allSongsUI.renderSongList(allSongs, storage);
 });
 
 
 
-allSongsSongList.addEventListener('click', (e) => {
+allSongsUI.songList.addEventListener('click', (e) => {
   if (e.target.classList.contains("delete-btn")) return;
 
   const li = e.target.closest('li');
@@ -197,7 +130,7 @@ allSongsSongList.addEventListener('click', (e) => {
     player.playTrack(index);
   }
 
-  if (li && allSongsSongList.contains(li)) {
+  if (li && allSongsUI.songList.contains(li)) {
     if (active) {
       active.classList.remove("active");
     }
@@ -257,8 +190,8 @@ fullPlayerUI.closeBtn.addEventListener('click', () => {
 });
 
 fullPlayerUI.progressBar.addEventListener("input", () => {
-  player.seek(fullPlayerUI.progressBar.value);
-  updateProgressColor();
+  player.seek(fullPlayerUI.getProgressValue());
+  fullPlayerUI.updateProgressColor();
 });
 
 fullPlayerUI.playBtn.addEventListener('click', (e) => {
@@ -289,78 +222,10 @@ tabs.forEach(tab => {
 
 
 
-
-
-//関数
-async function loadSongs(songs) {
-  allSongsSongList.innerHTML = "";
-  for (const song of songs) {
-    await addSongToList(song.title, song.path);
-  }
-}
-
-async function addSongToList(title, path) {
-  // ファイルをBase64形式で読み込む
-  const data = await storage.readFileAsBase64(path);
-  const index = findSongIndexByTitle(await storage.loadSongs(), title);
-
-  const li = document.createElement('li');
-  li.classList.add("song-list__item")
-  li.innerHTML = `
-    <button class="song-list__delete-button fa-solid fa-circle-minus"></button>
-    <i class="song-list__icon fa-solid fa-music"></i>
-    <div>
-      <p class="song-list__title">${title}</p>
-      <p class="song-list__length">--:--</p>
-    </div>
-  `;
-  li.dataset.index = index;
-  li.querySelector('.song-list__delete-button').addEventListener('click', () => {
-    storage.deleteSong(path);
-  });
-  //削除モード中だったら削除用のUIを表示
-  if (isDeleteMode()) {
-    li.querySelector(".delete-btn").classList.add("active");    
-  };
-
-  // Data URLとしてAudioを生成
-  const audio = new Audio(`data:audio/mp3;base64,${data}`);
-  audio.addEventListener('loadedmetadata', () => {
-    const minutes = Math.floor(audio.duration / 60);
-    const seconds = Math.floor(audio.duration % 60);
-    li.querySelector(".song-list__length").textContent =
-      `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  });
-
-  allSongsSongList.appendChild(li);
-}
-
-function toggleDeleteMode() {
-  deleteModeBtn.classList.toggle("active");
-}
-
-function isDeleteMode() {
-  return deleteModeBtn.classList.contains("active");
-}
-
-function activate(elem) {
-  elem.classList.add("active");
-}
-
-function deactivate(elem) {
-  elem.classList.remove("active");
-}
-
-
-
-
-
-
-
 //起動時処理
 async function initApp() {
   allSongs = await storage.loadSongs();
-  loadSongs(allSongs);        // 読み込み完了後に描画
+  allSongsUI.renderSongList(allSongs, storage);       // 読み込み完了後に描画
 }
 
 initApp();

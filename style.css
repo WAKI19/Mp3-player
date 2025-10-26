@@ -57,13 +57,13 @@ button{
     z-index: 10;
 }
 
-.header__button {
+.header__btn {
     font-size: 20px;
     color: var(--text-color);
     margin-left: 10px;
 }
 
-.header__button:active {
+.header__btn:active {
     color: var(--accent-color);
 }
 
@@ -100,7 +100,7 @@ button{
     outline: none;
 }
 
-.search-box__clear-button {
+.search-box__clear-btn {
   position: absolute;
   right: 0.3em;
   top: 50%;
@@ -112,7 +112,7 @@ button{
   color: var(--text-color2);
 }
 
-.search-box__clear-button:active {
+.search-box__clear-btn:active {
     opacity: 0.5;
 }
 
@@ -129,18 +129,18 @@ button{
     align-items: center;
 }
 
-.song-list__delete-button {
+.song-list__delete-btn {
     display: none;
     color: red;
     font-size: 20px;
     margin-right: 30px;
 }
 
-.song-list__delete-button:active {
+.song-list__delete-btn:active {
     opacity: 0.5;
 }
 
-.song-list__delete-button.active {
+.song-list__delete-btn.active {
     display: inline-block;
 }
 

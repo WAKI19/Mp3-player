@@ -16,6 +16,20 @@ export class FullPlayerUI extends BaseUI {
         this.progressBar.max = duration;
     }
 
+    getProgressValue() {
+        return this.progressBar.value;
+    }
+
+    setProgressValue(value) {
+        this.progressBar.value = value;
+        this.updateProgressColor();
+    }
+
+    updateProgressColor() {
+        const percentage = (this.progressBar.value / this.progressBar.max) * 100 || 0;
+        this.progressBar.style.background = `linear-gradient(to right, var(--active-color) ${percentage}%, var(--bg-color) ${percentage}%)`;
+    }
+
     setPlayBtn() {
         this.playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
     }
