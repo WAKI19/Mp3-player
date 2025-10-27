@@ -38,6 +38,7 @@ export class StorageManager {
     const arrayBuffer = await file.arrayBuffer();
     const base64Data = this.arrayBufferToBase64(arrayBuffer);
     const title = file.name.replace(/\.mp3$/i, '');
+    const duration = await this.getAudioDurationFromBase64(base64Data);
     const path = `music/${file.name}`;
 
     // 既存リストを取得
@@ -53,15 +54,23 @@ export class StorageManager {
 
     // リスト更新
     if (existingIndex !== -1) {
-      songs[existingIndex] = { title, path };
+      songs[existingIndex] = { title, duration, path };
     } else {
-      songs.push({ title, path });
+      songs.push({ title, duration, path });
     }
 
     songs.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
     await this.saveSongs(songs);
 
-    return { title, path };
+    return { title, duration, path };
+  }
+
+  getAudioDurationFromBase64(base64) {
+    return new Promise((resolve, reject) => {
+      const audio = new Audio(`data:audio/mp3;base64,${base64}`);
+      audio.addEventListener('loadedmetadata', () => resolve(audio.duration));
+      audio.addEventListener('error', (e) => reject(e));
+    });
   }
 
   /**

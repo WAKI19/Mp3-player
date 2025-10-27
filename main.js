@@ -6,7 +6,7 @@ import { AllSongsUI } from './ui/AllSongsUI';
 import { MiniPlayerUI } from './ui/miniPlayerUI';
 import { FullPlayerUI } from './ui/FullPlayerUI';
 
-import { activate } from './classes/Utils';
+import { activate, findSongIndexByTitle } from './classes/Utils';
 import { deactivate } from './classes/Utils';
 import { formatAudioDuration } from './classes/Utils';
 import { filterSongsByTitle } from './classes/Utils';
@@ -47,18 +47,18 @@ const contents = document.querySelectorAll(".tab-content");
 
 //イベント
  //audioロード時
-player.onLoaded = (duration) => {
-  const title = player.getCurrentTrack().title;
-  const length = formatAudioDuration(duration);
+player.canPlay = () => {
+  const song = player.getCurrentTrack();
 
-  miniPlayerUI.setup(title, length);
-  fullPlayerUI.setup(title, length, duration);
+  miniPlayerUI.setup(song.title, song.duration);
+  fullPlayerUI.setup(song.title, song.duration);
   miniPlayerUI.show();
 };
 
 player.onPlay = () => {
   miniPlayerUI.setPauseBtn();
   fullPlayerUI.setPauseBtn();
+  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
 }
 
 player.onPause = () => {
@@ -69,6 +69,10 @@ player.onPause = () => {
 player.onTimeUpdate = () => {
   fullPlayerUI.setProgressValue(player.audio.currentTime); // 現在の再生位置を反映
 };
+
+player.onEnded = () => {
+  player.next();
+}
 
   //全曲ページ
 allSongsUI.deleteModeBtn.addEventListener('click', () => {
@@ -83,12 +87,19 @@ allSongsUI.fileInput.addEventListener('change', async (e) => {
   const files = Array.from(e.target.files);
 
   for (const file of files) {
-    storage.importSong(file);
-
-    // 表示更新
-    allSongs = storage.loadSongs();
-    allSongsUI.renderSongList(allSongs, storage);
+    await storage.importSong(file);
   }
+
+  //全曲プレイリストを再生中だった場合、保存したファイルをプレイリストに含める
+  if (player.currentPlaylist === allSongs) {
+    player.setPlaylist(await storage.loadSongs());
+  }
+
+  allSongs = await storage.loadSongs();
+
+  //表示更新
+  allSongsUI.renderSongList(allSongs, storage);
+  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
 
   allSongsUI.fileInput.value = ''; // 選択リセット
 });
@@ -98,6 +109,7 @@ allSongsUI.searchInput.addEventListener('input', () => {
   const filtered = filterSongsByTitle(allSongs, val);
 
   allSongsUI.renderSongList(filtered, storage);
+  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
 
   if (val.trim() !== '') {
     allSongsUI.searchClearBtn.style.display = 'block';
@@ -112,29 +124,19 @@ allSongsUI.searchClearBtn.addEventListener('click', () => {
   allSongsUI.searchClearBtn.style.display = 'none';
 
   allSongsUI.renderSongList(allSongs, storage);
+  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
 });
 
-
-
 allSongsUI.songList.addEventListener('click', (e) => {
-  if (e.target.classList.contains("delete-btn")) return;
-
   const li = e.target.closest('li');
-  const index = li.dataset.index;
-  const active = document.querySelector("#all-songs-song-list li.active");
+  const index = findSongIndexByTitle(allSongs, li.dataset.title);
 
   if (allSongs[index] === player.getCurrentTrack()) {
     player.togglePlay();
   } else {
     player.setPlaylist(allSongs);
     player.playTrack(index);
-  }
-
-  if (li && allSongsUI.songList.contains(li)) {
-    if (active) {
-      active.classList.remove("active");
-    }
-    li.classList.add("active");
+    allSongsUI.highlightPlayingSong(allSongs[index]);
   }
 });
 
@@ -194,8 +196,16 @@ fullPlayerUI.progressBar.addEventListener("input", () => {
   fullPlayerUI.updateProgressColor();
 });
 
-fullPlayerUI.playBtn.addEventListener('click', (e) => {
+fullPlayerUI.prevBtn.addEventListener('click', () => {
+  player.previous();
+});
+
+fullPlayerUI.playBtn.addEventListener('click', () => {
   player.togglePlay();
+});
+
+fullPlayerUI.nextBtn.addEventListener('click', () => {
+  player.next();
 });
 
   //タブ
@@ -226,6 +236,9 @@ tabs.forEach(tab => {
 async function initApp() {
   allSongs = await storage.loadSongs();
   allSongsUI.renderSongList(allSongs, storage);       // 読み込み完了後に描画
+  if (player.getCurrentTrack()) {
+    allSongsUI.highlightPlayingSong(player.getCurrentTrack());
+  };
 }
 
 initApp();

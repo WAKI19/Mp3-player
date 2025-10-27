@@ -1,5 +1,7 @@
 import { BaseUI } from "./BaseUI";
 
+import { formatAudioDuration } from "../classes/Utils";
+
 export class MiniPlayerUI extends BaseUI {
     constructor(root) {
         super(root);
@@ -8,9 +10,9 @@ export class MiniPlayerUI extends BaseUI {
         this.playBtn = root.querySelector(".mini-player__play-btn");
     }
 
-    setup(songTitle, songLength) {
+    setup(songTitle, songDuration) {
         this.songTitleElem.textContent = songTitle;
-        this.songLengthElem.textContent = songLength;
+        this.songLengthElem.textContent = formatAudioDuration(songDuration);
     }
 
     setPlayBtn() {

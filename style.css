@@ -564,6 +564,11 @@ button{
     font-size: 30px;
 }
 
+.full-player__prev-btn:active,
+.full-player__next-btn:active {
+    opacity: 0.5;
+}
+
 .full-player__play-btn {
     font-size: 27px;
     width: 60px;

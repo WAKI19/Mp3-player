@@ -18,6 +18,7 @@ export class AudioPlayer {
     this.onPlay = null;
     this.onPause = null;
     this.onLoaded = null;
+    this.canPlay = null;
     this.onTimeUpdate = null;
     this.onEnded = null;
 
@@ -30,7 +31,11 @@ export class AudioPlayer {
   #attachEvents() {
     this.audio.addEventListener("loadedmetadata", (e) => {
       this.isReady = true;
-      if (this.onLoaded) this.onLoaded(e.target.duration);
+      if (this.onLoaded) this.onLoaded();
+    });
+
+    this.audio.addEventListener("canplay", () => {
+        if (this.canPlay) this.canPlay();
     });
 
     this.audio.addEventListener("play", () => {
@@ -58,7 +63,6 @@ export class AudioPlayer {
    */
   setPlaylist(songs) {
     this.currentPlaylist = songs;
-    this.currentIndex = 0;
   }
 
   /**
@@ -95,6 +99,9 @@ export class AudioPlayer {
     if (this.currentIndex < this.currentPlaylist.length - 1) {
       this.currentIndex++;
       await this.loadCurrentTrack();
+    } else {
+        this.currentIndex = 0;
+        await this.loadCurrentTrack();
     }
   }
 
@@ -105,6 +112,9 @@ export class AudioPlayer {
     if (this.currentIndex > 0) {
       this.currentIndex--;
       await this.loadCurrentTrack();
+    } else {
+        this.currentIndex = this.currentPlaylist.length - 1;
+        await this.loadCurrentTrack();
     }
   }
 
@@ -139,7 +149,6 @@ export class AudioPlayer {
   async playTrack(index) {
     this.currentIndex = index;
     await this.loadCurrentTrack();
-    this.play();
   }
 
   /**

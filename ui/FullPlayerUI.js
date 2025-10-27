@@ -1,5 +1,7 @@
 import { BaseUI } from "./BaseUI";
 
+import { formatAudioDuration } from "../classes/Utils";
+
 export class FullPlayerUI extends BaseUI {
     constructor(root) {
         super(root);
@@ -7,13 +9,15 @@ export class FullPlayerUI extends BaseUI {
         this.songTitleElem = root.querySelector(".full-player__song-title");
         this.songLengthElem = root.querySelector(".full-player__song-length");
         this.progressBar = root.querySelector(".full-player__progress-bar");
+        this.prevBtn = root.querySelector(".full-player__prev-btn");
         this.playBtn = root.querySelector(".full-player__play-btn");
+        this.nextBtn = root.querySelector(".full-player__next-btn");
     }
 
-    setup(songTitle, songLength, duration) {
+    setup(songTitle, songDuration) {
         this.songTitleElem.textContent = songTitle;
-        this.songLengthElem.textContent = songLength;
-        this.progressBar.max = duration;
+        this.songLengthElem.textContent = formatAudioDuration(songDuration);
+        this.progressBar.max = songDuration;
     }
 
     getProgressValue() {
