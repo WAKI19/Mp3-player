@@ -23,7 +23,7 @@ const miniPlayerUI = new MiniPlayerUI(document.getElementById("mini-player"));
 const fullPlayerUI = new FullPlayerUI(document.getElementById("full-player"));
 const playlistUI = new PlaylistUI(document.getElementById("playlist"));
 const playlistModalUI = new NewPlaylistModalUI(document.getElementById("new-playlist-modal"));
-const playlistDetailUI = new PlaylistDetailUI(document.getElementById("playlist-detail"));
+const playlistDetailUI = new PlaylistDetailUI(document.getElementById("playlist-detail")); //変数名にNewを付けるとエラーになるので省略
 
 let allSongs = [];
 let playlists = [];
@@ -155,10 +155,6 @@ playlistUI.modalOpenBtn.addEventListener('click', () => {
   playlistModalUI.show();
 });
 
-playlistModalUI.closeBtn.addEventListener('click', () => {
-  playlistModalUI.hide();
-});
-
 playlistUI.playlistList.addEventListener('click', (e) => {
   const li = e.target.closest('li');
   if (li && playlistUI.playlistList.contains(li)) {
@@ -180,6 +176,27 @@ playlistDetailUI.root.addEventListener('scroll', () => {
   } else {
     playlistDetailUI.headerTitle.style.display = "none";
   }
+});
+
+//新規プレイリストモーダル
+playlistModalUI.closeBtn.addEventListener('click', () => {
+  playlistModalUI.hide();
+  playlistModalUI.input.value = "";
+  playlistModalUI.hideErrorMessage();
+});
+
+playlistModalUI.createBtn.addEventListener('click', () => {
+  const val = playlistModalUI.input.value;
+
+  if (val === "") {
+    playlistModalUI.showErrorMessage("プレイリスト名を入力してください");
+    return;
+  };
+
+  playlistManager.createPlaylist(val);
+
+  playlistModalUI.hide();
+  playlistModalUI.input.value = "";
 });
 
   //ミニプレーヤー

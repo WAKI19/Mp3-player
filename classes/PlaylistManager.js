@@ -43,7 +43,7 @@ export class PlaylistManager {
     const newPlaylist = {
       id: crypto.randomUUID(),
       name,
-      imgBase64Data,
+      imgBase64Data: null, //サムネイル画像のbase64データ
       songs: [], // 曲の path の配列
     };
 

@@ -245,7 +245,6 @@ button{
     font-size: 16px;
     color: var(--text-color);
     margin-top: 35px;
-    margin-bottom: 16px;
     caret-color: var(--main-color);
     background-color: var(--bg-color2);
     border: none;
@@ -258,12 +257,19 @@ button{
     outline: none;
 }
 
+.modal__error-message {
+    color: red;
+    font-size: 14px;
+    display: none;
+}
+
 .modal__create-btn {
     font-size: 14px;
     padding: 6px 15px;
     background: var(--main-color);
     color: white;
     border-radius: 10px;
+    margin-top: 18px;
 }
 
 .modal__create-btn:active {
