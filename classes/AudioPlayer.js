@@ -29,12 +29,12 @@ export class AudioPlayer {
    * 🎵 イベントリスナーを内部登録
    */
   #attachEvents() {
-    this.audio.addEventListener("loadedmetadata", (e) => {
+    this.audio.addEventListener("loadedmetadata", () => {
       this.isReady = true;
       if (this.onLoaded) this.onLoaded();
     });
 
-    this.audio.addEventListener("canplay", () => {
+    this.audio.addEventListener("loadeddata", () => {
         if (this.canPlay) this.canPlay();
     });
 

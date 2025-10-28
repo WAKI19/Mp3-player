@@ -27,6 +27,7 @@ button{
     padding: 0;
 }
 
+/* tab-content */
 .tab-content {
     position: fixed;
     top: 0;
@@ -406,6 +407,7 @@ button{
     bottom: calc(env(safe-area-inset-bottom) + 59px);
     display: none;
     width: 96%;
+    height: 59px;
     padding: 10px 25px;
     align-items: center;
     background-color: var(--bg-color2);
@@ -544,7 +546,13 @@ button{
     box-shadow: none;
 }
 
-.full-player__song-length {
+.full-player__time-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.full-player__current-time,
+.full-player__remaining-time {
     font-size: 12px;
     color: var(--text-color2);
 }

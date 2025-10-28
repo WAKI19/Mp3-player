@@ -8,8 +8,8 @@ import { FullPlayerUI } from './ui/FullPlayerUI';
 
 import { activate, findSongIndexByTitle } from './classes/Utils';
 import { deactivate } from './classes/Utils';
-import { formatAudioDuration } from './classes/Utils';
 import { filterSongsByTitle } from './classes/Utils';
+import { hasSongByPath } from './classes/Utils';
 
 
 const player = new AudioPlayer(document.getElementById("audio"));
@@ -50,8 +50,8 @@ const contents = document.querySelectorAll(".tab-content");
 player.canPlay = () => {
   const song = player.getCurrentTrack();
 
-  miniPlayerUI.setup(song.title, song.duration);
-  fullPlayerUI.setup(song.title, song.duration);
+  miniPlayerUI.setup(song);
+  fullPlayerUI.setup(song);
   miniPlayerUI.show();
 };
 
@@ -66,13 +66,25 @@ player.onPause = () => {
   fullPlayerUI.setPlayBtn();
 };
 
-player.onTimeUpdate = () => {
-  fullPlayerUI.setProgressValue(player.audio.currentTime); // 現在の再生位置を反映
+player.onTimeUpdate = (currentTime, duration) => {
+  fullPlayerUI.update(currentTime, duration);
 };
 
 player.onEnded = () => {
   player.next();
-}
+};
+
+  //Fileインポート時
+storage.onFileImport = () => {
+
+};
+
+  //File削除時
+storage.onFileDelete = (path) => {
+  if (hasSongByPath(player.currentPlaylist, path)) {
+    console.log("再生中のプレイリストに削除した曲が含まれています！");
+  };
+};
 
   //全曲ページ
 allSongsUI.deleteModeBtn.addEventListener('click', () => {
@@ -99,7 +111,9 @@ allSongsUI.fileInput.addEventListener('change', async (e) => {
 
   //表示更新
   allSongsUI.renderSongList(allSongs, storage);
-  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
+  if (player.getCurrentTrack()) {
+    allSongsUI.highlightPlayingSong(player.getCurrentTrack());
+  }
 
   allSongsUI.fileInput.value = ''; // 選択リセット
 });
@@ -191,9 +205,24 @@ fullPlayerUI.closeBtn.addEventListener('click', () => {
   miniPlayerUI.show();
 });
 
-fullPlayerUI.progressBar.addEventListener("input", () => {
-  player.seek(fullPlayerUI.getProgressValue());
+fullPlayerUI.progressBar.addEventListener('touchstart', () => {
+  fullPlayerUI.isDragging = true;
+  fullPlayerUI.expansion();
+});
+
+fullPlayerUI.progressBar.addEventListener('input', () => {
+  fullPlayerUI.updateWhileDragging();
   fullPlayerUI.updateProgressColor();
+});
+
+fullPlayerUI.progressBar.addEventListener('change', () => {
+  player.seek(fullPlayerUI.getProgressValue());
+  // fullPlayerUI.updateWhileDragging();
+});
+
+fullPlayerUI.progressBar.addEventListener('touchend', () => {
+  fullPlayerUI.isDragging = false;
+  fullPlayerUI.reduction();
 });
 
 fullPlayerUI.prevBtn.addEventListener('click', () => {

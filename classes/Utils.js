@@ -39,7 +39,7 @@ export function formatAudioDuration(duration) {
  * 曲リストとタイトルを受け取り、
  * 一致するタイトルの曲のインデックス番号を返す関数
  * 
- * @param {Array} songs - 曲リスト（例: [{ title: "track1", path: "music/track1.mp3" }, ...]）
+ * @param {Array} songs - 曲リスト（例: [{ title: "track1", duration: 100.0, path: "music/track1.mp3" }, ...]）
  * @param {string} title - 探したい曲のタイトル
  * @returns {number} 見つかった曲のインデックス（見つからなければ -1）
  */
@@ -51,7 +51,7 @@ export function findSongIndexByTitle(songs, title) {
  * 曲リストと検索文字列を受け取り、
  * タイトルに文字列を含む曲だけを返す関数
  * 
- * @param {Array} songs - 曲リスト（例: [{ title: "track1", path: "music/track1.mp3" }, ...]）
+ * @param {Array} songs - 曲リスト（例: [{ title: "track1", duration: 100.0, path: "music/track1.mp3" }, ...]）
  * @param {string} keyword - 検索文字列
  * @returns {Array} 条件に一致する曲リスト
  */
@@ -62,4 +62,15 @@ export function filterSongsByTitle(songs, keyword) {
   return songs.filter(song =>
     song.title.toLowerCase().includes(keyword.toLowerCase())
   );
+}
+
+/**
+ * 曲リスト内に指定したpathを持つ曲が存在するかを判定する関数
+ * 
+ * @param {Array} songs - 曲リスト（例: [{ title: "track1", duration: 100.0, path: "music/track1.mp3" }, ...]）
+ * @param {string} path - 判定したい曲のpath
+ * @returns {boolean} 曲が存在すればtrue、存在しなければfalse
+ */
+export function hasSongByPath(songs, path) {
+  return songs.some(song => song.path === path);
 }

@@ -4,6 +4,9 @@ import { Preferences } from '@capacitor/preferences';
 export class StorageManager {
   constructor() {
     this.songsKey = 'importedSongs';  // Preferences のキー
+
+    this.onFileImport = null;
+    this.onFileDelete = null;
   }
 
   /**
@@ -62,6 +65,8 @@ export class StorageManager {
     songs.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
     await this.saveSongs(songs);
 
+    if (this.onFileImport) this.onFileImport(); //Fileインポート時に処理を追加できる（あれば）
+
     return { title, duration, path };
   }
 
@@ -87,6 +92,8 @@ export class StorageManager {
       const songs = await this.loadSongs();
       const updated = songs.filter(song => song.path !== path);
       await this.saveSongs(updated);
+
+      if (this.onFileDelete) this.onFileDelete(path); //File削除時の処理を追加できる（あれば）
 
       return true;
     } catch (err) {
