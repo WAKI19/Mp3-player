@@ -45,69 +45,53 @@
         <header class="header">
             <h2 class="header__title">プレイリスト</h2>
             <div class="header__btns">
-                <button id="new-playlist-modal-open-btn" class="header__btn"><i class="fa-solid fa-plus"></i></button>
+                <button id="modal-open-btn" class="header__btn"><i class="fa-solid fa-plus"></i></button>
             </div>
         </header>
 
-        <ul id="playlist-list" class="playlist-list">
+        <ul class="playlist-list">
             <li>
-                <canvas class="playlist-img"></canvas>
-                <p class="playlist-name">とき宣</p>
+                <canvas class="playlist-list__img"></canvas>
+                <p class="playlist-list__name">とき宣</p>
             </li>
-            <li>
-                <canvas class="playlist-img"></canvas>
-                <p class="playlist-name">お気に入り</p>
-            </li>
-            <li>
-                <canvas class="playlist-img"></canvas>
-                <p class="playlist-name">ドライブ</p>
-            </li>
-            <li>
-                <canvas class="playlist-img"></canvas>
-                <p class="playlist-name">chill</p>
-            </li>
+            
         </ul>
 
 
         <!-- プレイリスト詳細画面 -->
-        <div id="playlist-detail">
-            <div class="mini-header">
-                <button id="playlist-detail-close-btn" class="close-btn fa-solid fa-angle-left"></button>
-                <h3 class="playlist-title">とき宣</h3>
+        <div id="playlist-detail" id="playlist-detail">
+            <div class="playlist-detail__header">
+                <button class="playlist-detail__back-btn"><i class="fa-solid fa-angle-left"></i></button>
+                <h3 class="playlist-detail__title">とき宣</h3>
             </div>
-            <div class="playlist-info">
-                <div class="playlist-img"></div>
-                <h3 class="playlist-title">とき宣</h3>
-                <p class="playlist-length">18曲、 1時間2分</p>
+            <div class="playlist-detail__info">
+                <div class="playlist-detail__img"></div>
+                <h3 class="playlist-detail__title">とき宣</h3>
+                <p class="playlist-detail__length">18曲、 1時間2分</p>
 
-                <button class="play-btn fa-solid fa-circle-play"></button>
-                <div class="actions">
-                    <button class="action-btn"><i class="fa-solid fa-plus"></i> 追加</button>
-                    <button class="action-btn"><i class="fa-solid fa-bars"></i> 編集</button>
-                    <button class="action-btn"><i class="fa-solid fa-pen"></i> 名称</button>
+                <button class="playlist-detail__play-btn"><i class="fa-solid fa-circle-play"></i></button>
+                <div class="playlist-detail__actions">
+                    <button class="playlist-detail__action"><i class="fa-solid fa-plus"></i> 追加</button>
+                    <button class="playlist-detail__action"><i class="fa-solid fa-bars"></i> 編集</button>
+                    <button class="playlist-detail__action"><i class="fa-solid fa-pen"></i> 名称</button>
                 </div>
             </div>
 
             <ul class="song-list">
-                <li>
-                    <i class="icon fa-solid fa-music"></i>
+                <li class="song-list__item">
+                    <button class="song-list__delete-btn fa-solid fa-circle-minus"></button>
+                    <i class="song-list__icon fa-solid fa-music"></i>
                     <div>
-                        <p class="song-title">ハピラブルー！</p>
-                        <p class="song-length">3:24</p>
+                        <p class="song-list__title">ハピラブルー！</p>
+                        <p class="song-list__length">3:24</p>
                     </div>
                 </li>
-                <li>
-                    <i class="icon fa-solid fa-music" style="color: var(--active-color);"></i>
+                <li class="song-list__item">
+                    <button class="song-list__delete-btn fa-solid fa-circle-minus"></button>
+                    <i class="song-list__icon fa-solid fa-music"></i>
                     <div>
-                        <p class="song-title" style="color: var(--active-color);">ラヴなのっ♡</p>
-                        <p class="song-length">2:58</p>
-                    </div>
-                </li>
-                <li>
-                    <i class="icon fa-solid fa-music"></i>
-                    <div>
-                        <p class="song-title">エンドレス</p>
-                        <p class="song-length">4:37</p>
+                        <p class="song-list__title">ハピラブルー！</p>
+                        <p class="song-list__length">3:24</p>
                     </div>
                 </li>
             </ul>
@@ -115,11 +99,11 @@
     </section>
     <!-- プレイリスト作成モーダル -->
     <div id="new-playlist-modal">
-        <div class="modal-content">
-            <button id="new-playlist-modal-close-btn" class="close-btn fa-solid fa-xmark"></button>
+        <div class="modal__content">
+            <button class="modal__close-btn fa-solid fa-xmark"></button>
             <h3>新規プレイリスト</h3>
-            <input type="text" autocomplete="off" placeholder="プレイリスト名を入力..." />
-            <button class="create-btn" id="createPlaylistBtn">作成する</button>
+            <input class="modal__input" type="text" autocomplete="off" placeholder="プレイリスト名を入力..." />
+            <button class="modal__create-btn" id="createPlaylistBtn">作成する</button>
         </div>
     </div>
 

@@ -5,9 +5,11 @@ import { PlaylistManager } from './classes/PlaylistManager';
 import { AllSongsUI } from './ui/AllSongsUI';
 import { MiniPlayerUI } from './ui/miniPlayerUI';
 import { FullPlayerUI } from './ui/FullPlayerUI';
+import { PlaylistUI } from './ui/PlaylistUI';
+import { NewPlaylistModalUI } from './ui/NewPlaylistModalUI'; 
+import { PlaylistDetailUI } from './ui/PlaylistDetailUI';
 
-import { activate, findSongIndexByTitle } from './classes/Utils';
-import { deactivate } from './classes/Utils';
+import { findSongIndexByTitle } from './classes/Utils';
 import { filterSongsByTitle } from './classes/Utils';
 import { hasSongByPath } from './classes/Utils';
 
@@ -19,26 +21,18 @@ const playlistManager = new PlaylistManager(storage);
 const allSongsUI = new AllSongsUI(document.getElementById("all-songs"));
 const miniPlayerUI = new MiniPlayerUI(document.getElementById("mini-player"));
 const fullPlayerUI = new FullPlayerUI(document.getElementById("full-player"));
+const playlistUI = new PlaylistUI(document.getElementById("playlist"));
+const playlistModalUI = new NewPlaylistModalUI(document.getElementById("new-playlist-modal"));
+const playlistDetailUI = new PlaylistDetailUI(document.getElementById("playlist-detail"));
 
 let allSongs = [];
+let playlists = [];
 
 
 //要素取得
   //プレイリストページ
-const newPlaylistModalOpenBtn = document.getElementById("new-playlist-modal-open-btn");
-const newPlaylistModalCloseBtn = document.getElementById("new-playlist-modal-close-btn");
-const newPlaylistModal = document.getElementById("new-playlist-modal");
-const playlistList = document.getElementById("playlist-list");
-const playlistDetail = document.getElementById("playlist-detail");
-const playlistDetailCloseBtn = document.getElementById("playlist-detail-close-btn");
-const playlistDetailHeader = document.querySelector("#playlist-detail .mini-header");
-const playlistDetailHeaderTitle = document.querySelector("#playlist-detail .mini-header .playlist-title");
-const playlistDetailPlaylistTitle = document.querySelector("#playlist-detail .playlist-info .playlist-title");
-
 const tabs = document.querySelectorAll(".tab-button");
 const contents = document.querySelectorAll(".tab-content");
-
-
 
 
 
@@ -157,34 +151,34 @@ allSongsUI.songList.addEventListener('click', (e) => {
 
 
   //プレイリストページ
-newPlaylistModalOpenBtn.addEventListener('click', () => {
-  activate(newPlaylistModal);
+playlistUI.modalOpenBtn.addEventListener('click', () => {
+  playlistModalUI.show();
 });
 
-newPlaylistModalCloseBtn.addEventListener('click', () => {
-  deactivate(newPlaylistModal);
+playlistModalUI.closeBtn.addEventListener('click', () => {
+  playlistModalUI.hide();
 });
 
-playlistList.addEventListener('click', (e) => {
+playlistUI.playlistList.addEventListener('click', (e) => {
   const li = e.target.closest('li');
-  if (li && playlistList.contains(li)) {
-    activate(playlistDetail);
+  if (li && playlistUI.playlistList.contains(li)) {
+    playlistDetailUI.show();
   }
 });
 
-playlistDetailCloseBtn.addEventListener('click', () => {
-  deactivate(playlistDetail);
-  playlistDetail.scrollTo(0, 0);
+playlistDetailUI.backBtn.addEventListener('click', () => {
+  playlistDetailUI.hide();
+  playlistDetailUI.root.scrollTo(0, 0);
 });
 
-playlistDetail.addEventListener('scroll', () => {
-  const headerHight = playlistDetailHeader.offsetHeight;
-  const offset = playlistDetailPlaylistTitle.getBoundingClientRect().top + playlistDetailPlaylistTitle.offsetHeight;
+playlistDetailUI.root.addEventListener('scroll', () => {
+  const headerHight = playlistDetailUI.header.offsetHeight;
+  const offset = playlistDetailUI.title.getBoundingClientRect().top + playlistDetailUI.title.offsetHeight;
   
   if (offset <= headerHight) {
-    playlistDetailHeaderTitle.style.display = "block";
+    playlistDetailUI.headerTitle.style.display = "block";
   } else {
-    playlistDetailHeaderTitle.style.display = "none";
+    playlistDetailUI.headerTitle.style.display = "none";
   }
 });
 
@@ -264,6 +258,8 @@ tabs.forEach(tab => {
 //起動時処理
 async function initApp() {
   allSongs = await storage.loadSongs();
+  playlists = await playlistManager.loadPlaylists();
+
   allSongsUI.renderSongList(allSongs, storage);       // 読み込み完了後に描画
   if (player.getCurrentTrack()) {
     allSongsUI.highlightPlayingSong(player.getCurrentTrack());

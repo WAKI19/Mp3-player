@@ -10,7 +10,7 @@ import { Preferences } from "@capacitor/preferences";
 export class PlaylistManager {
   constructor(storageManager) {
     this.storage = storageManager; // StorageManagerのインスタンス
-    this.playlistsKey = "userPlaylists";
+    this.playlistsKey = "playlists";
     this.playlists = [];
   }
 
@@ -43,8 +43,8 @@ export class PlaylistManager {
     const newPlaylist = {
       id: crypto.randomUUID(),
       name,
+      imgBase64Data,
       songs: [], // 曲の path の配列
-      createdAt: Date.now(),
     };
 
     this.playlists.push(newPlaylist);
