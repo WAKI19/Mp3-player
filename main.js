@@ -111,9 +111,7 @@ allSongsUI.fileInput.addEventListener('change', async (e) => {
 
   //表示更新
   allSongsUI.renderSongList(allSongs, storage);
-  if (player.getCurrentTrack()) {
-    allSongsUI.highlightPlayingSong(player.getCurrentTrack());
-  }
+  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
 
   allSongsUI.fileInput.value = ''; // 選択リセット
 });
@@ -123,9 +121,7 @@ allSongsUI.searchInput.addEventListener('input', () => {
   const filtered = filterSongsByTitle(allSongs, val);
 
   allSongsUI.renderSongList(filtered, storage);
-  if (player.getCurrentTrack() === !null) {
-    allSongsUI.highlightPlayingSong(player.getCurrentTrack());
-  }
+  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
 
   if (val.trim() !== '') {
     allSongsUI.searchClearBtn.style.display = 'block';
@@ -165,6 +161,8 @@ playlistUI.modalOpenBtn.addEventListener('click', () => {
 
 playlistUI.playlistList.addEventListener('click', async (e) => {
   const li = e.target.closest('li');
+  if (!li) return;
+
   const id = li.dataset.id;
   const playlist = playlistManager.getPlaylist(id);
 
@@ -175,9 +173,20 @@ playlistUI.playlistList.addEventListener('click', async (e) => {
 });
 
 //プレイリスト詳細ページ
+playlistDetailUI.root.addEventListener('click', (e) => {
+  //アコーディオンを閉じるための処理
+  if (!playlistDetailUI.accordion.contains(e.target) && playlistDetailUI.accordion.open) {
+    playlistDetailUI.accordion.open = false;
+  }
+});
+
 playlistDetailUI.backBtn.addEventListener('click', () => {
   playlistDetailUI.hide();
   playlistDetailUI.root.scrollTo(0, 0);
+});
+
+playlistDetailUI.deleteBtn.addEventListener('click', () => {
+  playlistDetailUI.accordion.open = false;
 });
 
 playlistDetailUI.root.addEventListener('scroll', () => {
@@ -185,9 +194,9 @@ playlistDetailUI.root.addEventListener('scroll', () => {
   const offset = playlistDetailUI.title.getBoundingClientRect().top + playlistDetailUI.title.offsetHeight;
   
   if (offset <= headerHight) {
-    playlistDetailUI.headerTitle.style.display = "block";
+    playlistDetailUI.headerTitle.style.visibility = "visible";
   } else {
-    playlistDetailUI.headerTitle.style.display = "none";
+    playlistDetailUI.headerTitle.style.visibility = "hidden";
   }
 });
 
@@ -320,9 +329,7 @@ async function initApp() {
   playlists = await playlistManager.loadPlaylists();
 
   allSongsUI.renderSongList(allSongs, storage);       // 読み込み完了後に描画
-  if (player.getCurrentTrack()) {
-    allSongsUI.highlightPlayingSong(player.getCurrentTrack());
-  };
+  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
 
   playlistUI.renderPlaylists(playlists);
 }

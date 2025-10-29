@@ -358,8 +358,10 @@ button{
     top: 0;
     width: 100%;
     height: calc(env(safe-area-inset-top) + 40px);
+    display: flex;
     padding-top: env(safe-area-inset-top);
     background-color: var(--bg-color);
+    justify-content: center;
     z-index: 1;
     opacity: 0.97;
 }
@@ -367,8 +369,7 @@ button{
 .playlist-detail__header .playlist-detail__title {
     font-size: 20px;
     line-height: 40px;
-    text-align: center;
-    display: none;
+    visibility: hidden;
 }
 
 .playlist-detail__info {
@@ -382,6 +383,64 @@ button{
     line-height: 40px;
     color: var(--text-color);
     font-size: 25px;
+}
+
+.accordion {
+    position: absolute;
+    right: 10px;
+    line-height: 40px;
+    color: var(--text-color);
+    font-size: 25px;
+}
+
+.accordion__summary {
+  list-style: none;           /* Firefox用 */
+  text-align: right;
+}
+
+.accordion__summary::-webkit-details-marker {
+  display: none;              /* Chrome / Safari用 */
+}
+
+.accordion__list {
+    width: 250px;
+    list-style: none;
+    font-size: 16px;
+    background-color: var(--bg-color2);
+    border-radius: 10px;
+    box-shadow: 0 0 10px black;
+
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: top right;
+    max-height: 0;
+    overflow: hidden;
+
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease,
+        max-height 0.2s ease;
+}
+
+.accordion[open] .accordion__list {
+    opacity: 1;
+    transform: scale(1);
+    max-height: 400px; /* 内容に応じて十分な値にしておく */
+}
+
+.accordion__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 13px;
+}
+
+.accordion__item:not(:last-child) {
+  border-bottom: 1px solid var(--text-color2);
+}
+
+.accordion__item:active {
+    background-color: gray;
 }
 
 .playlist-detail__img {

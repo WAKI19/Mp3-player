@@ -80,6 +80,7 @@ export class AllSongsUI extends BaseUI {
     }
 
     highlightPlayingSong(playingSong) {
+        if (!playingSong) return;
         const active = this.songList.querySelector('.song-list__item.active');
         const target = this.songList.querySelector('[data-title="'+playingSong.title+'"]');
 
