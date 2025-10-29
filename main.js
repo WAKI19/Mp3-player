@@ -155,9 +155,13 @@ playlistUI.modalOpenBtn.addEventListener('click', () => {
   playlistModalUI.show();
 });
 
-playlistUI.playlistList.addEventListener('click', (e) => {
+playlistUI.playlistList.addEventListener('click', async (e) => {
   const li = e.target.closest('li');
+  const id = li.dataset.id;
+  const playlist = playlistManager.getPlaylist(id);
+
   if (li && playlistUI.playlistList.contains(li)) {
+    await playlistDetailUI.load(playlist);
     playlistDetailUI.show();
   }
 });
@@ -281,6 +285,8 @@ async function initApp() {
   if (player.getCurrentTrack()) {
     allSongsUI.highlightPlayingSong(player.getCurrentTrack());
   };
+
+  playlistUI.renderPlaylists(playlists);
 }
 
 initApp();
