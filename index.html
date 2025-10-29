@@ -70,9 +70,9 @@
 
                 <button class="playlist-detail__play-btn"><i class="fa-solid fa-circle-play"></i></button>
                 <div class="playlist-detail__actions">
-                    <button class="playlist-detail__action"><i class="fa-solid fa-plus"></i> 追加</button>
-                    <button class="playlist-detail__action"><i class="fa-solid fa-bars"></i> 編集</button>
-                    <button class="playlist-detail__action"><i class="fa-solid fa-pen"></i> 名称</button>
+                    <button class="playlist-detail__action playlist-detail__action--add"><i class="fa-solid fa-plus"></i> 追加</button>
+                    <button class="playlist-detail__action playlist-detail__action--edit"><i class="fa-solid fa-bars"></i> 編集</button>
+                    <button class="playlist-detail__action playlist-detail__action--info"><i class="fa-solid fa-pen"></i> 情報</button>
                 </div>
             </div>
 
@@ -96,6 +96,45 @@
             </ul>
         </div>
     </section>
+    <!-- 曲追加用ボトムシート -->
+    <div class="bottom-sheet__backdrop" id="add-song-sheet">
+        <div class="bottom-sheet">
+            <div class="bottom-sheet__container">
+                <header class="bottom-sheet__header">
+                    <button class="bottom-sheet__close-btn">キャンセル</button>
+                    <h3 class="bottom-sheet__title">曲を追加</h3>
+                </header>
+
+                
+            </div>
+        </div>
+    </div>
+    <!-- 編集用ボトムシート -->
+     <div class="bottom-sheet__backdrop" id="edit-playlist-sheet">
+        <div class="bottom-sheet">
+            <div class="bottom-sheet__container">
+                <header class="bottom-sheet__header">
+                    <button class="bottom-sheet__close-btn">キャンセル</button>
+                    <h3 class="bottom-sheet__title">プレイリスト編集</h3>
+                </header>
+
+                
+            </div>
+        </div>
+    </div>
+    <!-- プレイリスト情報編集用ボトムシート -->
+     <div class="bottom-sheet__backdrop" id="info-edit-sheet">
+        <div class="bottom-sheet">
+            <div class="bottom-sheet__container">
+                <header class="bottom-sheet__header">
+                    <button class="bottom-sheet__close-btn">キャンセル</button>
+                    <h3 class="bottom-sheet__title">情報を編集</h3>
+                </header>
+
+                
+            </div>
+        </div>
+    </div>
     <!-- プレイリスト作成モーダル -->
     <div id="new-playlist-modal">
         <div class="modal__content">

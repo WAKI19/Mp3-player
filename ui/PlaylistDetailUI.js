@@ -8,6 +8,9 @@ export class PlaylistDetailUI extends BaseUI{
         this.headerTitle = root.querySelector(".playlist-detail__header .playlist-detail__title");
         this.length = root.querySelector(".playlist-detail__length");
         this.title = root.querySelector(".playlist-detail__info .playlist-detail__title");
+        this.addBtn = root.querySelector(".playlist-detail__action--add");
+        this.editBtn = root.querySelector(".playlist-detail__action--edit");
+        this.infoBtn = root.querySelector(".playlist-detail__action--info");
     }
 
     async load(playlist) {

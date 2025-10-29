@@ -8,10 +8,13 @@ import { FullPlayerUI } from './ui/FullPlayerUI';
 import { PlaylistUI } from './ui/PlaylistUI';
 import { NewPlaylistModalUI } from './ui/NewPlaylistModalUI'; 
 import { PlaylistDetailUI } from './ui/PlaylistDetailUI';
+import { AddSongSheetUI } from './ui/AddSongSheetUI';
 
 import { findSongIndexByTitle } from './classes/Utils';
 import { filterSongsByTitle } from './classes/Utils';
 import { hasSongByPath } from './classes/Utils';
+import { EditPlaylistSheetUI } from './ui/EditPlaylistSheetUI';
+import { InfoEditSheetUI } from './ui/InfoEditSheetUI';
 
 
 const player = new AudioPlayer(document.getElementById("audio"));
@@ -22,8 +25,11 @@ const allSongsUI = new AllSongsUI(document.getElementById("all-songs"));
 const miniPlayerUI = new MiniPlayerUI(document.getElementById("mini-player"));
 const fullPlayerUI = new FullPlayerUI(document.getElementById("full-player"));
 const playlistUI = new PlaylistUI(document.getElementById("playlist"));
-const playlistModalUI = new NewPlaylistModalUI(document.getElementById("new-playlist-modal"));
-const playlistDetailUI = new PlaylistDetailUI(document.getElementById("playlist-detail")); //変数名にNewを付けるとエラーになるので省略
+const playlistModalUI = new NewPlaylistModalUI(document.getElementById("new-playlist-modal")); //変数名にNewを付けるとエラーになるので省略
+const playlistDetailUI = new PlaylistDetailUI(document.getElementById("playlist-detail"));
+const addSongSheetUI = new AddSongSheetUI(document.getElementById("add-song-sheet"));
+const editPlaylistSheetUI = new EditPlaylistSheetUI(document.getElementById("edit-playlist-sheet"));
+const infoEditSheetUI = new InfoEditSheetUI(document.getElementById("info-edit-sheet"));
 
 let allSongs = [];
 let playlists = [];
@@ -117,7 +123,9 @@ allSongsUI.searchInput.addEventListener('input', () => {
   const filtered = filterSongsByTitle(allSongs, val);
 
   allSongsUI.renderSongList(filtered, storage);
-  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
+  if (player.getCurrentTrack() === !null) {
+    allSongsUI.highlightPlayingSong(player.getCurrentTrack());
+  }
 
   if (val.trim() !== '') {
     allSongsUI.searchClearBtn.style.display = 'block';
@@ -166,6 +174,7 @@ playlistUI.playlistList.addEventListener('click', async (e) => {
   }
 });
 
+//プレイリスト詳細ページ
 playlistDetailUI.backBtn.addEventListener('click', () => {
   playlistDetailUI.hide();
   playlistDetailUI.root.scrollTo(0, 0);
@@ -182,6 +191,32 @@ playlistDetailUI.root.addEventListener('scroll', () => {
   }
 });
 
+playlistDetailUI.addBtn.addEventListener('click', () => {
+  addSongSheetUI.show();
+});
+
+playlistDetailUI.editBtn.addEventListener('click', () => {
+  editPlaylistSheetUI.show();
+});
+
+playlistDetailUI.infoBtn.addEventListener('click', () => {
+  infoEditSheetUI.show();
+});
+
+//曲追加用ボトムシート
+addSongSheetUI.closeBtn.addEventListener('click', () => {
+  addSongSheetUI.hide();
+});
+
+//編集用ボトムシート
+editPlaylistSheetUI.closeBtn.addEventListener('click', () => {
+  editPlaylistSheetUI.hide();
+});
+
+infoEditSheetUI.closeBtn.addEventListener('click', () => {
+  infoEditSheetUI.hide();
+});
+
 //新規プレイリストモーダル
 playlistModalUI.closeBtn.addEventListener('click', () => {
   playlistModalUI.hide();
@@ -189,7 +224,7 @@ playlistModalUI.closeBtn.addEventListener('click', () => {
   playlistModalUI.hideErrorMessage();
 });
 
-playlistModalUI.createBtn.addEventListener('click', () => {
+playlistModalUI.createBtn.addEventListener('click', async () => {
   const val = playlistModalUI.input.value;
 
   if (val === "") {
@@ -201,6 +236,9 @@ playlistModalUI.createBtn.addEventListener('click', () => {
 
   playlistModalUI.hide();
   playlistModalUI.input.value = "";
+
+  playlists = await playlistManager.loadPlaylists();
+  playlistUI.renderPlaylists(playlists);
 });
 
   //ミニプレーヤー
