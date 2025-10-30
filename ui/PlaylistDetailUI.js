@@ -6,8 +6,9 @@ export class PlaylistDetailUI extends BaseUI{
         this.backBtn = root.querySelector(".playlist-detail__back-btn");
         this.header = root.querySelector(".playlist-detail__header");
         this.headerTitle = root.querySelector(".playlist-detail__header .playlist-detail__title");
-        this.accordion = root.querySelector(".accordion");
-        this.deleteBtn = root.querySelector("#playlist-delete-btn");
+        this.ellipsisBtn = root.querySelector("#playlist-detail__popover .popover__btn");
+        this.popoverPanel = root.querySelector("#playlist-detail__popover .popover__panel");
+        this.deleteBtn = root.querySelector("#playlist-detail__delete-btn");
         this.length = root.querySelector(".playlist-detail__length");
         this.title = root.querySelector(".playlist-detail__info .playlist-detail__title");
         this.addBtn = root.querySelector(".playlist-detail__action--add");

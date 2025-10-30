@@ -174,9 +174,9 @@ playlistUI.playlistList.addEventListener('click', async (e) => {
 
 //プレイリスト詳細ページ
 playlistDetailUI.root.addEventListener('click', (e) => {
-  //アコーディオンを閉じるための処理
-  if (!playlistDetailUI.accordion.contains(e.target) && playlistDetailUI.accordion.open) {
-    playlistDetailUI.accordion.open = false;
+  //画面をタップしたときにポップオーバーが閉じるようにする
+  if (!playlistDetailUI.ellipsisBtn.contains(e.target)) {
+    playlistDetailUI.popoverPanel.classList.remove("active");
   }
 });
 
@@ -185,8 +185,12 @@ playlistDetailUI.backBtn.addEventListener('click', () => {
   playlistDetailUI.root.scrollTo(0, 0);
 });
 
+playlistDetailUI.ellipsisBtn.addEventListener("click", () => {
+  playlistDetailUI.popoverPanel.classList.toggle("active");
+});
+
 playlistDetailUI.deleteBtn.addEventListener('click', () => {
-  playlistDetailUI.accordion.open = false;
+  console.log("delete");
 });
 
 playlistDetailUI.root.addEventListener('scroll', () => {

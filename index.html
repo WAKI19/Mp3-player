@@ -62,18 +62,25 @@
             <div class="playlist-detail__header">
                 <button class="playlist-detail__back-btn"><i class="fa-solid fa-angle-left"></i></button>
                 <h3 class="playlist-detail__title">Playlist Title</h3>
-                <details class="accordion">
-                    <summary class="accordion__summary">
-                        <i class="fa-solid fa-ellipsis"></i>
-                    </summary>
 
-                    <ul class="accordion__list">
-                        <li class="accordion__item" id="playlist-delete-btn" style="color: red;">
-                            <span>プレイリスト削除</span>
-                            <i class="fa-solid fa-trash-can"></i>
-                        </li>
-                    </ul>
-                </details>
+                <div class="popover popover--dropdown-left" id="playlist-detail__popover">
+                    <div class="popover__container">
+                        <button class="popover__btn"><i class="fa-solid fa-ellipsis"></i></button>
+
+                        <div class="popover__panel">
+                            <ul class="popover__list">
+                                <li class="popover__item" id="playlist-detail__delete-btn" style="color: red;">
+                                    <span>プレイリスト削除</span>
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </li>
+                                <li class="popover__item">
+                                    <span>アクション</span>
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="playlist-detail__info">
                 <div class="playlist-detail__img"></div>
