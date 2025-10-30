@@ -76,6 +76,70 @@ button{
     color: red;
 }
 
+/* アクションシート */
+.action-sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;                 /* ← ここ */
+    pointer-events: none;       /* ← 非表示時クリック無効 */
+    transition: opacity 0.25s ease;
+    z-index: 10000;
+}
+
+.action-sheet-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* アクションシート本体 */
+.action-sheet {
+    position: fixed;
+    bottom: env(safe-area-inset-bottom);
+    width: 100%;
+    background: transparent;
+    box-sizing: border-box;
+    transform: translateY(100%);
+    transition: 0.25s ease;
+}
+
+.action-sheet.active {
+    transform: translateY(0);
+}
+
+/* 各ボタンのグループ */
+.action-sheet__group {
+    background: #fff;
+    border-radius: 14px;
+    margin: 8px;
+    overflow: hidden;
+}
+
+.action-sheet__btn {
+    width: 100%;
+    padding: 14px 0;
+    font-size: 17px;
+    border: none;
+    background: white;
+    color: #007aff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.action-sheet__btn:not(:last-child) {
+    border-bottom: 1px solid #e5e5ea;
+}
+
+.action-sheet__btn:active {
+    background: #e5e5ea;
+}
+
+/* キャンセルボタン */
+.action-sheet__cancel {
+    font-weight: bold;
+    color: #007aff;
+}
+
 /* bottom-sheet */
 .bottom-sheet__backdrop {
     visibility: hidden;

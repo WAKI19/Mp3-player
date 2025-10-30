@@ -17,8 +17,13 @@ export class PlaylistDetailUI extends BaseUI{
     }
 
     async load(playlist) {
+        this.root.dataset.id = playlist.id;
         this.headerTitle.textContent = playlist.name;
         this.title.textContent = playlist.name;
         this.length.textContent = `${playlist.songs.length}曲、 -時間--分`;
+    }
+
+    loadingPlaylistId() {
+        return this.root.dataset.id;
     }
 }

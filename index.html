@@ -73,10 +73,6 @@
                                     <span>プレイリスト削除</span>
                                     <i class="fa-solid fa-trash-can"></i>
                                 </li>
-                                <li class="popover__item">
-                                    <span>アクション</span>
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -150,7 +146,9 @@
                     <h3 class="bottom-sheet__title">情報を編集</h3>
                 </header>
 
-                
+                <div class="info-edit__img">
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -229,6 +227,18 @@
             <span>設定</span>
         </button>
     </nav>
+
+    <!-- アクションシート -->
+    <div class="action-sheet-backdrop" id="actionSheetBackdrop">
+        <div class="action-sheet" id="actionSheet">
+            <div class="action-sheet__group action-sheet__actions">
+                <!-- <button class="action-sheet__btn">写真を撮る</button> -->
+            </div>
+            <div class="action-sheet__group">
+            <button class="action-sheet__btn action-sheet__cancel">キャンセル</button>
+            </div>
+        </div>
+    </div>
 
     <script type="module" src="main.js"></script>
 </body>

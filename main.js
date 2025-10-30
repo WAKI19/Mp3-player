@@ -2,6 +2,7 @@ import { StorageManager } from './classes/StorageManager';
 import { AudioPlayer } from "./classes/AudioPlayer";
 import { PlaylistManager } from './classes/PlaylistManager';
 
+import { ActionSheet } from './ui/ActionSheet';
 import { AllSongsUI } from './ui/AllSongsUI';
 import { MiniPlayerUI } from './ui/miniPlayerUI';
 import { FullPlayerUI } from './ui/FullPlayerUI';
@@ -21,6 +22,7 @@ const player = new AudioPlayer(document.getElementById("audio"));
 const storage = new StorageManager();
 const playlistManager = new PlaylistManager(storage);
 
+const actionSheet = new ActionSheet();
 const allSongsUI = new AllSongsUI(document.getElementById("all-songs"));
 const miniPlayerUI = new MiniPlayerUI(document.getElementById("mini-player"));
 const fullPlayerUI = new FullPlayerUI(document.getElementById("full-player"));
@@ -189,8 +191,12 @@ playlistDetailUI.ellipsisBtn.addEventListener("click", () => {
   playlistDetailUI.popoverPanel.classList.toggle("active");
 });
 
-playlistDetailUI.deleteBtn.addEventListener('click', () => {
-  console.log("delete");
+playlistDetailUI.deleteBtn.addEventListener('click', async () => {
+  const action = await actionSheet.action([{text: "プレイリストを削除", value: "delete"}]);
+  if (action === "delete") playlistManager.deletePlaylist(playlistDetailUI.loadingPlaylistId());
+  playlistDetailUI.hide();
+  playlists = await playlistManager.loadPlaylists();
+  playlistUI.renderPlaylists(playlists);
 });
 
 playlistDetailUI.root.addEventListener('scroll', () => {
