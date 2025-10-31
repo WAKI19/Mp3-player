@@ -74,6 +74,16 @@ export class PlaylistManager {
     }
   }
 
+  async setImage(playlistId, file) {
+    const playlist = this.playlists.find(p => p.id === playlistId);
+    const base64 = await this.#fileToBase64(file);
+
+    if (playlist) {
+      playlist.imgBase64Data = base64;
+      await this.savePlaylists();
+    }
+  }
+
   /**
    * ➕ 曲をプレイリストに追加
    * @param {string} playlistId
@@ -130,5 +140,14 @@ export class PlaylistManager {
    */
   getAllPlaylists() {
     return this.playlists;
+  }
+
+  #fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
   }
 }

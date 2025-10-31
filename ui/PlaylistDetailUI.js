@@ -9,6 +9,7 @@ export class PlaylistDetailUI extends BaseUI{
         this.ellipsisBtn = root.querySelector("#playlist-detail__popover .popover__btn");
         this.popoverPanel = root.querySelector("#playlist-detail__popover .popover__panel");
         this.deleteBtn = root.querySelector("#playlist-detail__delete-btn");
+        this.img = root.querySelector(".playlist-detail__img");
         this.length = root.querySelector(".playlist-detail__length");
         this.title = root.querySelector(".playlist-detail__info .playlist-detail__title");
         this.addBtn = root.querySelector(".playlist-detail__action--add");
@@ -19,6 +20,7 @@ export class PlaylistDetailUI extends BaseUI{
     async load(playlist) {
         this.root.dataset.id = playlist.id;
         this.headerTitle.textContent = playlist.name;
+        this.img.src = playlist.imgBase64Data;
         this.title.textContent = playlist.name;
         this.length.textContent = `${playlist.songs.length}曲、 -時間--分`;
     }

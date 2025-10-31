@@ -5,6 +5,7 @@ export class InfoEditSheetUI extends BaseUI {
         super(root);
         this.closeBtn = root.querySelector(".bottom-sheet__close-btn");
         this.saveBtn = root.querySelector(".bottom-sheet__action-btn");
+        this.img = root.querySelector(".info-edit__img");
         this.cameraBtn = root.querySelector("#info-edit__camera-btn");
         this.popoverPanel = root.querySelector(".popover__panel");
         this.imgInputTrigger = root.querySelector("#img-input-trigger");
@@ -13,6 +14,12 @@ export class InfoEditSheetUI extends BaseUI {
     }
 
     setup(playlist) {
+        this.imgInput.value = "";
+        this.img.src = playlist.imgBase64Data;
         this.nameInput.value = playlist.name;
+    }
+
+    getImgFile() {
+        return this.imgInput.files[0] || null;
     }
 }

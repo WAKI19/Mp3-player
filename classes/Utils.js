@@ -74,3 +74,12 @@ export function filterSongsByTitle(songs, keyword) {
 export function hasSongByPath(songs, path) {
   return songs.some(song => song.path === path);
 }
+
+export function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}

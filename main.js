@@ -10,12 +10,13 @@ import { PlaylistUI } from './ui/PlaylistUI';
 import { NewPlaylistModalUI } from './ui/NewPlaylistModalUI'; 
 import { PlaylistDetailUI } from './ui/PlaylistDetailUI';
 import { AddSongSheetUI } from './ui/AddSongSheetUI';
+import { EditPlaylistSheetUI } from './ui/EditPlaylistSheetUI';
+import { InfoEditSheetUI } from './ui/InfoEditSheetUI';
 
 import { findSongIndexByTitle } from './classes/Utils';
 import { filterSongsByTitle } from './classes/Utils';
 import { hasSongByPath } from './classes/Utils';
-import { EditPlaylistSheetUI } from './ui/EditPlaylistSheetUI';
-import { InfoEditSheetUI } from './ui/InfoEditSheetUI';
+import { fileToBase64 } from './classes/Utils';
 
 
 const player = new AudioPlayer(document.getElementById("audio"));
@@ -271,7 +272,10 @@ infoEditSheetUI.closeBtn.addEventListener('click', () => {
 });
 
 infoEditSheetUI.saveBtn.addEventListener('click', async () => {
-  playlistManager.renamePlaylist(playlistDetailUI.loadingPlaylistId(), infoEditSheetUI.nameInput.value);
+  const file = infoEditSheetUI.getImgFile();
+  
+  if (file) await playlistManager.setImage(playlistDetailUI.loadingPlaylistId(), file);
+  await playlistManager.renamePlaylist(playlistDetailUI.loadingPlaylistId(), infoEditSheetUI.nameInput.value);
   playlistDetailUI.load(playlistManager.getPlaylist(playlistDetailUI.loadingPlaylistId()));
 
   playlists = await playlistManager.loadPlaylists();
@@ -285,6 +289,13 @@ infoEditSheetUI.cameraBtn.addEventListener('click', () => {
 
 infoEditSheetUI.imgInputTrigger.addEventListener('click', () => {
   infoEditSheetUI.imgInput.click();
+});
+
+infoEditSheetUI.imgInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  const base64 = await fileToBase64(file);
+
+  infoEditSheetUI.img.src = base64;
 });
 
 

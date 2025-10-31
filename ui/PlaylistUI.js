@@ -13,7 +13,9 @@ export class PlaylistUI extends BaseUI {
         playlists.forEach(playlist => {
             const li = document.createElement('li');
             li.innerHTML = `
-                <div class="playlist-list__img"></div>
+                <div class="playlist-list__img-area">
+                    <img class="playlist-list__img" src="${playlist.imgBase64Data}">
+                </div>
                 <p class="playlist-list__name">${playlist.name}</p>
             `;
             li.dataset.id = playlist.id;
