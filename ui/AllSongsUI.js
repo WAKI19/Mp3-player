@@ -85,6 +85,6 @@ export class AllSongsUI extends BaseUI {
         const target = this.songList.querySelector('[data-title="'+playingSong.title+'"]');
 
         if (active) active.classList.remove("active");
-        target.classList.add("active");
+        if (target) target.classList.add("active");
     }
 }

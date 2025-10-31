@@ -48,7 +48,9 @@ const contents = document.querySelectorAll(".tab-content");
 
 
 //イベント
- //audioロード時
+// ==================================================
+// 🎵　audio関係
+// ==================================================
 player.canPlay = () => {
   const song = player.getCurrentTrack();
 
@@ -76,19 +78,41 @@ player.onEnded = () => {
   player.next();
 };
 
-  //Fileインポート時
-storage.onFileImport = () => {
+
+// ==================================================
+// File操作時
+// ==================================================
+storage.onFileImport = () => { //Fileインポート時
 
 };
 
-  //File削除時
-storage.onFileDelete = (path) => {
+storage.onFileDelete = (path) => { //File削除時
   if (hasSongByPath(player.currentPlaylist, path)) {
     console.log("再生中のプレイリストに削除した曲が含まれています！");
   };
 };
 
-  //全曲ページ
+
+
+// ==================================================
+// 全画面共通
+// ==================================================
+document.addEventListener("click", (e) => {
+  // クリックされた要素（またはその親）に .popover__btn が含まれているか確認
+  const isPopoverButton = e.target.closest(".popover__btn");
+  const popoverPanels = document.querySelectorAll(".popover__panel");
+
+  if (!isPopoverButton) {
+    popoverPanels.forEach(panel => {
+      panel.classList.remove("active"); //popover_panelを消す
+    });
+  }
+});
+
+
+// ==================================================
+// 🎵 全曲ページ
+// ==================================================
 allSongsUI.deleteModeBtn.addEventListener('click', () => {
   allSongsUI.toggleDeleteMode();
 });
@@ -155,8 +179,9 @@ allSongsUI.songList.addEventListener('click', (e) => {
 });
 
 
-
-  //プレイリストページ
+// ==================================================
+// 🎶　プレイリストページ
+// ==================================================
 playlistUI.modalOpenBtn.addEventListener('click', () => {
   playlistModalUI.show();
 });
@@ -174,20 +199,17 @@ playlistUI.playlistList.addEventListener('click', async (e) => {
   }
 });
 
-//プレイリスト詳細ページ
-playlistDetailUI.root.addEventListener('click', (e) => {
-  //画面をタップしたときにポップオーバーが閉じるようにする
-  if (!playlistDetailUI.ellipsisBtn.contains(e.target)) {
-    playlistDetailUI.popoverPanel.classList.remove("active");
-  }
-});
 
+// ==================================================
+// 🎶　プレイリストページ　＞　プレイリスト詳細ページ
+// ==================================================
 playlistDetailUI.backBtn.addEventListener('click', () => {
   playlistDetailUI.hide();
   playlistDetailUI.root.scrollTo(0, 0);
 });
 
-playlistDetailUI.ellipsisBtn.addEventListener("click", () => {
+playlistDetailUI.ellipsisBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
   playlistDetailUI.popoverPanel.classList.toggle("active");
 });
 
@@ -222,21 +244,43 @@ playlistDetailUI.infoBtn.addEventListener('click', () => {
   infoEditSheetUI.show();
 });
 
-//曲追加用ボトムシート
+
+
+// ==================================================
+// 🎶プレイリストページ　＞　プレイリスト詳細ページ　＞　曲追加シート
+// ==================================================
 addSongSheetUI.closeBtn.addEventListener('click', () => {
   addSongSheetUI.hide();
 });
 
-//編集用ボトムシート
+
+// ==================================================
+// 🎶プレイリストページ　＞　プレイリスト詳細ページ　＞　プレイリスト編集シート
+// ==================================================
 editPlaylistSheetUI.closeBtn.addEventListener('click', () => {
   editPlaylistSheetUI.hide();
 });
 
+
+// ==================================================
+// 🎶プレイリストページ　＞　プレイリスト詳細ページ　＞　プレイリスト情報編集シート
+// ==================================================
 infoEditSheetUI.closeBtn.addEventListener('click', () => {
   infoEditSheetUI.hide();
 });
 
-//新規プレイリストモーダル
+infoEditSheetUI.cameraBtn.addEventListener('click', () => {
+  infoEditSheetUI.popoverPanel.classList.toggle("active");
+});
+
+infoEditSheetUI.imgInputTrigger.addEventListener('click', () => {
+  infoEditSheetUI.imgInput.click();
+});
+
+
+// ==================================================
+// 🎶プレイリストページ　＞　プレイリスト作成用モーダル
+// ==================================================
 playlistModalUI.closeBtn.addEventListener('click', () => {
   playlistModalUI.hide();
   playlistModalUI.input.value = "";
@@ -260,7 +304,10 @@ playlistModalUI.createBtn.addEventListener('click', async () => {
   playlistUI.renderPlaylists(playlists);
 });
 
-  //ミニプレーヤー
+
+// ==================================================
+// ▶️　ミニプレーヤー
+// ==================================================
 miniPlayerUI.root.addEventListener('click', () => {
   fullPlayerUI.show();
   miniPlayerUI.hide();
@@ -271,7 +318,10 @@ miniPlayerUI.playBtn.addEventListener('click', (e) => {
   player.togglePlay();
 });
 
-  //フルプレーヤー
+
+// ==================================================
+// ▶️　フルプレーヤー
+// ==================================================
 fullPlayerUI.closeBtn.addEventListener('click', () => {
   fullPlayerUI.hide();
   miniPlayerUI.show();
