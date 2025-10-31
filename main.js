@@ -241,6 +241,7 @@ playlistDetailUI.editBtn.addEventListener('click', () => {
 });
 
 playlistDetailUI.infoBtn.addEventListener('click', () => {
+  infoEditSheetUI.setup(playlistManager.getPlaylist(playlistDetailUI.loadingPlaylistId()));
   infoEditSheetUI.show();
 });
 
@@ -266,6 +267,15 @@ editPlaylistSheetUI.closeBtn.addEventListener('click', () => {
 // 🎶プレイリストページ　＞　プレイリスト詳細ページ　＞　プレイリスト情報編集シート
 // ==================================================
 infoEditSheetUI.closeBtn.addEventListener('click', () => {
+  infoEditSheetUI.hide();
+});
+
+infoEditSheetUI.saveBtn.addEventListener('click', async () => {
+  playlistManager.renamePlaylist(playlistDetailUI.loadingPlaylistId(), infoEditSheetUI.nameInput.value);
+  playlistDetailUI.load(playlistManager.getPlaylist(playlistDetailUI.loadingPlaylistId()));
+
+  playlists = await playlistManager.loadPlaylists();
+  playlistUI.renderPlaylists(playlists);
   infoEditSheetUI.hide();
 });
 

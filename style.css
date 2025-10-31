@@ -27,6 +27,15 @@ button{
     padding: 0;
 }
 
+input {
+    border: none;
+    caret-color: var(--main-color);
+}
+
+input:focus {
+    outline: none;
+}
+
 /* tab-content */
 .tab-content {
     position: fixed;
@@ -183,15 +192,24 @@ button{
     margin-top: 10px;
 }
 
-.bottom-sheet__close-btn {
+.bottom-sheet__close-btn,
+.bottom-sheet__action-btn {
     position: absolute;
-    left: 10px;
     bottom: 0;
     font-size: 17px;
     color: white;
 }
 
-.bottom-sheet__close-btn:active {
+.bottom-sheet__close-btn {
+    left: 18px;
+}
+
+.bottom-sheet__action-btn {
+    right: 18px;
+}
+
+.bottom-sheet__close-btn:active,
+.bottom-sheet__action-btn:active {
     opacity: 0.3;
 }
 
@@ -605,12 +623,17 @@ button{
 }
 
 /* プレイリスト情報編集シート */
+.info-edit-sheet__content {
+    width: 90%;
+    margin: 0 auto;
+}
+
 .info-edit__img {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    margin-top: 50px;
+    margin-top: 60px;
     width: 160px;
     height: 160px;
     background-color: #2C2C2E;
@@ -630,6 +653,19 @@ button{
 
 .info-edit__popover-wrapper:active {
     opacity: 0.6;
+}
+
+#playlist-name-input {
+    width: 100%;
+    padding: 5px 10px;
+    margin: 0 auto;
+    margin-top: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-color);
+    text-align: center;
+    background-color: transparent;
+    border-bottom: 1px solid #3A3A3C;
 }
 
 /* 設定ページ */
