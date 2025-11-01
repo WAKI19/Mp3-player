@@ -89,12 +89,12 @@ export class PlaylistManager {
    * @param {string} playlistId
    * @param {string} songPath - StorageManagerで管理される曲のpath
    */
-  async addSongToPlaylist(playlistId, songPath) {
+  async addSongToPlaylist(playlistId, song) {
     const playlist = this.playlists.find(p => p.id === playlistId);
     if (!playlist) return;
 
-    if (!playlist.songs.includes(songPath)) {
-      playlist.songs.push(songPath);
+    if (!playlist.songs.includes(song)) {
+      playlist.songs.push(song);
       await this.savePlaylists();
     }
   }
@@ -104,11 +104,11 @@ export class PlaylistManager {
    * @param {string} playlistId
    * @param {string} songPath
    */
-  async removeSongFromPlaylist(playlistId, songPath) {
+  async removeSongFromPlaylist(playlistId, songTitle) {
     const playlist = this.playlists.find(p => p.id === playlistId);
     if (!playlist) return;
 
-    playlist.songs = playlist.songs.filter(p => p !== songPath);
+    playlist.songs = playlist.songs.filter(s => s.title !== songTitle);
     await this.savePlaylists();
   }
 

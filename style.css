@@ -173,7 +173,7 @@ img:not([src]), img[src=""], img[src=null] {
     bottom: 0;
     width: 100%;
     height: 95%;
-    background-color: var(--bg-color2);
+    background-color: var(--bg-color);
     color: var(--text-color);
     border-radius: 10px 10px 0 0;
     transition: 0.25s ease;
@@ -226,15 +226,15 @@ img:not([src]), img[src=""], img[src=null] {
 .search-box {
     position: relative;
     display: inline-block;
+    background-color: #2C2C2E;
+    border-radius: 5px;
 }
 
 .search-box__input {
-    font-size: 15px;
-    padding: 3px 2em 3px 8px;
+    font-size: 16px;
+    padding: 4px 2em 4px 12px;
     color: var(--text-color);
-    background-color: var(--bg-color2);
-    border: 1px solid var(--bg-color2);
-    border-radius: 5px;
+    background-color: transparent;
     caret-color: var(--main-color);
 }
 
@@ -342,13 +342,14 @@ img:not([src]), img[src=""], img[src=null] {
 
 /* .song-list */
 .song-list {
+    position: relative;
     list-style: none;
 }
 
 .song-list__item {
     display: flex;
     padding: 12px 30px;
-    border-bottom: 2px solid var(--bg-color2);
+    border-bottom: 2px solid #3A3A3C;
     align-items: center;
 }
 
@@ -379,6 +380,18 @@ img:not([src]), img[src=""], img[src=null] {
 .song-list__length {
     font-size: 12px;
     color: var(--text-color2);
+}
+
+.song-list__add-btn {
+    position: absolute;
+    right: 20px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    font-size: 19px;
 }
 
 
@@ -639,6 +652,38 @@ img:not([src]), img[src=""], img[src=null] {
 #playlist-detail .song-list .song-length {
     font-size: 12px;
     color: var(--text-color2);
+}
+
+/* プレイリスト曲追加用シート */
+.add-song-sheet__content {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    height: 90%;
+    padding: 30px 0;
+    margin: 0 auto;
+}
+
+#add-song-sheet__search-box {
+    width: 100%;
+}
+
+#add-song-sheet__song-list {
+    margin-top: 15px;
+    background-color: #2C2C2E;
+    border-radius: 5px;
+    flex: 1;
+    overflow-y: scroll;
+}
+
+#add-song-sheet__song-list .song-list__item {
+    transition: 0.25s;
+}
+
+#add-song-sheet__song-list .song-list__item.hidden {
+    background-color: var(--main-color);
+    transform: translateX(-60%);
+    opacity: 0;
 }
 
 /* プレイリスト情報編集シート */

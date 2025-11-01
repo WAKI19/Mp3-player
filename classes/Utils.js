@@ -75,6 +75,23 @@ export function hasSongByPath(songs, path) {
   return songs.some(song => song.path === path);
 }
 
+
+/**
+ * 曲リストAから曲リストBに含まれる曲を除外して返す関数
+ * 
+ * @param {Array} listA - 元の曲リスト（例: [{ title: "track1", path: "music/track1.mp3" }, ...]）
+ * @param {Array} listB - 除外したい曲のリスト
+ * @returns {Array} Bに含まれない曲のみを持つ新しい配列
+ */
+export function excludeSongs(listA, listB) {
+  // BのpathをSetにして高速検索できるようにする
+  const pathsInB = new Set(listB.map(song => song.path));
+
+  // Aのうち、Bに存在しないpathを持つ曲だけを返す
+  return listA.filter(song => !pathsInB.has(song.path));
+}
+
+
 export function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

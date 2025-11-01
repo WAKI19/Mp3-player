@@ -16,6 +16,7 @@ import { InfoEditSheetUI } from './ui/InfoEditSheetUI';
 import { findSongIndexByTitle } from './classes/Utils';
 import { filterSongsByTitle } from './classes/Utils';
 import { hasSongByPath } from './classes/Utils';
+import { excludeSongs } from './classes/Utils';
 import { fileToBase64 } from './classes/Utils';
 
 
@@ -196,6 +197,7 @@ playlistUI.playlistList.addEventListener('click', async (e) => {
 
   if (li && playlistUI.playlistList.contains(li)) {
     await playlistDetailUI.load(playlist);
+    playlistDetailUI.renderSongList(playlist.songs);
     playlistDetailUI.show();
   }
 });
@@ -234,6 +236,10 @@ playlistDetailUI.root.addEventListener('scroll', () => {
 });
 
 playlistDetailUI.addBtn.addEventListener('click', () => {
+  const playlist = playlistManager.getPlaylist(playlistDetailUI.loadingPlaylistId());
+  const songs = excludeSongs(allSongs, playlist.songs);
+
+  addSongSheetUI.renderSongs(songs, playlistManager);
   addSongSheetUI.show();
 });
 
