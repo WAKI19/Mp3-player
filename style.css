@@ -618,6 +618,10 @@ img:not([src]), img[src=""], img[src=null] {
     margin-top: 15px;
 }
 
+.playlist-detail__play-btn:active {
+    color: var(--active-color);
+}
+
 .playlist-detail__actions {
     width: 80%;
     margin: 0 auto;

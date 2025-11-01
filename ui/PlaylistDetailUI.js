@@ -18,6 +18,7 @@ export class PlaylistDetailUI extends BaseUI{
         this.addBtn = root.querySelector(".playlist-detail__action--add");
         this.editBtn = root.querySelector(".playlist-detail__action--edit");
         this.infoBtn = root.querySelector(".playlist-detail__action--info");
+        this.playBtn = root.querySelector(".playlist-detail__play-btn");
         this.songList = root.querySelector(".song-list");
     }
 
@@ -53,6 +54,14 @@ export class PlaylistDetailUI extends BaseUI{
             this.songList.appendChild(li);
         })
     };
+
+    setPlayBtn() {
+        this.playBtn.innerHTML = '<i class="fa-solid fa-circle-play"></i>';
+    }
+
+    setPauseBtn() {
+        this.playBtn.innerHTML = '<i class="fa-solid fa-circle-pause"></i>';
+    }
 
     formatDuration(duration) {
         // durationが取得できない場合（まだ読み込み中など）

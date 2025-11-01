@@ -10,7 +10,8 @@ import { Filesystem, Directory } from "@capacitor/filesystem";
 export class AudioPlayer {
   constructor(audioElement) {
     this.audio = audioElement; // <audio>タグの参照
-    this.currentPlaylist = [];
+    this.setList = [];
+    this.currentPlaylistId = null;
     this.currentIndex = 0;
     this.isReady = false;
 
@@ -57,12 +58,22 @@ export class AudioPlayer {
     });
   }
 
+
+  setPlaylist(playlist) {
+    this.currentPlaylistId = playlist.id;
+    this.setSetList(playlist.songs);
+  }
+
+  unsetPlaylist() {
+    this.currentPlaylistId = null;
+  }
+
   /**
-   * 📀 プレイリストを設定
+   * 📀 セットリストを設定
    * @param {Array<{title: string, path: string}>} songs
    */
-  setPlaylist(songs) {
-    this.currentPlaylist = songs;
+  setSetList(songs) {
+    this.setList = songs;
   }
 
   /**
@@ -96,7 +107,7 @@ export class AudioPlayer {
    * ⏩ 次の曲へ
    */
   async next() {
-    if (this.currentIndex < this.currentPlaylist.length - 1) {
+    if (this.currentIndex < this.setList.length - 1) {
       this.currentIndex++;
       await this.loadCurrentTrack();
     } else {
@@ -113,7 +124,7 @@ export class AudioPlayer {
       this.currentIndex--;
       await this.loadCurrentTrack();
     } else {
-        this.currentIndex = this.currentPlaylist.length - 1;
+        this.currentIndex = this.setList.length - 1;
         await this.loadCurrentTrack();
     }
   }
@@ -130,7 +141,7 @@ export class AudioPlayer {
    * 🎶 現在のトラックをロード
    */
   async loadCurrentTrack() {
-    const track = this.currentPlaylist[this.currentIndex];
+    const track = this.setList[this.currentIndex];
     if (!track) return;
 
     const { data } = await Filesystem.readFile({
@@ -156,7 +167,7 @@ export class AudioPlayer {
    * @returns {object|null}
    */
   getCurrentTrack() {
-    return this.currentPlaylist[this.currentIndex] || null;
+    return this.setList[this.currentIndex] || null;
   }
 
   /**

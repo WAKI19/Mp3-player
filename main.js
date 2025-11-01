@@ -62,12 +62,16 @@ player.canPlay = () => {
 };
 
 player.onPlay = () => {
+  const id = playlistDetailUI.loadingPlaylistId();
+  if (player.currentPlaylistId === id) playlistDetailUI.setPauseBtn();
   miniPlayerUI.setPauseBtn();
   fullPlayerUI.setPauseBtn();
   allSongsUI.highlightPlayingSong(player.getCurrentTrack());
 }
 
 player.onPause = () => {
+  const id = playlistDetailUI.loadingPlaylistId();
+  if (player.currentPlaylistId === id) playlistDetailUI.setPlayBtn();
   miniPlayerUI.setPlayBtn();
   fullPlayerUI.setPlayBtn();
 };
@@ -89,7 +93,7 @@ storage.onFileImport = () => { //Fileインポート時
 };
 
 storage.onFileDelete = (path) => { //File削除時
-  if (hasSongByPath(player.currentPlaylist, path)) {
+  if (hasSongByPath(player.setList, path)) {
     console.log("再生中のプレイリストに削除した曲が含まれています！");
   };
 };
@@ -131,8 +135,8 @@ allSongsUI.fileInput.addEventListener('change', async (e) => {
   }
 
   //全曲プレイリストを再生中だった場合、保存したファイルをプレイリストに含める
-  if (player.currentPlaylist === allSongs) {
-    player.setPlaylist(await storage.loadSongs());
+  if (player.setList === allSongs) {
+    player.setSetList(await storage.loadSongs());
   }
 
   allSongs = await storage.loadSongs();
@@ -174,7 +178,7 @@ allSongsUI.songList.addEventListener('click', (e) => {
   if (allSongs[index] === player.getCurrentTrack()) {
     player.togglePlay();
   } else {
-    player.setPlaylist(allSongs);
+    player.setSetList(allSongs);
     player.playTrack(index);
     allSongsUI.highlightPlayingSong(allSongs[index]);
   }
@@ -196,8 +200,7 @@ playlistUI.playlistList.addEventListener('click', async (e) => {
   const playlist = playlistManager.getPlaylist(id);
 
   if (li && playlistUI.playlistList.contains(li)) {
-    await playlistDetailUI.load(playlist);
-    playlistDetailUI.renderSongList(playlist.songs);
+    playlistDetailUI.init(playlist);
     playlistDetailUI.show();
   }
 });
@@ -256,6 +259,18 @@ playlistDetailUI.infoBtn.addEventListener('click', () => {
   infoEditSheetUI.show();
 });
 
+playlistDetailUI.playBtn.addEventListener('click', async () => {
+  const id = playlistDetailUI.loadingPlaylistId();
+  const playlist =  playlistManager.getPlaylist(id);
+
+  if (player.currentPlaylistId === id) {
+    player.togglePlay();
+  } else {
+    player.setPlaylist(playlist);
+    await player.playTrack(0);
+  }
+});
+
 
 
 // ==================================================
@@ -278,7 +293,7 @@ editPlaylistSheetUI.closeBtn.addEventListener('click', () => {
   const playlist = playlistManager.getPlaylist(id);
 
   playlistDetailUI.init(playlist);
-  addSongSheetUI.hide();
+  editPlaylistSheetUI.hide();
 });
 
 
@@ -294,10 +309,10 @@ infoEditSheetUI.saveBtn.addEventListener('click', async () => {
   
   if (file) await playlistManager.setImage(playlistDetailUI.loadingPlaylistId(), file);
   await playlistManager.renamePlaylist(playlistDetailUI.loadingPlaylistId(), infoEditSheetUI.nameInput.value);
-  playlistDetailUI.load(playlistManager.getPlaylist(playlistDetailUI.loadingPlaylistId()));
-
-  playlists = await playlistManager.loadPlaylists();
-  playlistUI.renderPlaylists(playlists);
+  
+  const id = playlistDetailUI.loadingPlaylistId();
+  const playlist = playlistManager.getPlaylist(id);
+  playlistDetailUI.init(playlist);
   infoEditSheetUI.hide();
 });
 
