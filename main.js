@@ -271,6 +271,20 @@ playlistDetailUI.playBtn.addEventListener('click', async () => {
   }
 });
 
+playlistDetailUI.songList.addEventListener('click', (e) => {
+  const li = e.target.closest('li');
+  const id = playlistDetailUI.loadingPlaylistId();
+  const playlist = playlistManager.getPlaylist(id);
+  const index = findSongIndexByTitle(playlist.songs, li.dataset.title);
+
+  if (player.getCurrentTrack() === playlist.songs[index]) {
+    player.togglePlay();
+  } else {
+    player.setPlaylist(playlist);
+    player.playTrack(index);
+  }
+});
+
 
 
 // ==================================================
@@ -284,6 +298,34 @@ addSongSheetUI.closeBtn.addEventListener('click', () => {
   addSongSheetUI.hide();
 });
 
+addSongSheetUI.searchInput.addEventListener('input', async () => {
+  const allSongs = await storage.loadSongs();
+  const id = playlistDetailUI.loadingPlaylistId();
+  const playlist = playlistManager.getPlaylist(id);
+  const notAdded = excludeSongs(allSongs, playlist.songs);
+  const val = addSongSheetUI.getSearchValue();
+  const filtered = filterSongsByTitle(notAdded, val);
+  addSongSheetUI.renderSongs(filtered, playlistManager);
+
+  if (val.trim() !== '') {
+    addSongSheetUI.searchClearBtn.style.display = 'block';
+  } else {
+    addSongSheetUI.searchClearBtn.style.display = 'none';
+  }
+});
+
+addSongSheetUI.searchClearBtn.addEventListener('click', async () => {
+  const allSongs = await storage.loadSongs();
+  const id = playlistDetailUI.loadingPlaylistId();
+  const playlist = playlistManager.getPlaylist(id);
+  const filtered = excludeSongs(allSongs, playlist.songs);
+
+  addSongSheetUI.searchInput.value = '';
+  addSongSheetUI.searchInput.focus();
+  addSongSheetUI.searchClearBtn.style.display = 'none';
+  addSongSheetUI.renderSongs(filtered, playlistManager);
+});
+
 
 // ==================================================
 // 🎶プレイリストページ　＞　プレイリスト詳細ページ　＞　プレイリスト編集シート
@@ -294,6 +336,30 @@ editPlaylistSheetUI.closeBtn.addEventListener('click', () => {
 
   playlistDetailUI.init(playlist);
   editPlaylistSheetUI.hide();
+});
+
+editPlaylistSheetUI.searchInput.addEventListener('input', () => {
+  const id = playlistDetailUI.loadingPlaylistId();
+  const playlist = playlistManager.getPlaylist(id);
+  const val = editPlaylistSheetUI.getSearchValue();
+  const filtered = filterSongsByTitle(playlist.songs, val);
+  editPlaylistSheetUI.renderSongs(filtered, playlistManager);
+
+  if (val.trim() !== '') {
+    editPlaylistSheetUI.searchClearBtn.style.display = 'block';
+  } else {
+    editPlaylistSheetUI.searchClearBtn.style.display = 'none';
+  }
+});
+
+editPlaylistSheetUI.searchClearBtn.addEventListener('click', () => {
+  const id = playlistDetailUI.loadingPlaylistId();
+  const playlist = playlistManager.getPlaylist(id);
+
+  editPlaylistSheetUI.searchInput.value = '';
+  editPlaylistSheetUI.searchInput.focus();
+  editPlaylistSheetUI.searchClearBtn.style.display = 'none';
+  editPlaylistSheetUI.renderSongs(playlist.songs, playlistManager);
 });
 
 

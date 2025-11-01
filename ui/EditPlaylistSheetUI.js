@@ -6,6 +6,8 @@ export class EditPlaylistSheetUI extends BaseUI {
     constructor(root) {
         super(root);
         this.closeBtn = root.querySelector(".bottom-sheet__close-btn");
+        this.searchInput = root.querySelector(".search-box__input");
+        this.searchClearBtn = root.querySelector(".search-box__clear-btn");
         this.songList = root.querySelector(".song-list");
     }
 
@@ -41,5 +43,9 @@ export class EditPlaylistSheetUI extends BaseUI {
 
             this.songList.appendChild(li);
         });
+    }
+
+    getSearchValue() {
+        return this.searchInput.value;
     }
 }

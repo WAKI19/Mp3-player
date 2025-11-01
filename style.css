@@ -348,6 +348,8 @@ img:not([src]), img[src=""], img[src=null] {
 
 .song-list__item {
     display: flex;
+    width: 90%;
+    margin: 0 auto;
     padding: 12px 30px;
     border-bottom: 2px solid #3A3A3C;
     align-items: center;
@@ -369,6 +371,7 @@ img:not([src]), img[src=""], img[src=null] {
 }
 
 .song-list__icon {
+    color: var(--active-color);
     margin-right: 15px;
 }
 
