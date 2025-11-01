@@ -66,6 +66,9 @@ export class AllSongsUI extends BaseUI {
                 <p class="song-list__title">${song.title}</p>
                 <p class="song-list__length">${formatAudioDuration(song.duration)}</p>
                 </div>
+                <div class="wave">
+                    <span></span><span></span><span></span><span></span>
+                </div>
             `;
             li.dataset.title = song.title;
 
@@ -86,5 +89,19 @@ export class AllSongsUI extends BaseUI {
 
         if (active) active.classList.remove("active");
         if (target) target.classList.add("active");
+    }
+
+    startWave() {
+        const waveSpans = this.root.querySelectorAll(".wave span");
+        waveSpans.forEach(span => {
+            span.style.animationPlayState = "running";
+        });
+    }
+
+    stopWave() {
+        const waveSpans = this.root.querySelectorAll(".wave span");
+        waveSpans.forEach(span => {
+            span.style.animationPlayState = "paused";
+        });
     }
 }

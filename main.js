@@ -67,6 +67,7 @@ player.onPlay = () => {
   miniPlayerUI.setPauseBtn();
   fullPlayerUI.setPauseBtn();
   allSongsUI.highlightPlayingSong(player.getCurrentTrack());
+  allSongsUI.startWave();
 }
 
 player.onPause = () => {
@@ -74,6 +75,7 @@ player.onPause = () => {
   if (player.currentPlaylistId === id) playlistDetailUI.setPlayBtn();
   miniPlayerUI.setPlayBtn();
   fullPlayerUI.setPlayBtn();
+  allSongsUI.stopWave();
 };
 
 player.onTimeUpdate = (currentTime, duration) => {
