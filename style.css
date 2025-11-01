@@ -382,7 +382,8 @@ img:not([src]), img[src=""], img[src=null] {
     color: var(--text-color2);
 }
 
-.song-list__add-btn {
+.song-list__add-btn,
+.song-list__remove-btn {
     position: absolute;
     right: 20px;
     width: 25px;
@@ -390,10 +391,16 @@ img:not([src]), img[src=""], img[src=null] {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--text-color);
     font-size: 19px;
 }
 
+.song-list__add-btn {
+    color: var(--text-color);
+}
+
+.song-list__remove-btn {
+    color: red;
+}
 
 /* 曲一覧ページ */
 #all-songs .search-box {
@@ -654,8 +661,9 @@ img:not([src]), img[src=""], img[src=null] {
     color: var(--text-color2);
 }
 
-/* プレイリスト曲追加用シート */
-.add-song-sheet__content {
+/* プレイリスト曲追加用シート　＆　プレイリスト編集シート　（レイアウトがほぼ共通なため） */
+.add-song-sheet__content,
+.edit-playlist-sheet__content {
     display: flex;
     flex-direction: column;
     width: 90%;
@@ -664,11 +672,13 @@ img:not([src]), img[src=""], img[src=null] {
     margin: 0 auto;
 }
 
-#add-song-sheet__search-box {
+#add-song-sheet__search-box,
+#edit-playlist-sheet__search-box {
     width: 100%;
 }
 
-#add-song-sheet__song-list {
+#add-song-sheet__song-list,
+#edit-playlist-sheet__song-list {
     margin-top: 15px;
     background-color: #2C2C2E;
     border-radius: 5px;
@@ -676,13 +686,20 @@ img:not([src]), img[src=""], img[src=null] {
     overflow-y: scroll;
 }
 
-#add-song-sheet__song-list .song-list__item {
+#add-song-sheet__song-list .song-list__item,
+#edit-playlist-sheet__song-list .song-list__item {
     transition: 0.25s;
 }
 
-#add-song-sheet__song-list .song-list__item.hidden {
+#add-song-sheet__song-list .song-list__item.added {
     background-color: var(--main-color);
     transform: translateX(-60%);
+    opacity: 0;
+}
+
+#edit-playlist-sheet__song-list .song-list__item.removed {
+    background-color: red;
+    transform: translateX(60%);
     opacity: 0;
 }
 

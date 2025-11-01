@@ -1,5 +1,8 @@
 import { BaseUI } from "./BaseUI";
 
+import { formatAudioDuration } from "../classes/Utils";
+import { calcTotalSongDuration } from "../classes/Utils";
+
 export class PlaylistDetailUI extends BaseUI{
     constructor(root) {
         super(root);
@@ -18,12 +21,18 @@ export class PlaylistDetailUI extends BaseUI{
         this.songList = root.querySelector(".song-list");
     }
 
+    async init(playlist) {
+        await this.load(playlist);
+        this.renderSongList(playlist.songs);
+    }
+
     async load(playlist) {
         this.root.dataset.id = playlist.id;
         this.headerTitle.textContent = playlist.name;
         this.img.src = playlist.imgBase64Data;
         this.title.textContent = playlist.name;
-        this.length.textContent = `${playlist.songs.length}曲、 -時間--分`;
+        this.totalSongDuration = calcTotalSongDuration(playlist.songs);
+        this.length.textContent = `${playlist.songs.length}曲、 ${this.formatDuration(this.totalSongDuration)}`;
     }
 
     renderSongList(songs) {
@@ -36,7 +45,7 @@ export class PlaylistDetailUI extends BaseUI{
                 <i class="song-list__icon fa-solid fa-music"></i>
                 <div>
                     <p class="song-list__title">${song.title}</p>
-                    <p class="song-list__length">${song.duration}</p>
+                    <p class="song-list__length">${formatAudioDuration(song.duration)}</p>
                 </div>
             `;
             li.dataset.title = song.title;
@@ -44,6 +53,22 @@ export class PlaylistDetailUI extends BaseUI{
             this.songList.appendChild(li);
         })
     };
+
+    formatDuration(duration) {
+        // durationが取得できない場合（まだ読み込み中など）
+        if (isNaN(duration)) return null;
+
+        const totalSeconds = Math.floor(duration);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+        // 1時間未満なら「○分」だけ表示
+        if (hours === 0) {
+            return `${minutes}分`;
+        }
+
+        return `${hours}時間${minutes}分`;
+    }
 
     loadingPlaylistId() {
         return this.root.dataset.id;

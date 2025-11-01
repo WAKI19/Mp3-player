@@ -244,6 +244,10 @@ playlistDetailUI.addBtn.addEventListener('click', () => {
 });
 
 playlistDetailUI.editBtn.addEventListener('click', () => {
+  const playlist = playlistManager.getPlaylist(playlistDetailUI.loadingPlaylistId());
+  const songs = playlist.songs;
+
+  editPlaylistSheetUI.renderSongs(songs, playlistManager);
   editPlaylistSheetUI.show();
 });
 
@@ -258,6 +262,10 @@ playlistDetailUI.infoBtn.addEventListener('click', () => {
 // 🎶プレイリストページ　＞　プレイリスト詳細ページ　＞　曲追加シート
 // ==================================================
 addSongSheetUI.closeBtn.addEventListener('click', () => {
+  const id = playlistDetailUI.loadingPlaylistId();
+  const playlist = playlistManager.getPlaylist(id);
+
+  playlistDetailUI.init(playlist);
   addSongSheetUI.hide();
 });
 
@@ -266,7 +274,11 @@ addSongSheetUI.closeBtn.addEventListener('click', () => {
 // 🎶プレイリストページ　＞　プレイリスト詳細ページ　＞　プレイリスト編集シート
 // ==================================================
 editPlaylistSheetUI.closeBtn.addEventListener('click', () => {
-  editPlaylistSheetUI.hide();
+  const id = playlistDetailUI.loadingPlaylistId();
+  const playlist = playlistManager.getPlaylist(id);
+
+  playlistDetailUI.init(playlist);
+  addSongSheetUI.hide();
 });
 
 

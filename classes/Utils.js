@@ -34,6 +34,16 @@ export function formatAudioDuration(duration) {
   }
 }
 
+export function calcTotalSongDuration(songs) {
+  let totalSongLength = 0;
+
+  songs.forEach(song => {
+    totalSongLength += song.duration;
+  });
+
+  return totalSongLength;
+}
+
 
 /**
  * 曲リストとタイトルを受け取り、
