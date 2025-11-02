@@ -12,7 +12,7 @@ import { PlaylistDetailUI } from './ui/PlaylistDetailUI';
 import { AddSongSheetUI } from './ui/AddSongSheetUI';
 import { EditPlaylistSheetUI } from './ui/EditPlaylistSheetUI';
 import { InfoEditSheetUI } from './ui/InfoEditSheetUI';
-import { Notification } from './ui/Notification';
+import { NotificationUI } from './ui/NotificationUI';
 
 import { findSongIndexByTitle } from './classes/Utils';
 import { filterSongsByTitle } from './classes/Utils';
@@ -26,6 +26,7 @@ const storage = new StorageManager();
 const playlistManager = new PlaylistManager(storage);
 
 const actionSheet = new ActionSheet();
+const notificationUI = new NotificationUI();
 const allSongsUI = new AllSongsUI(document.getElementById("all-songs"));
 const miniPlayerUI = new MiniPlayerUI(document.getElementById("mini-player"));
 const fullPlayerUI = new FullPlayerUI(document.getElementById("full-player"));
@@ -108,7 +109,7 @@ storage.onFileDelete = async (path, filename) => { //File削除時
 
   };
 
-  const notification = new Notification(`${filename}を削除しました。`);
+  notificationUI.notify(`${filename}を削除しました`, "normal");
 };
 
 
@@ -280,7 +281,7 @@ playlistDetailUI.playBtn.addEventListener('click', async () => {
   const id = playlistDetailUI.loadingPlaylistId();
   const playlist =  playlistManager.getPlaylist(id);
 
-  if (player.currentPlaylistId === id) {
+  if (player.currentPlaylistId === id && player.getCurrentTrack()) {
     player.togglePlay();
   } else {
     player.setPlaylist(playlist);
@@ -294,7 +295,7 @@ playlistDetailUI.songList.addEventListener('click', (e) => {
   const playlist = playlistManager.getPlaylist(id);
   const index = findSongIndexByTitle(playlist.songs, li.dataset.title);
 
-  if (player.currentPlaylistId === id && player.getCurrentTrack().title === playlist.songs[index].title) {
+  if (player.getCurrentTrack() && player.currentPlaylistId === id && player.getCurrentTrack().title === playlist.songs[index].title) {
     player.togglePlay();
   } else {
     player.setPlaylist(playlist);

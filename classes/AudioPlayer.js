@@ -1,5 +1,9 @@
 import { Filesystem, Directory } from "@capacitor/filesystem";
 
+import { NotificationUI } from "../ui/NotificationUI";
+
+const notificationUI = new NotificationUI();
+
 /**
  * AudioPlayer クラス
  * 
@@ -12,7 +16,7 @@ export class AudioPlayer {
     this.audio = audioElement; // <audio>タグの参照
     this.setList = [];
     this.currentPlaylistId = null;
-    this.currentIndex = 0;
+    this.currentIndex = null;
     this.isReady = false;
 
     // 再生状態を外部に通知するためのコールバック
@@ -143,6 +147,18 @@ export class AudioPlayer {
   async loadCurrentTrack() {
     const track = this.setList[this.currentIndex];
     if (!track) return;
+
+    try {
+      await Filesystem.stat({
+        path: track.path,
+        directory: Directory.Data,
+      });
+    } catch {
+      const filename = track.path.split("/").pop();
+      notificationUI.notify(`${filename}が見つかりません`, "error");
+      this.currentIndex = null;
+      return;
+    }
 
     const { data } = await Filesystem.readFile({
       path: track.path,

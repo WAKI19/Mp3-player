@@ -1,6 +1,9 @@
 import { BaseUI } from "./BaseUI";
 
+import { NotificationUI } from "./NotificationUI";
 import { formatAudioDuration } from "../classes/Utils";
+
+const notificationUI = new NotificationUI();
 
 export class EditPlaylistSheetUI extends BaseUI {
     constructor(root) {
@@ -13,6 +16,14 @@ export class EditPlaylistSheetUI extends BaseUI {
 
     renderSongs(songs, playlistManager) {
         this.songList.innerHTML = "";
+
+        if (songs.length === 0) {
+            const p = document.createElement('p');
+            p.classList.add("song-list__empty-message");
+            p.innerText = "♪ 曲がありません";
+
+            this.songList.appendChild(p);
+        }
 
         songs.forEach(song => {
             const li = document.createElement('li');
@@ -39,6 +50,7 @@ export class EditPlaylistSheetUI extends BaseUI {
 
                 li.classList.add("removed");
                 await playlistManager.removeSongFromPlaylist(playlistId, song.title);
+                notificationUI.notify(`「${song.title}」を削除しました`, "normal");
             });
 
             this.songList.appendChild(li);

@@ -99,10 +99,10 @@ img:not([src]), img[src=""], img[src=null] {
     top: 0;
     left: 2%;
     width: 96%;
-    background-color: #fff;
     border-radius: 10px;
+    z-index: 10000;
 
-    transition: 0.25s ease;
+    transition: transform 0.25s ease;
     transform: translateY(-100%);
 }
 
@@ -110,8 +110,17 @@ img:not([src]), img[src=""], img[src=null] {
     transform: translateY(0);
 }
 
-.Notification__textarea {
+.Notification.-normal {
+    background-color: #fff;
     color: black;
+}
+
+.Notification.-error {
+    background-color: red;
+    color: #fff;
+}
+
+.Notification__textarea {
     text-align: center;
     font-size: 15px;
     padding: 10px;
