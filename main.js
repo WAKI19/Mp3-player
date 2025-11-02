@@ -517,12 +517,11 @@ tabs.forEach(tab => {
 
 //起動時処理
 async function initApp() {
-  allSongs = await storage.loadSongs();
-  playlists = await playlistManager.loadPlaylists();
-
-  allSongsUI.renderSongList(allSongs, storage);       // 読み込み完了後に描画
-  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
-
+  const allSongs = await storage.loadSongs();
+  allSongsUI.renderSongList(allSongs, storage);
+  allSongsUI.highlightPlayingSong(player.getCurrentTrack());  
+  
+  const playlists = await playlistManager.loadPlaylists();
   playlistUI.renderPlaylists(playlists);
 }
 

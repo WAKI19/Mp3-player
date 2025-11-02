@@ -38,14 +38,6 @@ export class PlaylistDetailUI extends BaseUI{
 
     renderSongList(songs) {
         this.songList.innerHTML = "";
-
-        if (songs.length === 0) {
-            const p = document.createElement('p');
-            p.classList.add("song-list__empty-message");
-            p.innerText = "♪ 曲がありません";
-
-            this.songList.appendChild(p);
-        }
         
         songs.forEach(song => {
             const li = document.createElement('li');

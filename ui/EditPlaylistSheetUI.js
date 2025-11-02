@@ -17,14 +17,6 @@ export class EditPlaylistSheetUI extends BaseUI {
     renderSongs(songs, playlistManager) {
         this.songList.innerHTML = "";
 
-        if (songs.length === 0) {
-            const p = document.createElement('p');
-            p.classList.add("song-list__empty-message");
-            p.innerText = "♪ 曲がありません";
-
-            this.songList.appendChild(p);
-        }
-
         songs.forEach(song => {
             const li = document.createElement('li');
             li.classList.add("song-list__item");
@@ -40,8 +32,7 @@ export class EditPlaylistSheetUI extends BaseUI {
             li.addEventListener('transitionend', function handler(e) {
                 // transform か opacity のどちらかが完了した時点でOK
                 if (e.propertyName === 'transform') {
-                    li.style.display = 'none'; // ← 完全に領域を消す
-                    li.removeEventListener('transitionend', handler);
+                    li.remove();
                 }
             });
 

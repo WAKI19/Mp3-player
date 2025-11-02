@@ -56,14 +56,6 @@ export class AllSongsUI extends BaseUI {
     async renderSongList(songs, storage) {
         this.songList.innerHTML = "";
 
-        if (songs.length === 0) {
-            const p = document.createElement('p');
-            p.classList.add("song-list__empty-message");
-            p.innerText = "♪ 曲が見つかりません";
-
-            this.songList.appendChild(p);
-        }
-
         songs.forEach(song => {
             const li = document.createElement('li');
             li.classList.add("song-list__item");
