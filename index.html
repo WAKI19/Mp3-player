@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>MP3プレイヤー</title>
-  <link rel="stylesheet" href="css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="fontawesome/all.min.css">
+  <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
     <audio id="audio" autoplay></audio> <!-- 曲再生用audioタグ -->
@@ -206,13 +206,12 @@
         </div>
     </div>
     <!-- プレイリスト作成モーダル -->
-    <div id="new-playlist-modal">
-        <div class="modal__content">
-            <button class="modal__close-btn fa-solid fa-xmark"></button>
+    <div class="Modal">
+        <div class="Modal__content">
+            <button class="Modal__close-btn"><i class="fa-solid fa-xmark"></i></button>
             <h3>新規プレイリスト</h3>
-            <input class="modal__input" type="text" autocomplete="off" placeholder="プレイリスト名を入力..." />
-            <p class="modal__error-message"></p>
-            <button class="modal__create-btn" id="createPlaylistBtn">作成する</button>
+            <input class="Modal__input" type="text" autocomplete="off" placeholder="プレイリスト名を入力..." />
+            <button class="Modal__create-btn">作成する</button>
         </div>
     </div>
 
@@ -241,28 +240,24 @@
     </div>
 
     <!-- フルプレーヤー -->
-    <div class="full-player" id="full-player">
-        <div class="full-player__safe-area-top"></div>
-
-        <button class="full-player__close-btn"><i class="fa-solid fa-chevron-down"></i></button>
-        <div class="full-player__content">
-            <div class="full-player__img">♬</div>
-            <h3 class="full-player__song-title">Song Title</h3>
-            <div class="full-player__progress-container">
-                <input class="full-player__progress-bar" type="range" step="0.1">
-                <div class="full-player__time-info">
-                    <span class="full-player__current-time">--:--</span>
-                    <span class="full-player__remaining-time">--:--</span>
+    <div class="FullPlayer">
+        <button class="FullPlayer__close-btn"><i class="fa-solid fa-chevron-down"></i></button>
+        <div class="FullPlayer__content-wrapper">
+            <div class="FullPlayer__img">♬</div>
+            <h3 class="FullPlayer__song-title">Song Title</h3>
+            <div class="FullPlayer__progress">
+                <input class="FullPlayer__progress-bar" type="range" step="0.1">
+                <div class="FullPlayer__time-info">
+                    <span class="FullPlayer__current-time">--:--</span>
+                    <span class="FullPlayer__remaining-time">--:--</span>
                 </div>
             </div>
-            <div class="full-player__controlls">
-                <button class="full-player__prev-btn"><i class="fa-solid fa-backward-step"></i></button>
-                <button class="full-player__play-btn"><i class="fa-solid fa-play"></i></button>
-                <button class="full-player__next-btn"><i class="fa-solid fa-forward-step"></i></button>
+            <div class="FullPlayer__controlls">
+                <button class="FullPlayer__prev-btn"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="FullPlayer__play-btn"><i class="fa-solid fa-play"></i></button>
+                <button class="FullPlayer__next-btn"><i class="fa-solid fa-forward-step"></i></button>
             </div>
         </div>
-
-        <div class="full-player__safe-area-bottom"></div>
     </div> 
 
     <!-- タブバー -->

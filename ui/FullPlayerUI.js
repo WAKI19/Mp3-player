@@ -1,18 +1,16 @@
-import { BaseUI } from "./BaseUI";
-
 import { formatAudioDuration } from "../classes/Utils";
 
-export class FullPlayerUI extends BaseUI {
-    constructor(root) {
-        super(root);
-        this.closeBtn = root.querySelector(".full-player__close-btn");
-        this.songTitleElem = root.querySelector(".full-player__song-title");
-        this.currentTimeElem = root.querySelector(".full-player__current-time");
-        this.remainingTimeElem = root.querySelector(".full-player__remaining-time");
-        this.progressBar = root.querySelector(".full-player__progress-bar");
-        this.prevBtn = root.querySelector(".full-player__prev-btn");
-        this.playBtn = root.querySelector(".full-player__play-btn");
-        this.nextBtn = root.querySelector(".full-player__next-btn");
+export class FullPlayerUI {
+    constructor() {
+        this.root = document.querySelector(".FullPlayer");
+        this.closeBtn = this.root.querySelector(".FullPlayer__close-btn");
+        this.songTitleElem = this.root.querySelector(".FullPlayer__song-title");
+        this.currentTimeElem = this.root.querySelector(".FullPlayer__current-time");
+        this.remainingTimeElem = this.root.querySelector(".FullPlayer__remaining-time");
+        this.progressBar = this.root.querySelector(".FullPlayer__progress-bar");
+        this.prevBtn = this.root.querySelector(".FullPlayer__prev-btn");
+        this.playBtn = this.root.querySelector(".FullPlayer__play-btn");
+        this.nextBtn = this.root.querySelector(".FullPlayer__next-btn");
 
         this.isDragging = false; //progressBarがドラック中かどうかを判定するフラグ
     }
@@ -70,5 +68,13 @@ export class FullPlayerUI extends BaseUI {
 
     setPauseBtn() {
         this.playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+    }
+
+    open() {
+        this.root.classList.add("-opened");
+    }
+
+    close() {
+        this.root.classList.remove("-opened");
     }
 }

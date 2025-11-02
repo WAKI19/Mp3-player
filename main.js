@@ -29,16 +29,13 @@ const actionSheet = new ActionSheet();
 const notificationUI = new NotificationUI();
 const allSongsUI = new AllSongsUI(document.getElementById("all-songs"));
 const miniPlayerUI = new MiniPlayerUI(document.getElementById("mini-player"));
-const fullPlayerUI = new FullPlayerUI(document.getElementById("full-player"));
+const fullPlayerUI = new FullPlayerUI();
 const playlistUI = new PlaylistUI(document.getElementById("playlist"));
-const playlistModalUI = new NewPlaylistModalUI(document.getElementById("new-playlist-modal")); //変数名にNewを付けるとエラーになるので省略
+const playlistModalUI = new NewPlaylistModalUI(); //変数名にNewを付けるとエラーになるので省略
 const playlistDetailUI = new PlaylistDetailUI(document.getElementById("playlist-detail"));
 const addSongSheetUI = new AddSongSheetUI(document.getElementById("add-song-sheet"));
 const editPlaylistSheetUI = new EditPlaylistSheetUI(document.getElementById("edit-playlist-sheet"));
 const infoEditSheetUI = new InfoEditSheetUI(document.getElementById("info-edit-sheet"));
-
-let allSongs = [];
-let playlists = [];
 
 
 //要素取得
@@ -205,7 +202,7 @@ allSongsUI.songList.addEventListener('click', async (e) => {
 // 🎶　プレイリストページ
 // ==================================================
 playlistUI.modalOpenBtn.addEventListener('click', () => {
-  playlistModalUI.show();
+  playlistModalUI.open();
 });
 
 playlistUI.playlistList.addEventListener('click', async (e) => {
@@ -223,10 +220,40 @@ playlistUI.playlistList.addEventListener('click', async (e) => {
 
 
 // ==================================================
+// 🎶プレイリストページ　＞　プレイリスト作成用モーダル
+// ==================================================
+playlistModalUI.closeBtn.addEventListener('click', () => {
+  playlistModalUI.close();
+});
+
+playlistModalUI.input.addEventListener('input', () => {
+  const val = playlistModalUI.input.value;
+  if (val === "") {
+    playlistModalUI.deactivateCreateBtn();
+  } else {
+    playlistModalUI.activateCreateBtn();
+  }
+});
+
+playlistModalUI.createBtn.addEventListener('click', async () => {
+  const name = playlistModalUI.input.value;
+  playlistManager.createPlaylist(name);
+
+  playlistModalUI.close();
+
+  const playlists = await playlistManager.loadPlaylists();
+  playlistUI.renderPlaylists(playlists);
+});
+
+
+// ==================================================
 // 🎶　プレイリストページ　＞　プレイリスト詳細ページ
 // ==================================================
 playlistDetailUI.backBtn.addEventListener('click', () => {
+  const playlists = playlistManager.getAllPlaylists();
+
   playlistDetailUI.hide();
+  playlistUI.renderPlaylists(playlists);
   playlistDetailUI.root.scrollTo(0, 0);
 });
 
@@ -417,31 +444,10 @@ infoEditSheetUI.imgInput.addEventListener('change', async (e) => {
 
 
 // ==================================================
-// 🎶プレイリストページ　＞　プレイリスト作成用モーダル
-// ==================================================
-playlistModalUI.closeBtn.addEventListener('click', () => {
-  playlistModalUI.hide();
-  playlistModalUI.input.value = "";
-});
-
-playlistModalUI.createBtn.addEventListener('click', async () => {
-  const name = playlistModalUI.input.value;
-
-  playlistManager.createPlaylist(name);
-
-  playlistModalUI.hide();
-  playlistModalUI.input.value = "";
-
-  const playlists = await playlistManager.loadPlaylists();
-  playlistUI.renderPlaylists(playlists);
-});
-
-
-// ==================================================
 // ▶️　ミニプレーヤー
 // ==================================================
 miniPlayerUI.root.addEventListener('click', () => {
-  fullPlayerUI.show();
+  fullPlayerUI.open();
   miniPlayerUI.hide();
 });
 
@@ -455,7 +461,7 @@ miniPlayerUI.playBtn.addEventListener('click', (e) => {
 // ▶️　フルプレーヤー
 // ==================================================
 fullPlayerUI.closeBtn.addEventListener('click', () => {
-  fullPlayerUI.hide();
+  fullPlayerUI.close();
   miniPlayerUI.show();
 });
 

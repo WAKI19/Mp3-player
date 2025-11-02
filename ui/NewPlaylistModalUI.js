@@ -1,21 +1,26 @@
-import { BaseUI } from "./BaseUI";
-
-export class NewPlaylistModalUI extends BaseUI {
-    constructor(root) {
-        super(root);
-        this.closeBtn = root.querySelector(".modal__close-btn");
-        this.input = root.querySelector(".modal__input");
-        this.errorMessage = root.querySelector(".modal__error-message");
-        this.createBtn = root.querySelector(".modal__create-btn");
+export class NewPlaylistModalUI {
+    constructor() {
+        this.root = document.querySelector(".Modal");
+        this.closeBtn = this.root.querySelector(".Modal__close-btn");
+        this.input = this.root.querySelector(".Modal__input");
+        this.createBtn = this.root.querySelector(".Modal__create-btn");
     }
 
-    showErrorMessage(message) {
-        this.errorMessage.textContent = message;
-        this.errorMessage.style.display = "block";
+    open() {
+        this.root.classList.add("-open");
+        this.input.focus();
     }
 
-    hideErrorMessage() {
-        this.errorMessage.style.display = "none";
+    close() {
+        this.root.classList.remove("-open");
+        this.input.value = "";
     }
 
+    activateCreateBtn() {
+        this.createBtn.classList.add("-active");
+    }
+
+    deactivateCreateBtn() {
+        this.createBtn.classList.remove("-active");
+    }
 }

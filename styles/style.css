@@ -1,3 +1,8 @@
+@charset "UTF-8";
+
+@import './Blocks/Modal.css';
+@import './Blocks/FullPlayer.css';
+
 :root {
     --main-color: #3dd6b0;
     --accent-color: #7B68EE;
@@ -334,10 +339,10 @@ img:not([src]), img[src=""], img[src=null] {
     position: absolute;
     top: calc(100% + 6px);
     width: 250px;
-    background-color: #2f2f31;
+    background-color: #2C2C2E;
+    box-shadow: 0 0 15px #000;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 0px 15px black;
     opacity: 0;
     transform: scale(0.6);
     pointer-events: none;
@@ -555,83 +560,6 @@ img:not([src]), img[src=""], img[src=null] {
 
 .playlist-list__name {
     font-size: 13px;
-}
-
-/* プレイリスト作成モーダル */
-#new-playlist-modal {
-    position: fixed;
-    z-index: 100;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.8);
-    align-items: center;
-    justify-content: center;
-    transition: 1s;
-    display: none;
-}
-
-#new-playlist-modal.active {
-    display: inline-block;
-}
-
-.modal__content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    background: var(--bg-color);
-    padding: 20px;
-    border-radius: 10px;
-    width: 85%;
-    box-shadow: 0 0 8px var(--main-color);
-    text-align: center;
-}
-
-.modal__close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 16px;
-    color: var(--text-color2);
-}
-
-.modal__input {
-    display: inline-block;
-    width: 100%;
-    font-size: 16px;
-    color: var(--text-color);
-    margin-top: 35px;
-    caret-color: var(--main-color);
-    background-color: var(--bg-color2);
-    border: none;
-    border-radius: 6px;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-.modal__input:focus {
-    outline: none;
-}
-
-.modal__error-message {
-    color: red;
-    font-size: 14px;
-    display: none;
-}
-
-.modal__create-btn {
-    font-size: 14px;
-    padding: 6px 15px;
-    background: var(--main-color);
-    color: white;
-    border-radius: 10px;
-    margin-top: 18px;
-}
-
-.modal__create-btn:active {
-    opacity: 0.7;
 }
 
 /* プレイリスト詳細画面 */
@@ -886,7 +814,7 @@ img:not([src]), img[src=""], img[src=null] {
     border-radius: 10px;
     box-shadow: 0 0 20px black;
     transition: 0.3s ease;
-    z-index: 30;
+    z-index: 1;
 }
 
 .mini-player.active {
@@ -919,170 +847,6 @@ img:not([src]), img[src=""], img[src=null] {
     height: 15px;
 }
 
-/* フルプレーヤー */
-.full-player {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to top, #16272c 0%, #0f181a 50%, #0b1215 100%);
-    transition: 0.3s ease;
-    transform: translateY(100%);
-    z-index: -50;
-}
-
-.full-player.active {
-    transform: translateY(0);
-    z-index: 50;
-}
-
-.full-player__safe-area-top {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: env(safe-area-inset-top);
-    background-color: var(--active-color);
-}
-
-.full-player.hidden .full-player__content {
-    display: none;
-}
-
-.full-player__close-btn {
-    position: absolute;
-    top: calc(env(safe-area-inset-top) + 10px);
-    left: 10px;
-    font-size: 25px;
-    color: var(--text-color);
-}
-
-.full-player__content {
-    width: 85%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-55%);
-}
-
-.full-player__img {
-    display: flex;
-    width: 60%;
-    aspect-ratio: 1;
-    color: var(--main-color);
-    font-size: 70px;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    border-radius: 12px;
-    background-color: rgba(0, 255, 217, 0.2);
-    backdrop-filter: blur(35px);
-    -webkit-backdrop-filter: blur(35px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 8px rgba(0, 255, 217, 0.35);
-    transition: box-shadow 0.3s;
-}
-
-.full-player__song-title {
-    text-align: center;
-    font-size: 22px;
-    margin-top: 4px;
-}
-
-.full-player__progress-container {
-    margin-top: 70px;
-    font-size: 0;
-}
-
-.full-player__progress-bar {
-    appearance: none;
-    width: 100%;
-    height: 7px;
-    margin-bottom: 2px;
-    font-size: 13px;
-    border-radius: 4px;
-    background: linear-gradient(90deg, #00bfff, #00ffd9);
-}
-
-.full-player__progress-bar::-moz-range-progress {
-    background: var(--active-color);
-    height: 7px;
-    border-radius: 4px;
-}
-
-.full-player__progress-bar::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 13px;
-    height: 13px;
-    border: 1px solid var(--active-color);
-    border-radius: 9999px;
-    background: var(--bg-color2);
-    box-shadow: none;
-}
-
-.full-player__time-info {
-    display: flex;
-    justify-content: space-between;
-}
-
-.full-player__current-time,
-.full-player__remaining-time {
-    font-size: 12px;
-    color: var(--text-color2);
-}
-
-.full-player__controlls {
-    display: flex;
-    width: 70%;
-    margin: 0 auto;
-    margin-top: 20px;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.full-player__prev-btn,
-.full-player__next-btn {
-    color: #d7dfdf;
-    font-size: 30px;
-}
-
-.full-player__prev-btn:active,
-.full-player__next-btn:active {
-    opacity: 0.5;
-}
-
-.full-player__play-btn {
-    font-size: 27px;
-    width: 60px;
-    height: 60px;
-    display: inline-flex; /* 中央揃えが簡単 */
-    align-items: center;
-    justify-content: center;
-    color: var(--bg-color2);
-    background: var(--main-color);
-    border-radius: 30px;
-    box-shadow: 0 4px 20px rgba(0,191,255,0.3);
-    transition: transform 0.2s, box-shadow 0.3s;
-}
-
-.full-player__play-btn .fa-play::before {
-    position: relative;
-    right: -1.5px; /* アイコンのずれ調整用 */
-}
-
-.full-player__play-btn:active {
-    background-color: var(--active-color);
-}
-
-.full-player__safe-area-bottom {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: env(safe-area-inset-top);
-    background-color: var(--active-color);
-}
-
 /* タブバー */
 .tab-bar {
     position: fixed;
@@ -1095,7 +859,7 @@ img:not([src]), img[src=""], img[src=null] {
     align-items: center;
     background: var(--bg-color);
     color: var(--text-color2);
-    z-index: 40;
+    z-index: 1;
 }
 
 .tab-button {

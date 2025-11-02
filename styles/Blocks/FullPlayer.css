@@ -1,0 +1,144 @@
+@charset "UTF-8";
+
+.FullPlayer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, #16272c 0%, #0f181a 50%, #0b1215 100%);
+    z-index: 3;
+
+    transition: 0.3s ease;
+    transform: translateY(100%);
+    pointer-events: none;
+}
+
+.FullPlayer.-opened {
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.FullPlayer__content-wrapper {
+    width: 85%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-55%);
+}
+
+.FullPlayer__close-btn {
+    position: absolute;
+    top: calc(env(safe-area-inset-top) + 10px);
+    left: 15px;
+    font-size: 25px;
+    color: #fff;
+}
+
+.FullPlayer__img {
+    display: flex;
+    width: 60%;
+    aspect-ratio: 1;
+    color: var(--main-color);
+    font-size: 70px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    border-radius: 12px;
+    background-color: rgba(0, 255, 217, 0.2);
+    backdrop-filter: blur(35px);
+    -webkit-backdrop-filter: blur(35px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 8px rgba(0, 255, 217, 0.35);
+}
+
+.FullPlayer__song-title {
+    text-align: center;
+    font-size: 22px;
+    margin-top: 4px;
+}
+
+.FullPlayer__progress {
+    margin-top: 70px;
+    font-size: 0;
+}
+
+.FullPlayer__progress-bar {
+    appearance: none;
+    width: 100%;
+    height: 7px;
+    margin-bottom: 2px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #00bfff, #00ffd9);
+}
+
+.FullPlayer__progress-bar::-moz-range-progress {
+    background: var(--active-color);
+    height: 7px;
+    border-radius: 4px;
+}
+
+.FullPlayer__progress-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 13px;
+    height: 13px;
+    border: 1px solid var(--active-color);
+    border-radius: 9999px;
+    background: var(--bg-color2);
+    box-shadow: none;
+}
+
+.FullPlayer__time-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.FullPlayer__current-time,
+.FullPlayer__remaining-time {
+    font-size: 12px;
+    color: var(--text-color2);
+}
+
+.FullPlayer__controlls {
+    display: flex;
+    width: 70%;
+    margin: 0 auto;
+    margin-top: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.FullPlayer__prev-btn,
+.FullPlayer__next-btn {
+    color: #fff;
+    font-size: 30px;
+}
+
+.FullPlayer__prev-btn:active,
+.FullPlayer__next-btn:active {
+    opacity: 0.5;
+}
+
+.FullPlayer__play-btn {
+    font-size: 27px;
+    width: 60px;
+    height: 60px;
+    display: inline-flex; /* 中央揃えが簡単 */
+    align-items: center;
+    justify-content: center;
+    color: var(--bg-color2);
+    background: var(--main-color);
+    border-radius: 30px;
+    box-shadow: 0 4px 20px rgba(0,191,255,0.3);
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.FullPlayer__play-btn .fa-play::before {
+    position: relative;
+    right: -1.5px; /* アイコンのずれ調整用 */
+}
+
+.FullPlayer__play-btn:active {
+    background-color: var(--active-color);
+}
