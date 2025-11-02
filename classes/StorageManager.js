@@ -93,7 +93,8 @@ export class StorageManager {
       const updated = songs.filter(song => song.path !== path);
       await this.saveSongs(updated);
 
-      if (this.onFileDelete) this.onFileDelete(path); //File削除時の処理を追加できる（あれば）
+      const filename = path.split("/").pop();
+      if (this.onFileDelete) this.onFileDelete(path, filename); //File削除時の処理を追加できる（あれば）
 
       return true;
     } catch (err) {
