@@ -28,7 +28,7 @@ const playlistManager = new PlaylistManager(storage);
 const actionSheet = new ActionSheet();
 const notificationUI = new NotificationUI();
 const allSongsUI = new AllSongsUI(document.getElementById("all-songs"));
-const miniPlayerUI = new MiniPlayerUI(document.getElementById("mini-player"));
+const miniPlayerUI = new MiniPlayerUI();
 const fullPlayerUI = new FullPlayerUI();
 const playlistUI = new PlaylistUI(document.getElementById("playlist"));
 const playlistModalUI = new NewPlaylistModalUI(); //変数名にNewを付けるとエラーになるので省略
@@ -40,9 +40,8 @@ const infoEditSheetUI = new InfoEditSheetUI(document.getElementById("info-edit-s
 
 //要素取得
   //プレイリストページ
-const tabs = document.querySelectorAll(".tab-button");
+const tabs = document.querySelectorAll(".TabBar__btn");
 const contents = document.querySelectorAll(".tab-content");
-
 
 
 
@@ -263,7 +262,7 @@ playlistDetailUI.ellipsisBtn.addEventListener("click", (e) => {
 });
 
 playlistDetailUI.deleteBtn.addEventListener('click', async () => {
-  const action = await actionSheet.action([{text: "プレイリストを削除", value: "delete"}]);
+  const action = await actionSheet.action([{text: "プレイリストを削除", value: "delete", type: "danger"}]);
   if (action === "delete") playlistManager.deletePlaylist(playlistDetailUI.loadingPlaylistId());
   playlistDetailUI.hide();
   const playlists = await playlistManager.loadPlaylists();

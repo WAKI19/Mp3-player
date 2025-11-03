@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+.Notification {
+    position: fixed;
+    top: 0;
+    left: 2%;
+    width: 96%;
+    border-radius: 10px;
+    z-index: 10000;
+
+    transition: transform 0.25s ease;
+    transform: translateY(-100%);
+}
+
+.Notification.-active {
+    transform: translateY(0);
+}
+
+.Notification.-normal {
+    background-color: #fff;
+    color: black;
+}
+
+.Notification.-error {
+    background-color: red;
+    color: #fff;
+}
+
+.Notification__textarea {
+    text-align: center;
+    font-size: 15px;
+    padding: 10px;
+}

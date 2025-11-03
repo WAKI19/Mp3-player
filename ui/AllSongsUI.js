@@ -9,8 +9,8 @@ import { formatAudioDuration } from "../classes/Utils";
 export class AllSongsUI extends BaseUI {
     constructor(root) {
         super(root);
-        this.deleteModeBtn = root.querySelector("#delete-mode-btn");
-        this.importBtn = root.querySelector("#import-btn");
+        this.deleteModeBtn = root.querySelector(".Header__btn.-delete-mode");
+        this.importBtn = root.querySelector(".Header__btn.-import");
         this.fileInput = root.querySelector("#file-input");
         this.searchInput = root.querySelector(".search-box__input");
         this.searchClearBtn = root.querySelector(".search-box__clear-btn");

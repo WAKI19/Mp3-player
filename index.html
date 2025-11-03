@@ -12,11 +12,11 @@
 
     <!-- トップページ（曲一覧）ページ -->
     <section id="all-songs" class="tab-content active">
-        <header class="header">
-            <h2 class="header__title">全曲</h2>
-            <div class="header__btns">
-                <button id="delete-mode-btn" class="header__btn"><i class="fa-solid fa-trash-can"></i></button>
-                <button id="import-btn" class="header__btn"><i class="fa-solid fa-file-import"></i></button>
+        <header class="Header">
+            <h2 class="Header__title">全曲</h2>
+            <div class="Header__btns">
+                <button class="Header__btn -delete-mode"><i class="fa-solid fa-trash-can"></i></button>
+                <button class="Header__btn -import"><i class="fa-solid fa-file-import"></i></button>
             </div>
         </header>
 
@@ -42,10 +42,10 @@
 
     <!-- プレイリストページ -->
     <section id="playlist" class="tab-content">
-        <header class="header">
-            <h2 class="header__title">プレイリスト</h2>
-            <div class="header__btns">
-                <button id="modal-open-btn" class="header__btn"><i class="fa-solid fa-plus"></i></button>
+        <header class="Header">
+            <h2 class="Header__title">プレイリスト</h2>
+            <div class="Header__btns">
+                <button id="modal-open-btn" class="Header__btn"><i class="fa-solid fa-plus"></i></button>
             </div>
         </header>
 
@@ -217,8 +217,8 @@
 
     <!-- 設定ページ -->
     <section id="setting" class="tab-content">
-        <header class="header">
-            <h2 class="header__title">設定</h2>
+        <header class="Header">
+            <h2 class="Header__title">設定</h2>
         </header>
 
         <p class="setting-genre">設定項目</p>
@@ -230,13 +230,13 @@
     </section>
 
     <!-- ミニプレーヤー -->
-    <div class="mini-player" id="mini-player">
-        <i class="mini-player__icon fa-solid fa-music" style="color: var(--active-color);"></i>
+    <div class="MiniPlayer">
+        <i class="MiniPlayer__icon fa-solid fa-music"></i>
         <div>
-            <p class="mini-player__song-title" style="color: var(--active-color);">Song Title</p>
-            <p class="mini-player__song-length">00:00</p>
+            <p class="MiniPlayer__song-title">Song Title</p>
+            <p class="MiniPlayer__song-length">00:00</p>
         </div>
-        <button class="mini-player__play-btn"><i class="fa-solid fa-play"></i></button>
+        <button class="MiniPlayer__play-btn"><i class="fa-solid fa-play"></i></button>
     </div>
 
     <!-- フルプレーヤー -->
@@ -261,29 +261,29 @@
     </div> 
 
     <!-- タブバー -->
-    <nav class="tab-bar">
-        <button class="tab-button active" data-target="all-songs">
-            <i class="fa-solid fa-music"></i>
-            <span>全曲</span>
+    <nav class="TabBar">
+        <button class="TabBar__btn active" data-target="all-songs">
+            <i class="TabBar__icon fa-solid fa-music"></i>
+            <span class="TabBar__tab-name">全曲</span>
         </button>
-        <button class="tab-button" data-target="playlist">
-            <i class="fa-solid fa-folder"></i>
-            <span>プレイリスト</span>
+        <button class="TabBar__btn" data-target="playlist">
+            <i class="TabBar__icon fa-solid fa-folder"></i>
+            <span class="TabBar__tab-name">プレイリスト</span>
         </button>
-        <button class="tab-button" data-target="setting">
-            <i class="fa-solid fa-gear"></i>
-            <span>設定</span>
+        <button class="TabBar__btn" data-target="setting">
+            <i class="TabBar__icon fa-solid fa-gear"></i>
+            <span class="TabBar__tab-name">設定</span>
         </button>
     </nav>
 
     <!-- アクションシート -->
-    <div class="action-sheet-backdrop" id="actionSheetBackdrop">
-        <div class="action-sheet" id="actionSheet">
-            <div class="action-sheet__group action-sheet__actions">
-                <!-- <button class="action-sheet__btn">写真を撮る</button> -->
+    <div class="ActionSheetBackdrop">
+        <div class="ActionSheet">
+            <div class="ActionSheet__group ActionSheet__actions">
+                <!-- <button class="ActionSheet__btn ActionSheet_action">写真を撮る</button> -->
             </div>
-            <div class="action-sheet__group">
-            <button class="action-sheet__btn action-sheet__cancel">キャンセル</button>
+            <div class="ActionSheet__group">
+                <button class="ActionSheet__btn ActionSheet__cancel">キャンセル</button>
             </div>
         </div>
     </div>

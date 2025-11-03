@@ -1,7 +1,13 @@
 @charset "UTF-8";
 
-@import './Blocks/Modal.css';
-@import './Blocks/FullPlayer.css';
+@import './Blocks/Header.css';
+
+@import './RootBlocks/Modal.css';
+@import './RootBlocks/MiniPlayer.css';
+@import './RootBlocks/FullPlayer.css';
+@import './RootBlocks/TabBar.css';
+@import './RootBlocks/ActionSheet.css';
+@import './RootBlocks/Notification.css';
 
 :root {
     --main-color: #3dd6b0;
@@ -60,139 +66,6 @@ img:not([src]), img[src=""], img[src=null] {
 
 .tab-content.active {
     display: block;
-}
-
-/* 全ページ共通 */
-.header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: calc(env(safe-area-inset-top) + 58px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: env(safe-area-inset-top) 17px 0px 17px;
-    z-index: 10;
-}
-
-.header__title {
-    font-size: 30px;
-}
-
-.header__btn {
-    font-size: 20px;
-    color: var(--text-color);
-    margin-left: 10px;
-    opacity: 0.9;
-}
-
-.header__btn:active {
-    color: var(--accent-color);
-}
-
-#delete-mode-btn:active {
-    color: red;
-}
-
-#delete-mode-btn.active {
-    color: red;
-}
-
-/* 通知 */
-.Notification {
-    position: fixed;
-    top: 0;
-    left: 2%;
-    width: 96%;
-    border-radius: 10px;
-    z-index: 10000;
-
-    transition: transform 0.25s ease;
-    transform: translateY(-100%);
-}
-
-.Notification.-active {
-    transform: translateY(0);
-}
-
-.Notification.-normal {
-    background-color: #fff;
-    color: black;
-}
-
-.Notification.-error {
-    background-color: red;
-    color: #fff;
-}
-
-.Notification__textarea {
-    text-align: center;
-    font-size: 15px;
-    padding: 10px;
-}
-
-/* アクションシート */
-.action-sheet-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    opacity: 0;                 /* ← ここ */
-    pointer-events: none;       /* ← 非表示時クリック無効 */
-    transition: opacity 0.25s ease;
-    z-index: 10000;
-}
-
-.action-sheet-backdrop.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* アクションシート本体 */
-.action-sheet {
-    position: fixed;
-    bottom: env(safe-area-inset-bottom);
-    width: 100%;
-    background: transparent;
-    box-sizing: border-box;
-    transform: translateY(100%);
-    transition: 0.25s ease;
-}
-
-.action-sheet.active {
-    transform: translateY(0);
-}
-
-/* 各ボタンのグループ */
-.action-sheet__group {
-    background: #fff;
-    border-radius: 14px;
-    margin: 8px;
-    overflow: hidden;
-}
-
-.action-sheet__btn {
-    width: 100%;
-    padding: 14px 0;
-    font-size: 17px;
-    border: none;
-    background: white;
-    color: #007aff;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.action-sheet__btn:not(:last-child) {
-    border-bottom: 1px solid #e5e5ea;
-}
-
-.action-sheet__btn:active {
-    background: #e5e5ea;
-}
-
-/* キャンセルボタン */
-.action-sheet__cancel {
-    font-weight: bold;
-    color: #007aff;
 }
 
 /* bottom-sheet */
@@ -797,93 +670,4 @@ img:not([src]), img[src=""], img[src=null] {
 .setting-item {
     padding: 10px 25px;
     border-bottom: 1px solid var(--bg-color2);
-}
-
-/* ミニプレーヤー */
-.mini-player {
-    position: fixed;
-    left: 2%;
-    bottom: calc(env(safe-area-inset-bottom) + 59px);
-    display: none;
-    width: 96%;
-    height: 59px;
-    padding: 10px 25px;
-    align-items: center;
-    background-color: var(--bg-color2);
-    border: 0.5px solid var(--active-color);
-    border-radius: 10px;
-    box-shadow: 0 0 20px black;
-    transition: 0.3s ease;
-    z-index: 1;
-}
-
-.mini-player.active {
-    display: flex;
-}
-
-.mini-player__icon {
-    font-size: 16px;
-    margin-right: 15px;
-}
-
-.mini-player__song-title {
-    font-size: 16px;
-}
-
-.mini-player__song-length {
-    font-size: 11px;
-    color: var(--text-color2);
-}
-
-.mini-player__play-btn {
-    position: absolute;
-    right: 25px;
-    display: inline-flex; /* 中央揃えが簡単 */
-    align-items: center;
-    justify-content: center;
-    color: var(--text-color);
-    font-size: 15px;
-    width: 15px;
-    height: 15px;
-}
-
-/* タブバー */
-.tab-bar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: calc(env(safe-area-inset-bottom) + 58px);
-    padding-bottom: env(safe-area-inset-bottom);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background: var(--bg-color);
-    color: var(--text-color2);
-    z-index: 1;
-}
-
-.tab-button {
-    flex: 1;
-    background: none;
-    border: none;
-    outline: none;
-    font-size: 14px;
-    color: var(--text-color2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.tab-button i {
-    font-size: 20px;
-}
-
-.tab-button.active {
-    color: var(--accent-color);
-    font-weight: 600;
-}
-
-.tab-button span {
-    font-size: 10px;
 }

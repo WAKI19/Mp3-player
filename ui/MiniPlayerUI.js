@@ -1,18 +1,16 @@
-import { BaseUI } from "./BaseUI";
-
 import { formatAudioDuration } from "../classes/Utils";
 
-export class MiniPlayerUI extends BaseUI {
-    constructor(root) {
-        super(root);
-        this.songTitleElem = root.querySelector(".mini-player__song-title");
-        this.songLengthElem = root.querySelector(".mini-player__song-length");
-        this.playBtn = root.querySelector(".mini-player__play-btn");
+export class MiniPlayerUI {
+    constructor() {
+        this.root = document.querySelector(".MiniPlayer");
+        this.songTitle = this.root.querySelector(".MiniPlayer__song-title");
+        this.songLength = this.root.querySelector(".MiniPlayer__song-length");
+        this.playBtn = this.root.querySelector(".MiniPlayer__play-btn");
     }
 
     setup(song) {
-        this.songTitleElem.textContent = song.title;
-        this.songLengthElem.textContent = formatAudioDuration(song.duration);
+        this.songTitle.textContent = song.title;
+        this.songLength.textContent = formatAudioDuration(song.duration);
     }
 
     setPlayBtn() {
@@ -21,5 +19,13 @@ export class MiniPlayerUI extends BaseUI {
 
     setPauseBtn() {
         this.playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+    }
+
+    show() {
+        this.root.classList.add("-active");
+    }
+
+    hide() {
+        this.root.classList.remove("-active");
     }
 }
