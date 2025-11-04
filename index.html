@@ -243,7 +243,10 @@
     <div class="FullPlayer">
         <button class="FullPlayer__close-btn"><i class="fa-solid fa-chevron-down"></i></button>
         <div class="FullPlayer__content-wrapper">
-            <div class="FullPlayer__img">♬</div>
+            <div class="FullPlayer__img-area">
+                <canvas id="vCanvas" width="800" height="500"></canvas>
+                <div class="FullPlayer__img">♬</div>
+            </div>
             <h3 class="FullPlayer__song-title">Song Title</h3>
             <div class="FullPlayer__progress">
                 <input class="FullPlayer__progress-bar" type="range" step="0.1">

@@ -1,9 +1,12 @@
 import { formatAudioDuration } from "../classes/Utils";
 
+import { AudioVisualizer } from "./AudioVisualizer";
+
 export class FullPlayerUI {
     constructor() {
         this.root = document.querySelector(".FullPlayer");
         this.closeBtn = this.root.querySelector(".FullPlayer__close-btn");
+        this.Img = this.root.querySelector(".FullPlayer__img");
         this.songTitleElem = this.root.querySelector(".FullPlayer__song-title");
         this.currentTimeElem = this.root.querySelector(".FullPlayer__current-time");
         this.remainingTimeElem = this.root.querySelector(".FullPlayer__remaining-time");
@@ -11,6 +14,9 @@ export class FullPlayerUI {
         this.prevBtn = this.root.querySelector(".FullPlayer__prev-btn");
         this.playBtn = this.root.querySelector(".FullPlayer__play-btn");
         this.nextBtn = this.root.querySelector(".FullPlayer__next-btn");
+
+        this.visualCanvas = this.root.querySelector("#vCanvas");
+        this.audioVisualizer = new AudioVisualizer(this.visualCanvas, this.Img);
 
         this.isDragging = false; //progressBarがドラック中かどうかを判定するフラグ
     }
@@ -68,6 +74,14 @@ export class FullPlayerUI {
 
     setPauseBtn() {
         this.playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+    }
+
+    startImgAnimation() {
+        this.Img.style.animationPlayState = "running";
+    }
+
+    stopImgAnimation() {
+        this.Img.style.animationPlayState = "paused";
     }
 
     open() {

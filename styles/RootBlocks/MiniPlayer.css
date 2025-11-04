@@ -9,8 +9,9 @@
     height: 59px;
     padding: 10px 25px;
     align-items: center;
-    background-color: var(--bg-color2);
-    border: 0.5px solid var(--active-color);
+    background-color: #004b3c;
+    color: var(--main-color);
+    border: 1px solid var(--active-color);
     border-radius: 10px;
     box-shadow: 0 0 20px black;
     z-index: 1;

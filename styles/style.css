@@ -12,10 +12,12 @@
 @import './RootBlocks/Notification.css';
 
 :root {
+    --black: #000;
+
     --main-color: #3dd6b0;
     --accent-color: #7B68EE;
     --bg-color: #0D1117;
-    --bg-color2: #1E232B;
+    --bg-color2: #1e1e1ee3;
     --text-color: #EAEAEA; 
     --text-color2: #A0A0A0;
     --active-color: #3dd6b0;
@@ -29,7 +31,7 @@
 }
 
 body {
-    background: linear-gradient(180deg, #10141b 0%, #0c1017 100%);
+    background: var(--black);
     background-attachment: fixed;
     color: #fff;
 }
@@ -153,10 +155,10 @@ img:not([src]), img[src=""], img[src=null] {
     margin-top: 12px;
     padding: 10px 30px;
     border-radius: 12px;
+    background-color: var(--bg-color2);
 
     transition: 0.2s ease;
     opacity: 1;
-    background-color: rgba(255,255,255,0.05);
     transform: translateX(0);
     pointer-events: auto;
 }
@@ -186,8 +188,12 @@ img:not([src]), img[src=""], img[src=null] {
 .song-list__icon {
     color: var(--active-color);
     margin-right: 15px;
-    opacity: 0.6;
+    opacity: 0.5;
     transition: 0.2s ease;
+}
+
+.song-list__title {
+    opacity: 0.8;
 }
 
 .song-list__item.active .song-list__icon {
@@ -195,7 +201,7 @@ img:not([src]), img[src=""], img[src=null] {
 }
 
 .song-list__item.active {
-    /* border: 1px solid #00ffd0; */
+    border: 1px solid var(--main-color);
     scale: 1.04;
 }
 
@@ -204,7 +210,7 @@ img:not([src]), img[src=""], img[src=null] {
 }
 
 .song-list__item.active .song-list__title {
-    color: var(--active-color);
+    opacity: 1;
 }
 
 .song-list__title {
@@ -458,7 +464,7 @@ img:not([src]), img[src=""], img[src=null] {
 .edit-playlist-sheet__content {
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 95%;
     height: 90%;
     padding: 30px 0;
     margin: 0 auto;
