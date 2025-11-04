@@ -9,8 +9,8 @@ export class PlaylistDetailUI extends BaseUI{
         this.backBtn = root.querySelector(".playlist-detail__back-btn");
         this.header = root.querySelector(".playlist-detail__header");
         this.headerTitle = root.querySelector(".playlist-detail__header .playlist-detail__title");
-        this.ellipsisBtn = root.querySelector("#playlist-detail__popover .popover__btn");
-        this.popoverPanel = root.querySelector("#playlist-detail__popover .popover__panel");
+        this.ellipsisBtn = root.querySelector("#playlist-detail__popover .PopoverList__btn");
+        this.popoverPanel = root.querySelector("#playlist-detail__popover .PopoverList__panel");
         this.deleteBtn = root.querySelector("#playlist-detail__delete-btn");
         this.img = root.querySelector(".playlist-detail__img");
         this.length = root.querySelector(".playlist-detail__length");
@@ -44,7 +44,7 @@ export class PlaylistDetailUI extends BaseUI{
             li.classList.add("song-list__item");
             li.innerHTML = `
                 <i class="song-list__icon fa-solid fa-music"></i>
-                <div>
+                <div class="song-list__info">
                     <p class="song-list__title">${song.title}</p>
                     <p class="song-list__length">${formatAudioDuration(song.duration)}</p>
                 </div>

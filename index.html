@@ -22,9 +22,9 @@
 
         <input id="file-input" type="file" accept="audio/mpeg" multiple style="display: none;">
 
-        <div class="search-box">
-            <input class="search-box__input" type="text" id="all-songs-search-input" placeholder="検索：" autocomplete="off">
-            <button class="search-box__clear-btn" id="all-songs-search-clear-btn" class="clear-btn" type="button">×</button>
+        <div class="SearchBox">
+            <input class="SearchBox__input" type="text" id="all-songs-search-input" placeholder="検索：" autocomplete="off">
+            <button class="SearchBox__clear-btn" id="all-songs-search-clear-btn" class="clear-btn" type="button">×</button>
         </div>
 
         <ul id="all-songs-song-list" class="song-list">
@@ -65,13 +65,13 @@
                 <button class="playlist-detail__back-btn"><i class="fa-solid fa-angle-left"></i></button>
                 <h3 class="playlist-detail__title">Playlist Title</h3>
 
-                <div class="popover popover--dropdown-left" id="playlist-detail__popover">
-                    <div class="popover__container">
-                        <button class="popover__btn"><i class="fa-solid fa-ellipsis"></i></button>
+                <div class="PopoverList -bottom-left" id="playlist-detail__popover">
+                    <div class="PopoverList__container">
+                        <button class="PopoverList__btn"><i class="fa-solid fa-ellipsis"></i></button>
 
-                        <div class="popover__panel">
-                            <ul class="popover__list">
-                                <li class="popover__item" id="playlist-detail__delete-btn" style="color: red;">
+                        <div class="PopoverList__panel">
+                            <ul class="PopoverList__list">
+                                <li class="PopoverList__item" id="playlist-detail__delete-btn" style="color: red;">
                                     <span>プレイリスト削除</span>
                                     <i class="fa-solid fa-trash-can"></i>
                                 </li>
@@ -116,9 +116,9 @@
                 </header>
 
                 <div class="add-song-sheet__content">
-                    <div class="search-box" id="add-song-sheet__search-box">
-                        <input class="search-box__input" type="text" placeholder="検索：" autocomplete="off">
-                        <button class="search-box__clear-btn" type="button">×</button>
+                    <div class="SearchBox" id="add-song-sheet__search-box">
+                        <input class="SearchBox__input" type="text" placeholder="検索：" autocomplete="off">
+                        <button class="SearchBox__clear-btn" type="button">×</button>
                     </div>
 
                     <ul class="song-list" id="add-song-sheet__song-list">
@@ -146,9 +146,9 @@
                 </header>
                 
                 <div class="edit-playlist-sheet__content">
-                    <div class="search-box" id="edit-playlist-sheet__search-box">
-                        <input class="search-box__input" type="text" placeholder="検索：" autocomplete="off">
-                        <button class="search-box__clear-btn" type="button">×</button>
+                    <div class="SearchBox" id="edit-playlist-sheet__search-box">
+                        <input class="SearchBox__input" type="text" placeholder="検索：" autocomplete="off">
+                        <button class="SearchBox__clear-btn" type="button">×</button>
                     </div>
 
                     <ul class="song-list" id="edit-playlist-sheet__song-list">
@@ -182,13 +182,13 @@
                     <div class="info-edit__img-area">
                         <img class="info-edit__img" src="" alt="">
                         <div class="info-edit__popover-wrapper">
-                            <div class="popover popover--dropdown-center">
-                                <div class="popover__container">
-                                    <button class="popover__btn" id="info-edit__camera-btn"><i class="fa-solid fa-camera"></i></button>
+                            <div class="PopoverList -bottom-center">
+                                <div class="PopoverList__container">
+                                    <button class="PopoverList__btn" id="info-edit__camera-btn"><i class="fa-solid fa-camera"></i></button>
 
-                                    <div class="popover__panel">
-                                        <ul class="popover__list">
-                                            <li class="popover__item" id="img-input-trigger">
+                                    <div class="PopoverList__panel">
+                                        <ul class="PopoverList__list">
+                                            <li class="PopoverList__item" id="img-input-trigger">
                                                 <span>ファイルを選択</span>
                                                 <i class="fa-solid fa-folder"></i>
                                             </li>
@@ -232,7 +232,7 @@
     <!-- ミニプレーヤー -->
     <div class="MiniPlayer">
         <i class="MiniPlayer__icon fa-solid fa-music"></i>
-        <div>
+        <div class="MiniPlayer__song-info">
             <p class="MiniPlayer__song-title">Song Title</p>
             <p class="MiniPlayer__song-length">00:00</p>
         </div>

@@ -38,10 +38,10 @@ const editPlaylistSheetUI = new EditPlaylistSheetUI(document.getElementById("edi
 const infoEditSheetUI = new InfoEditSheetUI(document.getElementById("info-edit-sheet"));
 
 
-//要素取得
-  //プレイリストページ
 const tabs = document.querySelectorAll(".TabBar__btn");
 const contents = document.querySelectorAll(".tab-content");
+
+let loadedSongs = [];
 
 
 
@@ -115,12 +115,12 @@ storage.onFileDelete = async (path, filename) => { //File削除時
 // ==================================================
 document.addEventListener("click", (e) => {
   // クリックされた要素（またはその親）に .popover__btn が含まれているか確認
-  const isPopoverButton = e.target.closest(".popover__btn");
-  const popoverPanels = document.querySelectorAll(".popover__panel");
+  const isPopoverButton = e.target.closest(".PopoverList__btn");
+  const popoverPanels = document.querySelectorAll(".PopoverList__panel");
 
   if (!isPopoverButton) {
     popoverPanels.forEach(panel => {
-      panel.classList.remove("active"); //popover_panelを消す
+      panel.classList.remove("-opened"); //popover_panelを消す
     });
   }
 });
@@ -141,16 +141,17 @@ allSongsUI.fileInput.addEventListener('change', async (e) => {
   const files = Array.from(e.target.files);
 
   for (const file of files) {
-    await storage.importSong(file);
+    const newSong = await storage.importSong(file);
+    loadedSongs.push(newSong);
+    loadedSongs.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
+    allSongsUI.renderSong(newSong, storage);
+
+    //全曲プレイリストを再生中だった場合、セットリストをセットしなおす
+    if (player.currentPlaylistId === null) {
+      player.setSetList(loadedSongs);
+    }
   }
 
-  //全曲プレイリストを再生中だった場合、保存したファイルをプレイリストに含める
-  if (player.currentPlaylistId === null) {
-    player.setSetList(await storage.loadSongs());
-  }
-
-  //表示更新
-  allSongsUI.renderSongList(await storage.loadSongs(), storage);
   allSongsUI.highlightPlayingSong(player.getCurrentTrack());
 
   allSongsUI.fileInput.value = ''; // 選択リセット
@@ -258,7 +259,7 @@ playlistDetailUI.backBtn.addEventListener('click', () => {
 
 playlistDetailUI.ellipsisBtn.addEventListener("click", (e) => {
   e.stopPropagation();
-  playlistDetailUI.popoverPanel.classList.toggle("active");
+  playlistDetailUI.popoverPanel.classList.toggle("-opened");
 });
 
 playlistDetailUI.deleteBtn.addEventListener('click', async () => {
@@ -427,7 +428,7 @@ infoEditSheetUI.saveBtn.addEventListener('click', async () => {
 });
 
 infoEditSheetUI.cameraBtn.addEventListener('click', () => {
-  infoEditSheetUI.popoverPanel.classList.toggle("active");
+  infoEditSheetUI.popoverPanel.classList.toggle("-opened");
 });
 
 infoEditSheetUI.imgInputTrigger.addEventListener('click', () => {
@@ -522,8 +523,8 @@ tabs.forEach(tab => {
 
 //起動時処理
 async function initApp() {
-  const allSongs = await storage.loadSongs();
-  allSongsUI.renderSongList(allSongs, storage);
+  loadedSongs = await storage.loadSongs();
+  allSongsUI.renderSongList(loadedSongs, storage);
   allSongsUI.highlightPlayingSong(player.getCurrentTrack());  
   
   const playlists = await playlistManager.loadPlaylists();

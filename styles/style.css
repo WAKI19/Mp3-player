@@ -1,6 +1,8 @@
 @charset "UTF-8";
 
 @import './Blocks/Header.css';
+@import './Blocks/PopoverList.css';
+@import './Blocks/SearchBox.css';
 
 @import './RootBlocks/Modal.css';
 @import './RootBlocks/MiniPlayer.css';
@@ -137,133 +139,6 @@ img:not([src]), img[src=""], img[src=null] {
     font-size: 18px;
 }
 
-/* .search-box */
-.search-box {
-    position: relative;
-    display: block;
-    width: 90%;
-    margin: 0 auto;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-}
-
-.search-box__input {
-    width: 100%;
-    font-size: 16px;
-    padding: 4px 2em 4px 12px;
-    color: #fff;
-    padding: 8px 12px;
-    outline: none;
-    transition: border 0.2s;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background-color: transparent;
-    caret-color: var(--main-color);
-}
-
-.search-box__input::placeholder {
-    color: var(--text-color2);
-}
-
-.search-box__input:focus {
-    outline: none;
-    border: 1px solid #1fa7a8;
-}
-
-.search-box__clear-btn {
-  position: absolute;
-  right: 0.3em;
-  top: 50%;
-  display: none;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 1.2em;
-  color: var(--text-color2);
-}
-
-.search-box__clear-btn:active {
-    opacity: 0.5;
-}
-
-/* ポップオーバー */
-.popover {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-}
-
-.popover__container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-.popover__btn {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    color: var(--text-color);
-    font-size: 25px;
-}
-
-.popover__panel {
-    position: absolute;
-    top: calc(100% + 6px);
-    width: 250px;
-    background-color: #2C2C2E;
-    box-shadow: 0 0 15px #000;
-    border-radius: 8px;
-    overflow: hidden;
-    opacity: 0;
-    transform: scale(0.6);
-    pointer-events: none;
-    transition: all 0.15s ease;
-}
-
-.popover--dropdown-left .popover__panel {
-    right: 0;
-    transform-origin: top right;
-}
-
-.popover--dropdown-right .popover__panel {
-    left: 0;
-    transform-origin: top left;
-}
-
-.popover--dropdown-center .popover__panel {
-    left: calc(-125px + 100% / 2);
-    transform-origin: top;
-}
-
-.popover__panel.active {
-    opacity: 1;
-    transform: scale(1);
-    pointer-events: auto;
-}
-
-.popover__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.popover__item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 7px 17px;
-}
-
-.popover__item:not(:last-child) {
-    border-bottom: 1px solid var(--text-color2);
-}
-
-.popover__item:active {
-    background-color: #2C2C2E;
-}
-
 /* .song-list */
 .song-list {
     position: relative;
@@ -277,9 +152,20 @@ img:not([src]), img[src=""], img[src=null] {
     margin: 0 auto;
     margin-top: 12px;
     padding: 10px 30px;
-    background-color: rgba(255,255,255,0.05);
     border-radius: 12px;
+
     transition: 0.2s ease;
+    opacity: 1;
+    background-color: rgba(255,255,255,0.05);
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.song-list__item.-deleted {
+    opacity: 0;
+    background-color: red;
+    transform: translateX(60%);
+    pointer-events: none;
 }
 
 .song-list__delete-btn {
@@ -313,11 +199,18 @@ img:not([src]), img[src=""], img[src=null] {
     scale: 1.04;
 }
 
+.song-list__info {
+    width: 70%;
+}
+
 .song-list__item.active .song-list__title {
     color: var(--active-color);
 }
 
 .song-list__title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: 15px;
     transition: 0.2s ease;
 }
@@ -330,7 +223,7 @@ img:not([src]), img[src=""], img[src=null] {
 .song-list__add-btn,
 .song-list__remove-btn {
     position: absolute;
-    right: 40px;
+    right: 30px;
     width: 25px;
     height: 25px;
     display: flex;
@@ -391,7 +284,7 @@ img:not([src]), img[src=""], img[src=null] {
 }
 
 /* 曲一覧ページ */
-#all-songs .search-box {
+#all-songs .SearchBox {
     margin-top: 30px;
 }
 

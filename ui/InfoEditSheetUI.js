@@ -7,7 +7,7 @@ export class InfoEditSheetUI extends BaseUI {
         this.saveBtn = root.querySelector(".bottom-sheet__action-btn");
         this.img = root.querySelector(".info-edit__img");
         this.cameraBtn = root.querySelector("#info-edit__camera-btn");
-        this.popoverPanel = root.querySelector(".popover__panel");
+        this.popoverPanel = root.querySelector(".PopoverList__panel");
         this.imgInputTrigger = root.querySelector("#img-input-trigger");
         this.imgInput = root.querySelector("#playlist-img-input");
         this.nameInput = root.querySelector("#playlist-name-input");
