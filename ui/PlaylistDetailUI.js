@@ -94,4 +94,18 @@ export class PlaylistDetailUI extends BaseUI{
     loadingPlaylistId() {
         return this.root.dataset.id;
     }
+
+    startWave() {
+        const waveSpans = this.root.querySelectorAll(".wave span");
+        waveSpans.forEach(span => {
+            span.style.animationPlayState = "running";
+        });
+    }
+
+    stopWave() {
+        const waveSpans = this.root.querySelectorAll(".wave span");
+        waveSpans.forEach(span => {
+            span.style.animationPlayState = "paused";
+        });
+    }
 }

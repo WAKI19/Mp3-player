@@ -8,7 +8,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--black);
+    background-color: rgb(var(--black));
     padding: env(safe-area-inset-top) 17px 0px 17px;
     z-index: 1;
 }
@@ -19,12 +19,12 @@
 
 .Header__btn {
     font-size: 20px;
-    color: #fff;
+    color: rgb(var(--white));
     margin-left: 10px;
 }
 
 .Header__btn:active {
-    color: var(--accent-color);
+    color: rgb(var(--sub-color));
 }
 
 .Header__btn.-delete-mode:active {

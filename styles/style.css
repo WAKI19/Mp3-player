@@ -12,18 +12,15 @@
 @import './RootBlocks/Notification.css';
 
 :root {
-    --black: #000;
-    --dark-gray: #1e1e1e;
-    --gray: #7b7b7b;
-    --white: #fff;
+    --black: 0, 0, 0;
+    --dark-gray: 30, 30, 30;
+    --gray: 123, 123, 123;
+    --light-gray: 217, 217, 217;
+    --white: 255, 255, 255;
 
-    --main-color: #3dd6b0;
-    --accent-color: #7B68EE;
-    --bg-color: #0D1117;
-    --bg-color2: #1e1e1ee3;
-    --text-color: #EAEAEA; 
-    --text-color2: #A0A0A0;
-    --active-color: #3dd6b0;
+    --main-color: 61, 214, 176;
+    --accent-color: 0, 75, 60;
+    --sub-color: 123, 104, 238;
 }
 
 * {
@@ -34,9 +31,9 @@
 }
 
 body {
-    background: var(--black);
+    background: rgb(var(--black));
     background-attachment: fixed;
-    color: #fff;
+    color: rgb(var(--white));
 }
 
 button{
@@ -48,7 +45,7 @@ button{
 
 input {
     border: none;
-    caret-color: var(--main-color);
+    caret-color: rgb(var(--main-color));
 }
 
 input:focus {
@@ -56,7 +53,7 @@ input:focus {
 }
 
 img:not([src]), img[src=""], img[src=null] {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 /* tab-content */
@@ -82,7 +79,7 @@ img:not([src]), img[src=""], img[src=null] {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(var(--black), 0.8);
     z-index: 3;
 }
 
@@ -95,8 +92,8 @@ img:not([src]), img[src=""], img[src=null] {
     bottom: 0;
     width: 100%;
     height: 95%;
-    background-color: var(--black);
-    color: var(--text-color);
+    background-color: rgb(var(--black));
+    color: rgb(var(--white));
     border-radius: 15px 15px 0 0;
     overflow: hidden;
 
@@ -117,16 +114,16 @@ img:not([src]), img[src=""], img[src=null] {
 
 .bottom-sheet__header {
     position: relative;
-    padding: 5px 0;
-    background: var(--dark-gray);
+    padding: 10px 0;
+    background: rgb(var(--accent-color));
 }
 
 .bottom-sheet__close-btn,
 .bottom-sheet__action-btn {
     position: absolute;
-    bottom: 0;
-    font-size: 17px;
-    color: white;
+    bottom: 10px;
+    font-size: 16px;
+    color: rgb(var(--white));
 }
 
 .bottom-sheet__close-btn {
@@ -161,7 +158,7 @@ img:not([src]), img[src=""], img[src=null] {
     margin-top: 12px;
     padding: 10px 30px;
     border-radius: 12px;
-    background-color: var(--dark-gray);
+    background-color: rgb(var(--dark-gray));
 
     transition: 0.2s ease;
     opacity: 1;
@@ -192,7 +189,7 @@ img:not([src]), img[src=""], img[src=null] {
 }
 
 .song-list__icon {
-    color: var(--active-color);
+    color: rgb(var(--main-color));
     margin-right: 15px;
     opacity: 0.5;
     transition: 0.2s ease;
@@ -207,7 +204,7 @@ img:not([src]), img[src=""], img[src=null] {
 }
 
 .song-list__item.-playing {
-    border: 1px solid var(--main-color);
+    border: 1px solid rgb(var(--main-color));
     scale: 1.04;
 }
 
@@ -229,7 +226,7 @@ img:not([src]), img[src=""], img[src=null] {
 
 .song-list__length {
     font-size: 12px;
-    color: var(--text-color2);
+    color: rgb(var(--gray));
 }
 
 .song-list__add-btn,
@@ -245,7 +242,7 @@ img:not([src]), img[src=""], img[src=null] {
 }
 
 .song-list__add-btn {
-    color: var(--main-color);
+    color: rgb(var(--main-color));
 }
 
 .song-list__remove-btn {
@@ -261,7 +258,7 @@ img:not([src]), img[src=""], img[src=null] {
     display: block;
     padding: 8px;
     margin-top: 30px;
-    color: #666;
+    color: rgb(var(--gray));
     font-style: italic;
     text-align: center;
 }
@@ -282,7 +279,7 @@ img:not([src]), img[src=""], img[src=null] {
     width: 3px;
     height: 6px;
     margin: 0 1px;
-    background: var(--main-color);
+    background: rgb(var(--main-color));
     animation: wave 1s infinite ease-in-out;
 }
 
@@ -324,9 +321,9 @@ img:not([src]), img[src=""], img[src=null] {
 .playlist-list__img-area {
     width: 100%;
     aspect-ratio: 1;
-    background-color: #2C2C2E;
+    background-color: rgb(var(--dark-gray));
     border-radius: 3px;
-    border: 1px solid #3A3A3C;
+    border: 1px solid rgba(var(--gray), 0.2);
     overflow: hidden;
 }
 
@@ -347,11 +344,11 @@ img:not([src]), img[src=""], img[src=null] {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, #16272c 0%, #0f181a 20%, #0b1215 100%);
+    background-color: rgb(var(--black));
     overflow-y: scroll;
     transition: 0.3s ease;
     padding-bottom: 300px;
-    z-index: 20;
+    z-index: 2;
     transform: translateX(100%);
 }
 
@@ -366,10 +363,9 @@ img:not([src]), img[src=""], img[src=null] {
     height: calc(env(safe-area-inset-top) + 40px);
     display: flex;
     padding-top: env(safe-area-inset-top);
-    background-color: #16272c;
+    background-color: rgba(var(--accent-color), 0.97);
     justify-content: center;
     z-index: 1;
-    opacity: 0.97;
 }
 
 .playlist-detail__header .playlist-detail__title {
@@ -385,6 +381,7 @@ img:not([src]), img[src=""], img[src=null] {
 }
 
 .playlist-detail__info {
+    background: linear-gradient(to bottom, rgb(var(--accent-color)) 0%, rgb(var(--black)) 100%);
     padding-top: calc(env(safe-area-inset-top) + 70px);
     padding-bottom: 40px;
 }
@@ -393,7 +390,7 @@ img:not([src]), img[src=""], img[src=null] {
     position: absolute;
     left: 10px;
     line-height: 40px;
-    color: var(--text-color);
+    color: rgb(var(--white));
     font-size: 25px;
 }
 
@@ -401,8 +398,8 @@ img:not([src]), img[src=""], img[src=null] {
     width: 40%;
     aspect-ratio: 1;
     margin: 0 auto;
-    background-color: #2C2C2E;
-    border: 1px solid #3A3A3C;
+    background-color: rgb(var(--dark-gray));
+    border: 1px solid rgb(var(--gray));
     border-radius: 5px;
     overflow: hidden;
 }
@@ -421,7 +418,7 @@ img:not([src]), img[src=""], img[src=null] {
 
 .playlist-detail__length {
     font-size: 13px;
-    color: var(--text-color2);
+    color: rgb(var(--gray));
     text-align: center;
 }
 
@@ -429,12 +426,12 @@ img:not([src]), img[src=""], img[src=null] {
     display: block;
     margin: 0 auto;
     font-size: 50px;
-    color: #2ccab0; /* 彩度を少し落としたブルー */
+    color: rgb(var(--main-color));
     margin-top: 15px;
 }
 
 .playlist-detail__play-btn:active {
-    color: var(--active-color);
+    color: rgb(var(--accent-color));
 }
 
 .playlist-detail__actions {
@@ -447,13 +444,13 @@ img:not([src]), img[src=""], img[src=null] {
 
 .playlist-detail__action {
     font-size: 14px;
-    background: #d7dfdf; /* ティールと馴染むニュートラルグレー */
-    color: #0b1215;      /* コントラストを確保 */
-    border: 1px solid rgba(44, 202, 176, 0.25);
-    transition: 0.2s;
+    background: rgb(var(--white));
+    color: rgb(var(--black));
     padding: 3px 12px;
     margin-right: 5px;
     border-radius: 15px;
+
+    transition: 0.2s;
 }   
 
 .playlist-detail__action:active {
@@ -462,7 +459,7 @@ img:not([src]), img[src=""], img[src=null] {
 
 #playlist-detail .song-list {
     list-style: none;
-    border-top: 1px solid var(--text-color2);
+    border-top: 1px solid rgb(var(--gray));
 }
 
 /* プレイリスト曲追加用シート　＆　プレイリスト編集シート　（レイアウトがほぼ共通なため） */
@@ -483,7 +480,7 @@ img:not([src]), img[src=""], img[src=null] {
 
 #add-song-sheet__song-list,
 #edit-playlist-sheet__song-list {
-    margin-top: 15px;
+    margin-top: 5px;
     background-color: transparent;
     border-radius: 5px;
     flex: 1;
@@ -496,7 +493,7 @@ img:not([src]), img[src=""], img[src=null] {
 }
 
 #add-song-sheet__song-list .song-list__item.added {
-    background-color: var(--main-color);
+    background-color: green;
     transform: translateX(-60%);
     opacity: 0;
 }
@@ -519,9 +516,8 @@ img:not([src]), img[src=""], img[src=null] {
     margin-top: 60px;
     width: 160px;
     height: 160px;
-    background-color: #2C2C2E;
+    background-color: rgb(var(--dark-gray));
     border-radius: 3px;
-    border: 1px solid #3A3A3C;
 }
 
 .info-edit__img {
@@ -544,7 +540,7 @@ img:not([src]), img[src=""], img[src=null] {
     width: 50px;
     height: 50px;
     border-radius: 25px;
-    background-color: var(--main-color);
+    background-color: rgb(var(--main-color));
 }
 
 .info-edit__popover-wrapper:active {
@@ -558,15 +554,15 @@ img:not([src]), img[src=""], img[src=null] {
     margin-top: 30px;
     font-size: 20px;
     font-weight: bold;
-    color: var(--text-color);
+    color: rgb(var(--white));
     text-align: center;
     background-color: transparent;
-    border-bottom: 1px solid #3A3A3C;
+    border-bottom: 1px solid rgb(var(--dark-gray));
 }
 
 /* 設定ページ */
 .setting-genre {
-    color: var(--text-color2);
+    color: rgb(var(--gray));
     font-size: 14px;
     margin-top: 30px;
     margin-left: 20px;
@@ -574,5 +570,5 @@ img:not([src]), img[src=""], img[src=null] {
 
 .setting-item {
     padding: 10px 25px;
-    border-bottom: 1px solid var(--bg-color2);
+    border-bottom: 1px solid rgb(var(--dark-gray));
 }

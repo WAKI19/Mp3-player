@@ -17,13 +17,13 @@
 }
 
 .Notification.-normal {
-    background-color: #fff;
-    color: black;
+    background-color: rgb(var(--white));
+    color: rgb(var(--black));
 }
 
 .Notification.-error {
     background-color: red;
-    color: #fff;
+    color: rgb(var(--white));
 }
 
 .Notification__textarea {

@@ -5,7 +5,7 @@
     display: block;
     width: 90%;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(var(--dark-gray), 0.5);
     border-radius: 12px;
 }
 
@@ -13,23 +13,23 @@
     width: 100%;
     font-size: 16px;
     padding: 4px 2em 4px 12px;
-    color: #fff;
+    color: rgb(var(--white));
     padding: 8px 12px;
     outline: none;
     transition: border 0.2s;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(var(--gray), 1);
     background-color: transparent;
-    caret-color: var(--main-color);
+    caret-color: rgb(var(--main-color));
 }
 
 .SearchBox__input::placeholder {
-    color: var(--text-color2);
+    color: rgb(var(--gray));
 }
 
 .SearchBox__input:focus {
     outline: none;
-    border: 1px solid #1fa7a8;
+    border: 1px solid rgba(var(--main-color), 0.5);
 }
 
 .SearchBox__clear-btn {
@@ -41,7 +41,7 @@
   background: none;
   border: none;
   font-size: 1.2em;
-  color: var(--text-color2);
+  color: rgb(var(--gray));
 }
 
 .SearchBox__clear-btn:active {

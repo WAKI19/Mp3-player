@@ -3,17 +3,17 @@
 .MiniPlayer {
     position: fixed;
     left: 2%;
-    bottom: calc(env(safe-area-inset-bottom) + 59px);
+    bottom: calc(env(safe-area-inset-bottom) + 59px); /* タブバーから1pxあける */
     display: flex;
     width: 96%;
-    height: 59px;
+    height: 60px;
     padding: 10px 25px;
     align-items: center;
-    background-color: #004b3c;
-    color: var(--main-color);
-    border: 1px solid var(--active-color);
+    background-color: rgb(var(--accent-color));
+    color: rgb(var(--main-color));
+    border: 1px solid rgb(var(--main-color));
     border-radius: 10px;
-    box-shadow: 0 0 20px black;
+    box-shadow: 0 0 20px rgb(var(--black));
     z-index: 1;
 
     transition: 0.2s ease;
@@ -44,7 +44,7 @@
 
 .MiniPlayer__song-length {
     font-size: 11px;
-    color: var(--text-color2);
+    color: rgb(var(--light-gray));
 }
 
 .MiniPlayer__play-btn {
@@ -53,7 +53,7 @@
     display: inline-flex; /* 中央揃えが簡単 */
     align-items: center;
     justify-content: center;
-    color: var(--text-color);
+    color: rgb(var(--white));
     font-size: 15px;
     width: 15px;
     height: 15px;

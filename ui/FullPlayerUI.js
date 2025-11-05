@@ -53,7 +53,7 @@ export class FullPlayerUI {
 
     updateProgressColor() {
         const percentage = (this.progressBar.value / this.progressBar.max) * 100 || 0;
-        this.progressBar.style.background = `linear-gradient(to right, var(--main-color) 0%, var(--white) ${percentage}%, var(--black) ${percentage}%)`;
+        this.progressBar.style.background = `linear-gradient(to right, rgb(var(--main-color)) 0%, rgb(var(--white)) ${percentage}%, rgb(var(--dark-gray)) ${percentage}%)`;
     }
 
     expansion() {

@@ -15,7 +15,6 @@ import { InfoEditSheetUI } from './ui/InfoEditSheetUI';
 import { NotificationUI } from './ui/NotificationUI';
 
 import { findSongIndexByTitle } from './classes/Utils';
-import { filterSongsByTitle } from './classes/Utils';
 import { excludeSongs } from './classes/Utils';
 import { fileToBase64 } from './classes/Utils';
 
@@ -66,6 +65,7 @@ player.onPlay = () => {
   allSongsUI.highlightPlayingSong(player.currentSongTitle);
   playlistDetailUI.highlightPlayingSong(player.currentSongTitle);
   allSongsUI.startWave();
+  playlistDetailUI.startWave();
   fullPlayerUI.startRecordAnimation();
 }
 
@@ -75,6 +75,7 @@ player.onPause = () => {
   miniPlayerUI.setPlayBtn();
   fullPlayerUI.setPlayBtn();
   allSongsUI.stopWave();
+  playlistDetailUI.stopWave();
   fullPlayerUI.stopRecordAnimation();
 };
 
@@ -208,7 +209,8 @@ playlistUI.playlistList.addEventListener('click', async (e) => {
   const playlist = playlistManager.getPlaylist(id);
 
   if (li && playlistUI.playlistList.contains(li)) {
-    playlistDetailUI.init(playlist);
+    await playlistDetailUI.init(playlist);
+    playlistDetailUI.highlightPlayingSong(player.currentSongTitle);
     playlistDetailUI.show();
   }
 });
