@@ -97,13 +97,13 @@ export class AllSongsUI extends BaseUI {
         if (!inserted) this.songList.appendChild(li);
     }
 
-    highlightPlayingSong(playingSong) {
-        if (!playingSong) return;
-        const active = this.songList.querySelector('.song-list__item.active');
-        const target = this.songList.querySelector('[data-title="'+playingSong.title+'"]');
+    highlightPlayingSong(title) {
+        if (!title) return;
+        const active = this.songList.querySelector('.song-list__item.-playing');
+        const target = this.songList.querySelector('[data-title="'+title+'"]');
 
-        if (active) active.classList.remove("active");
-        if (target) target.classList.add("active");
+        if (active) active.classList.remove("-playing");
+        if (target) target.classList.add("-playing");
     }
 
     startWave() {

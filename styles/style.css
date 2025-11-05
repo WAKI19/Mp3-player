@@ -13,6 +13,8 @@
 
 :root {
     --black: #000;
+    --dark-gray: #1e1e1e;
+    --white: #fff;
 
     --main-color: #3dd6b0;
     --accent-color: #7B68EE;
@@ -80,7 +82,7 @@ img:not([src]), img[src=""], img[src=null] {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 1000;
+    z-index: 3;
 }
 
 .bottom-sheet__backdrop.active {
@@ -196,11 +198,11 @@ img:not([src]), img[src=""], img[src=null] {
     opacity: 0.8;
 }
 
-.song-list__item.active .song-list__icon {
+.song-list__item.-playing .song-list__icon {
     opacity: 1;
 }
 
-.song-list__item.active {
+.song-list__item.-playing {
     border: 1px solid var(--main-color);
     scale: 1.04;
 }
@@ -209,7 +211,7 @@ img:not([src]), img[src=""], img[src=null] {
     width: 70%;
 }
 
-.song-list__item.active .song-list__title {
+.song-list__item.-playing .song-list__title {
     opacity: 1;
 }
 
@@ -260,7 +262,7 @@ img:not([src]), img[src=""], img[src=null] {
     text-align: center;
 }
 
-.song-list__item.active .wave {
+.song-list__item.-playing .wave {
     display: flex;
 }
 

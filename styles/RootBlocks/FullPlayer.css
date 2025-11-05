@@ -43,20 +43,18 @@
     width: 100%;
 }
 
-.FullPlayer__img {
+.FullPlayer__record {
     position: absolute;
     left: 20%;
     bottom: 15px;
     display: flex;
     width: 60%;
     aspect-ratio: 1;
-    color: var(--main-color);
-    font-size: 70px;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.9);
-    border: 2px solid var(--main-color);
+    background-color: rgba(0, 0, 0, 0.85);
+    /* border: 1px solid var(--main-color); */
 
     transition: 
         box-shadow 0.05s ease-out,
@@ -73,6 +71,20 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.FullPlayer__label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    font-size: 30px;
+    color: var(--main-color);
+    background-color: #004b3c;
+    border: 6px solid var(--black);
+    opacity: 0.9;
 }
 
 .FullPlayer__song-title {
@@ -92,11 +104,11 @@
     height: 7px;
     margin-bottom: 2px;
     border-radius: 4px;
-    background: linear-gradient(90deg, #00bfff, #00ffd9);
+    background: var(--black);
 }
 
 .FullPlayer__progress-bar::-moz-range-progress {
-    background: var(--active-color);
+    background: var(--black);
     height: 7px;
     border-radius: 4px;
 }

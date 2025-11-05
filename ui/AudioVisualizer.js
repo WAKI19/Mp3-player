@@ -47,7 +47,7 @@ export class AudioVisualizer {
         if (this.flashTarget) {
             const avg = this.dataArray.reduce((a, b) => a + b, 0) / this.dataArray.length;
             const normalized = avg / 255; // 0〜1 に正規化
-            const target = Math.pow(normalized, 3); // カーブをかけて自然な光り方に
+            const target = Math.pow(normalized, 3.1); // カーブをかけて自然な光り方に
             this.flashIntensity += (target - this.flashIntensity) * 0.2; // スムーズ補間
 
             const glow = Math.floor(this.flashIntensity * 1500); // 最大200pxくらい

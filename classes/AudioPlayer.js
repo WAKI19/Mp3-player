@@ -1,5 +1,7 @@
 import { Filesystem, Directory } from "@capacitor/filesystem";
 
+import { findSongIndexByTitle } from "./Utils";
+
 import { NotificationUI } from "../ui/NotificationUI";
 
 const notificationUI = new NotificationUI();
@@ -17,6 +19,7 @@ export class AudioPlayer {
     this.setList = [];
     this.currentPlaylistId = null;
     this.currentIndex = null;
+    this.currentSongTitle = null;
     this.isReady = false;
 
     // 再生状態を外部に通知するためのコールバック
@@ -111,6 +114,7 @@ export class AudioPlayer {
    * ⏩ 次の曲へ
    */
   async next() {
+    this.currentIndex = findSongIndexByTitle(this.setList, this.currentSongTitle);
     if (this.currentIndex < this.setList.length - 1) {
       this.currentIndex++;
       await this.loadCurrentTrack();
@@ -124,6 +128,7 @@ export class AudioPlayer {
    * ⏪ 前の曲へ
    */
   async previous() {
+    this.currentIndex = findSongIndexByTitle(this.setList, this.currentSongTitle);
     if (this.currentIndex > 0) {
       this.currentIndex--;
       await this.loadCurrentTrack();
@@ -165,6 +170,7 @@ export class AudioPlayer {
       directory: Directory.Data,
     });
 
+    this.currentSongTitle = track.title;
     this.audio.src = `data:audio/mp3;base64,${data}`;
     this.audio.load();
   }

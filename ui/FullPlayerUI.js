@@ -6,7 +6,7 @@ export class FullPlayerUI {
     constructor() {
         this.root = document.querySelector(".FullPlayer");
         this.closeBtn = this.root.querySelector(".FullPlayer__close-btn");
-        this.Img = this.root.querySelector(".FullPlayer__img");
+        this.Record = this.root.querySelector(".FullPlayer__record");
         this.songTitleElem = this.root.querySelector(".FullPlayer__song-title");
         this.currentTimeElem = this.root.querySelector(".FullPlayer__current-time");
         this.remainingTimeElem = this.root.querySelector(".FullPlayer__remaining-time");
@@ -16,7 +16,7 @@ export class FullPlayerUI {
         this.nextBtn = this.root.querySelector(".FullPlayer__next-btn");
 
         this.visualCanvas = this.root.querySelector("#vCanvas");
-        this.audioVisualizer = new AudioVisualizer(this.visualCanvas, this.Img);
+        this.audioVisualizer = new AudioVisualizer(this.visualCanvas, this.Record);
 
         this.isDragging = false; //progressBarがドラック中かどうかを判定するフラグ
     }
@@ -53,7 +53,7 @@ export class FullPlayerUI {
 
     updateProgressColor() {
         const percentage = (this.progressBar.value / this.progressBar.max) * 100 || 0;
-        this.progressBar.style.background = `linear-gradient(to right, var(--active-color) ${percentage}%, var(--bg-color) ${percentage}%)`;
+        this.progressBar.style.background = `linear-gradient(to right, var(--main-color) 0%, var(--white) ${percentage}%, var(--black) ${percentage}%)`;
     }
 
     expansion() {
@@ -76,12 +76,12 @@ export class FullPlayerUI {
         this.playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
     }
 
-    startImgAnimation() {
-        this.Img.style.animationPlayState = "running";
+    startRecordAnimation() {
+        this.Record.style.animationPlayState = "running";
     }
 
-    stopImgAnimation() {
-        this.Img.style.animationPlayState = "paused";
+    stopRecordAnimation() {
+        this.Record.style.animationPlayState = "paused";
     }
 
     open() {

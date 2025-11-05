@@ -16,7 +16,6 @@ import { NotificationUI } from './ui/NotificationUI';
 
 import { findSongIndexByTitle } from './classes/Utils';
 import { filterSongsByTitle } from './classes/Utils';
-import { hasSongByPath } from './classes/Utils';
 import { excludeSongs } from './classes/Utils';
 import { fileToBase64 } from './classes/Utils';
 
@@ -64,9 +63,9 @@ player.onPlay = () => {
   if (player.currentPlaylistId === id) playlistDetailUI.setPauseBtn();
   miniPlayerUI.setPauseBtn();
   fullPlayerUI.setPauseBtn();
-  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
+  allSongsUI.highlightPlayingSong(player.currentSongTitle);
   allSongsUI.startWave();
-  fullPlayerUI.startImgAnimation();
+  fullPlayerUI.startRecordAnimation();
 }
 
 player.onPause = () => {
@@ -75,7 +74,7 @@ player.onPause = () => {
   miniPlayerUI.setPlayBtn();
   fullPlayerUI.setPlayBtn();
   allSongsUI.stopWave();
-  fullPlayerUI.stopImgAnimation();
+  fullPlayerUI.stopRecordAnimation();
 };
 
 player.onTimeUpdate = (currentTime, duration) => {
@@ -95,16 +94,12 @@ storage.onFileImport = () => { //Fileインポート時
 };
 
 storage.onFileDelete = async (path, filename) => { //File削除時
-  if (hasSongByPath(player.setList, path)) {
-    
-    if (player.currentPlaylistId) {
-      const playlist = playlistManager.getPlaylist(player.currentPlaylistId);
-      player.setPlaylist(playlist);
-    } else {
-      const allsongs = await storage.loadSongs();
-      player.setSetList(allsongs);
-    }
+  const existingIndex = loadedSongs.findIndex(s => s.path === path);
+  loadedSongs.splice(existingIndex, 1);
 
+  //削除時に全曲リストで曲を聴いていた場合、セットリストを更新
+  if (player.getCurrentTrack() && player.currentPlaylistId === null) {
+    player.setSetList(loadedSongs);
   };
 
   notificationUI.notify(`${filename}を削除しました`, "normal");
@@ -144,28 +139,30 @@ allSongsUI.fileInput.addEventListener('change', async (e) => {
 
   for (const file of files) {
     const newSong = await storage.importSong(file);
-    loadedSongs.push(newSong);
+    const existingIndex = loadedSongs.findIndex(s => s.title === newSong.title);
+
+    if (existingIndex !== -1) {
+      loadedSongs[existingIndex] = newSong;
+    } else {
+      loadedSongs.push(newSong);
+      allSongsUI.renderSong(newSong, storage);
+    }
     loadedSongs.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
-    allSongsUI.renderSong(newSong, storage);
 
     //全曲プレイリストを再生中だった場合、セットリストをセットしなおす
-    if (player.currentPlaylistId === null) {
+    if (player.currentPlaylistId === null && player.getCurrentTrack()) {
       player.setSetList(loadedSongs);
     }
   }
 
-  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
-
   allSongsUI.fileInput.value = ''; // 選択リセット
 });
 
-allSongsUI.searchInput.addEventListener('input', async () => {
-  const allSongs = await storage.loadSongs();
+allSongsUI.searchInput.addEventListener('input', () => {
   const val = allSongsUI.getSearchValue();
-  const filtered = filterSongsByTitle(allSongs, val);
+  const filtered = filterSongsByTitle(loadedSongs, val);
 
   allSongsUI.renderSongList(filtered, storage);
-  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
 
   if (val.trim() !== '') {
     allSongsUI.searchClearBtn.style.display = 'block';
@@ -174,28 +171,25 @@ allSongsUI.searchInput.addEventListener('input', async () => {
   }
 });
 
-allSongsUI.searchClearBtn.addEventListener('click', async () => {
-  const allSongs = await storage.loadSongs();
+allSongsUI.searchClearBtn.addEventListener('click', () => {
   allSongsUI.searchInput.value = '';
   allSongsUI.searchInput.focus();
   allSongsUI.searchClearBtn.style.display = 'none';
 
-  allSongsUI.renderSongList(allSongs, storage);
-  allSongsUI.highlightPlayingSong(player.getCurrentTrack());
+  allSongsUI.renderSongList(loadedSongs, storage);
 });
 
-allSongsUI.songList.addEventListener('click', async (e) => {
+allSongsUI.songList.addEventListener('click', (e) => {
   const li = e.target.closest('li');
-  const allSongs = await storage.loadSongs();
-  const index = findSongIndexByTitle(allSongs, li.dataset.title);
+  const index = findSongIndexByTitle(loadedSongs, li.dataset.title);
 
-  if (player.getCurrentTrack() && allSongs[index].title === player.getCurrentTrack().title) {
+  player.unsetPlaylist();
+  player.setSetList(loadedSongs);
+
+  if (li.dataset.title === player.currentSongTitle) {
     player.togglePlay();
   } else {
-    player.unsetPlaylist();
-    player.setSetList(allSongs);
     player.playTrack(index);
-    allSongsUI.highlightPlayingSong(allSongs[index]);
   }
 });
 
@@ -260,13 +254,13 @@ playlistDetailUI.backBtn.addEventListener('click', () => {
 });
 
 playlistDetailUI.ellipsisBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
   playlistDetailUI.popoverPanel.classList.toggle("-opened");
 });
 
 playlistDetailUI.deleteBtn.addEventListener('click', async () => {
   const action = await actionSheet.action([{text: "プレイリストを削除", value: "delete", type: "danger"}]);
   if (action === "delete") playlistManager.deletePlaylist(playlistDetailUI.loadingPlaylistId());
+
   playlistDetailUI.hide();
   const playlists = await playlistManager.loadPlaylists();
   playlistUI.renderPlaylists(playlists);
@@ -283,10 +277,9 @@ playlistDetailUI.root.addEventListener('scroll', () => {
   }
 });
 
-playlistDetailUI.addBtn.addEventListener('click', async () => {
-  const allSongs = await storage.loadSongs();
+playlistDetailUI.addBtn.addEventListener('click', () => {
   const playlist = playlistManager.getPlaylist(playlistDetailUI.loadingPlaylistId());
-  const songs = excludeSongs(allSongs, playlist.songs);
+  const songs = excludeSongs(loadedSongs, playlist.songs);
 
   addSongSheetUI.renderSongs(songs, playlistManager);
   addSongSheetUI.show();
@@ -324,10 +317,11 @@ playlistDetailUI.songList.addEventListener('click', (e) => {
   const playlist = playlistManager.getPlaylist(id);
   const index = findSongIndexByTitle(playlist.songs, li.dataset.title);
 
-  if (player.getCurrentTrack() && player.currentPlaylistId === id && player.getCurrentTrack().title === playlist.songs[index].title) {
+  player.setPlaylist(playlist);
+
+  if (player.currentPlaylistId === id && player.currentSongTitle === li.dataset.title) {
     player.togglePlay();
   } else {
-    player.setPlaylist(playlist);
     player.playTrack(index);
   }
 });
@@ -346,10 +340,9 @@ addSongSheetUI.closeBtn.addEventListener('click', () => {
 });
 
 addSongSheetUI.searchInput.addEventListener('input', async () => {
-  const allSongs = await storage.loadSongs();
   const id = playlistDetailUI.loadingPlaylistId();
   const playlist = playlistManager.getPlaylist(id);
-  const notAdded = excludeSongs(allSongs, playlist.songs);
+  const notAdded = excludeSongs(loadedSongs, playlist.songs);
   const val = addSongSheetUI.getSearchValue();
   const filtered = filterSongsByTitle(notAdded, val);
   addSongSheetUI.renderSongs(filtered, playlistManager);
@@ -362,10 +355,9 @@ addSongSheetUI.searchInput.addEventListener('input', async () => {
 });
 
 addSongSheetUI.searchClearBtn.addEventListener('click', async () => {
-  const allSongs = await storage.loadSongs();
   const id = playlistDetailUI.loadingPlaylistId();
   const playlist = playlistManager.getPlaylist(id);
-  const filtered = excludeSongs(allSongs, playlist.songs);
+  const filtered = excludeSongs(loadedSongs, playlist.songs);
 
   addSongSheetUI.searchInput.value = '';
   addSongSheetUI.searchInput.focus();
@@ -413,18 +405,19 @@ editPlaylistSheetUI.searchClearBtn.addEventListener('click', () => {
 // ==================================================
 // 🎶プレイリストページ　＞　プレイリスト詳細ページ　＞　プレイリスト情報編集シート
 // ==================================================
-infoEditSheetUI.closeBtn.addEventListener('click', () => {
-  infoEditSheetUI.hide();
+infoEditSheetUI.closeBtn.addEventListener('click', async () => {
+  const action = await actionSheet.action([{text: "変更を破棄", value: "discard", type: "danger"}]);
+  if (action === "discard") infoEditSheetUI.hide();
 });
 
 infoEditSheetUI.saveBtn.addEventListener('click', async () => {
-  const file = infoEditSheetUI.getImgFile();
-  
-  if (file) await playlistManager.setImage(playlistDetailUI.loadingPlaylistId(), file);
-  await playlistManager.renamePlaylist(playlistDetailUI.loadingPlaylistId(), infoEditSheetUI.nameInput.value);
-  
   const id = playlistDetailUI.loadingPlaylistId();
   const playlist = playlistManager.getPlaylist(id);
+  const file = infoEditSheetUI.getImgFile();
+  
+  if (file) await playlistManager.setImage(id, file);
+  await playlistManager.renamePlaylist(id, infoEditSheetUI.nameInput.value);
+  
   playlistDetailUI.init(playlist);
   infoEditSheetUI.hide();
 });
@@ -479,7 +472,6 @@ fullPlayerUI.progressBar.addEventListener('input', () => {
 
 fullPlayerUI.progressBar.addEventListener('change', () => {
   player.seek(fullPlayerUI.getProgressValue());
-  // fullPlayerUI.updateWhileDragging();
 });
 
 fullPlayerUI.progressBar.addEventListener('touchend', () => {
@@ -520,14 +512,10 @@ tabs.forEach(tab => {
 
 
 
-
-
-
 //起動時処理
 async function initApp() {
   loadedSongs = await storage.loadSongs();
   allSongsUI.renderSongList(loadedSongs, storage);
-  allSongsUI.highlightPlayingSong(player.getCurrentTrack());  
   
   const playlists = await playlistManager.loadPlaylists();
   playlistUI.renderPlaylists(playlists);
