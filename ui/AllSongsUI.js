@@ -97,6 +97,25 @@ export class AllSongsUI extends BaseUI {
         if (!inserted) this.songList.appendChild(li);
     }
 
+    filterList(keyword) {
+        // 入力を小文字にして大小文字を区別しない検索にする
+        const query = keyword.toLowerCase();
+
+        // すべての<li>要素を取得
+        const items = this.songList.querySelectorAll('li');
+
+        items.forEach(li => {
+            const title = li.dataset.title.toLowerCase();
+            // キーワードを含むかどうかで表示・非表示を切り替え
+            if (title.includes(query)) {
+                li.style.display = '';  // 表示
+            } else {
+                li.style.display = 'none';  // 非表示
+            }
+        });
+    }
+
+
     highlightPlayingSong(title) {
         if (!title) return;
         const active = this.songList.querySelector('.song-list__item.-playing');

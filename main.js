@@ -64,6 +64,7 @@ player.onPlay = () => {
   miniPlayerUI.setPauseBtn();
   fullPlayerUI.setPauseBtn();
   allSongsUI.highlightPlayingSong(player.currentSongTitle);
+  playlistDetailUI.highlightPlayingSong(player.currentSongTitle);
   allSongsUI.startWave();
   fullPlayerUI.startRecordAnimation();
 }
@@ -160,9 +161,7 @@ allSongsUI.fileInput.addEventListener('change', async (e) => {
 
 allSongsUI.searchInput.addEventListener('input', () => {
   const val = allSongsUI.getSearchValue();
-  const filtered = filterSongsByTitle(loadedSongs, val);
-
-  allSongsUI.renderSongList(filtered, storage);
+  allSongsUI.filterList(val);
 
   if (val.trim() !== '') {
     allSongsUI.searchClearBtn.style.display = 'block';
@@ -176,7 +175,7 @@ allSongsUI.searchClearBtn.addEventListener('click', () => {
   allSongsUI.searchInput.focus();
   allSongsUI.searchClearBtn.style.display = 'none';
 
-  allSongsUI.renderSongList(loadedSongs, storage);
+  allSongsUI.filterList("");
 });
 
 allSongsUI.songList.addEventListener('click', (e) => {
@@ -340,12 +339,8 @@ addSongSheetUI.closeBtn.addEventListener('click', () => {
 });
 
 addSongSheetUI.searchInput.addEventListener('input', async () => {
-  const id = playlistDetailUI.loadingPlaylistId();
-  const playlist = playlistManager.getPlaylist(id);
-  const notAdded = excludeSongs(loadedSongs, playlist.songs);
   const val = addSongSheetUI.getSearchValue();
-  const filtered = filterSongsByTitle(notAdded, val);
-  addSongSheetUI.renderSongs(filtered, playlistManager);
+  addSongSheetUI.filterList(val);
 
   if (val.trim() !== '') {
     addSongSheetUI.searchClearBtn.style.display = 'block';
@@ -355,14 +350,10 @@ addSongSheetUI.searchInput.addEventListener('input', async () => {
 });
 
 addSongSheetUI.searchClearBtn.addEventListener('click', async () => {
-  const id = playlistDetailUI.loadingPlaylistId();
-  const playlist = playlistManager.getPlaylist(id);
-  const filtered = excludeSongs(loadedSongs, playlist.songs);
-
   addSongSheetUI.searchInput.value = '';
   addSongSheetUI.searchInput.focus();
   addSongSheetUI.searchClearBtn.style.display = 'none';
-  addSongSheetUI.renderSongs(filtered, playlistManager);
+  addSongSheetUI.filterList("");
 });
 
 
@@ -378,11 +369,8 @@ editPlaylistSheetUI.closeBtn.addEventListener('click', () => {
 });
 
 editPlaylistSheetUI.searchInput.addEventListener('input', () => {
-  const id = playlistDetailUI.loadingPlaylistId();
-  const playlist = playlistManager.getPlaylist(id);
   const val = editPlaylistSheetUI.getSearchValue();
-  const filtered = filterSongsByTitle(playlist.songs, val);
-  editPlaylistSheetUI.renderSongs(filtered, playlistManager);
+  editPlaylistSheetUI.filterList(val);
 
   if (val.trim() !== '') {
     editPlaylistSheetUI.searchClearBtn.style.display = 'block';
@@ -392,13 +380,10 @@ editPlaylistSheetUI.searchInput.addEventListener('input', () => {
 });
 
 editPlaylistSheetUI.searchClearBtn.addEventListener('click', () => {
-  const id = playlistDetailUI.loadingPlaylistId();
-  const playlist = playlistManager.getPlaylist(id);
-
   editPlaylistSheetUI.searchInput.value = '';
   editPlaylistSheetUI.searchInput.focus();
   editPlaylistSheetUI.searchClearBtn.style.display = 'none';
-  editPlaylistSheetUI.renderSongs(playlist.songs, playlistManager);
+  editPlaylistSheetUI.filterList("");
 });
 
 

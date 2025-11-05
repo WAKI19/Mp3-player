@@ -48,12 +48,24 @@ export class PlaylistDetailUI extends BaseUI{
                     <p class="song-list__title">${song.title}</p>
                     <p class="song-list__length">${formatAudioDuration(song.duration)}</p>
                 </div>
+                <div class="wave">
+                    <span></span><span></span><span></span><span></span>
+                </div>
             `;
             li.dataset.title = song.title;
 
             this.songList.appendChild(li);
         })
     };
+
+    highlightPlayingSong(title) {
+        if (!title) return;
+        const active = this.songList.querySelector('.song-list__item.-playing');
+        const target = this.songList.querySelector('[data-title="'+title+'"]');
+
+        if (active) active.classList.remove("-playing");
+        if (target) target.classList.add("-playing");
+    }
 
     setPlayBtn() {
         this.playBtn.innerHTML = '<i class="fa-solid fa-circle-play"></i>';
