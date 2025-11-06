@@ -3,7 +3,7 @@ export class AudioVisualizer {
         this.audio = document.getElementById("audio");
 
         this.ctx = canvas.getContext('2d');
-        this.barColor = "#3dd6b0";
+        this.barColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color');
         this.WIDTH = canvas.width;
         this.HEIGHT = canvas.height;
 
@@ -51,7 +51,7 @@ export class AudioVisualizer {
             this.flashIntensity += (target - this.flashIntensity) * 0.2; // スムーズ補間
 
             const glow = Math.floor(this.flashIntensity * 1500); // 最大200pxくらい
-            this.flashTarget.style.boxShadow = `0 0 ${glow}px ${this.barColor}`;
+            this.flashTarget.style.boxShadow = `0 0 ${glow}px rgb(${this.barColor})`;
         }
 
         this.ctx.clearRect(0, 0, this.WIDTH, this.HEIGHT);
@@ -71,11 +71,11 @@ export class AudioVisualizer {
             const x = i * barWidth;
             const y = this.HEIGHT - barHeight;
 
-            // 🎨 グラデーション（Y=400~200:ベース, Y=200~0:白へ）
+            // 🎨 グラデーション
             const grad = this.ctx.createLinearGradient(0, 0, 0, this.HEIGHT);
             grad.addColorStop(0, "#ffffff"); // 上端：白
             grad.addColorStop(0.5, "#ffffff");
-            grad.addColorStop(1, this.barColor);   // 下端もベースカラー
+            grad.addColorStop(1, `rgb(${this.barColor})`);   // 下端もベースカラー
 
             this.ctx.fillStyle = grad;
             this.ctx.fillRect(x, y, barWidth - 2, barHeight);

@@ -12,7 +12,10 @@ export class ActionSheet {
         });
     }
 
-    async action(btns) { //btns [{text: "ボタンのテキスト", value: "value", type: "type"}, {}, {}]
+    async action(headerText, btns) { //btns [{text: "ボタンのテキスト", value: "value", type: "type"}, {}, {}]
+        this.actions.innerHTML = "";
+
+        if (headerText) this.setHeaderText(headerText);
         this.generateBtns(btns);
         this.open();
 
@@ -20,9 +23,16 @@ export class ActionSheet {
         return selectedValue;
     }
 
-    generateBtns(btns) {
-        this.actions.innerHTML = "";
+    setHeaderText(text) {
+        const p = document.createElement("p");
+        p.classList.add("ActionSheet__header-text");
+        p.textContent = text;
+        p.addEventListener('click', (e) => { e.stopPropagation() }); //headerTextをクリックしてもActionSheetが閉じないようにする
 
+        this.actions.appendChild(p);
+    }
+
+    generateBtns(btns) {
         btns.forEach(btn => {
             const btnElem = document.createElement("button");
             btnElem.classList.add("ActionSheet__btn", "ActionSheet__action");

@@ -18,7 +18,7 @@
     outline: none;
     transition: border 0.2s;
     border-radius: 12px;
-    border: 1px solid rgba(var(--gray), 1);
+    border: 1px solid rgba(var(--gray), 0.5);
     background-color: transparent;
     caret-color: rgb(var(--main-color));
 }
@@ -29,7 +29,7 @@
 
 .SearchBox__input:focus {
     outline: none;
-    border: 1px solid rgba(var(--main-color), 0.5);
+    border: 1px solid rgb(var(--sub-color));
 }
 
 .SearchBox__clear-btn {

@@ -132,7 +132,11 @@ allSongsUI.deleteModeBtn.addEventListener('click', () => {
   allSongsUI.toggleDeleteMode();
 });
 
-allSongsUI.importBtn.addEventListener('click', () => {
+allSongsUI.importBtn.addEventListener('click', (e) => {
+  allSongsUI.importPopoverPanel.classList.toggle("-opened");
+});
+
+allSongsUI.importTrigger.addEventListener('click', () => {
   allSongsUI.fileInput.click();
 });
 
@@ -259,7 +263,7 @@ playlistDetailUI.ellipsisBtn.addEventListener("click", (e) => {
 });
 
 playlistDetailUI.deleteBtn.addEventListener('click', async () => {
-  const action = await actionSheet.action([{text: "プレイリストを削除", value: "delete", type: "danger"}]);
+  const action = await actionSheet.action("このプレイリストを削除しますか？", [{text: "プレイリストを削除", value: "delete", type: "danger"}]);
   if (action === "delete") playlistManager.deletePlaylist(playlistDetailUI.loadingPlaylistId());
 
   playlistDetailUI.hide();
@@ -298,6 +302,7 @@ playlistDetailUI.infoBtn.addEventListener('click', () => {
   const playlist = playlistManager.getPlaylist(playlistDetailUI.loadingPlaylistId());
   infoEditSheetUI.setup(playlist);
   infoEditSheetUI.show();
+  if (infoEditSheetUI.value === "") infoEditSheetUI.saveBtn.classList.add("-disabled");
 });
 
 playlistDetailUI.playBtn.addEventListener('click', async () => {
@@ -393,8 +398,10 @@ editPlaylistSheetUI.searchClearBtn.addEventListener('click', () => {
 // 🎶プレイリストページ　＞　プレイリスト詳細ページ　＞　プレイリスト情報編集シート
 // ==================================================
 infoEditSheetUI.closeBtn.addEventListener('click', async () => {
-  const action = await actionSheet.action([{text: "変更を破棄", value: "discard", type: "danger"}]);
+  const action = await actionSheet.action("プレイリストに加えた変更を破棄しますか？", [{text: "変更を破棄", value: "discard", type: "danger"}]);
   if (action === "discard") infoEditSheetUI.hide();
+
+  infoEditSheetUI.saveBtn.classList.remove("-disabled");
 });
 
 infoEditSheetUI.saveBtn.addEventListener('click', async () => {
@@ -422,6 +429,14 @@ infoEditSheetUI.imgInput.addEventListener('change', async (e) => {
   const base64 = await fileToBase64(file);
 
   infoEditSheetUI.img.src = base64;
+});
+
+infoEditSheetUI.nameInput.addEventListener('input', () => {
+  if (infoEditSheetUI.nameInput.value === "") {
+    infoEditSheetUI.saveBtn.classList.add("-disabled");
+  } else {
+    infoEditSheetUI.saveBtn.classList.remove("-disabled");
+  }
 });
 
 

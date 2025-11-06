@@ -25,7 +25,8 @@
     position: absolute;
     top: calc(100% + 6px);
     width: 250px;
-    background-color: rgba(var(--dark-gray), 0.97);
+    background-color: rgba(var(--white), 0.97);
+    color: rgb(var(--dark-gray));
     border: 1px solid rgba(var(--gray), 0.1);
     box-shadow: 0 0 5px rgb(var(--black));
     border-radius: 8px;

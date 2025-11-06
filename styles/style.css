@@ -18,9 +18,13 @@
     --light-gray: 217, 217, 217;
     --white: 255, 255, 255;
 
-    --main-color: 61, 214, 176;
+    /* --main-color: 61, 214, 176;
     --accent-color: 0, 75, 60;
-    --sub-color: 123, 104, 238;
+    --sub-color: 123, 104, 238; */
+
+    --main-color: 170, 128, 255;   /* 明るく印象的なラベンダー系パープル */
+    --accent-color: 75, 0, 130;    /* 濃いインディゴ系。緑テーマの濃緑に対応 */
+    --sub-color: 255, 107, 245;
 }
 
 * {
@@ -127,11 +131,18 @@ img:not([src]), img[src=""], img[src=null] {
 }
 
 .bottom-sheet__close-btn {
+    color: rgb(var(--main-color));
     left: 18px;
 }
 
 .bottom-sheet__action-btn {
+    color: rgb(var(--main-color));
     right: 18px;
+}
+
+.bottom-sheet__action-btn.-disabled {
+    color: rgba(var(--dark-gray), 0.5);
+    pointer-events: none;
 }
 
 .bottom-sheet__close-btn:active,
@@ -301,6 +312,14 @@ img:not([src]), img[src=""], img[src=null] {
     margin-top: 25px;
 }
 
+#import-btn {
+    font-size: 21px;
+}
+
+#import-trigger {
+    font-size: 16px;
+}
+
 
 /* プレイリストページ */
 .playlist-list {
@@ -399,7 +418,7 @@ img:not([src]), img[src=""], img[src=null] {
     aspect-ratio: 1;
     margin: 0 auto;
     background-color: rgb(var(--dark-gray));
-    border: 1px solid rgb(var(--gray));
+    border: 1px solid rgba(var(--gray), 0.3);
     border-radius: 5px;
     overflow: hidden;
 }
@@ -543,7 +562,7 @@ img:not([src]), img[src=""], img[src=null] {
     background-color: rgb(var(--main-color));
 }
 
-.info-edit__popover-wrapper:active {
+#info-edit__camera-btn:active {
     opacity: 0.6;
 }
 

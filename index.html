@@ -16,7 +16,22 @@
             <h2 class="Header__title">全曲</h2>
             <div class="Header__btns">
                 <button class="Header__btn -delete-mode"><i class="fa-solid fa-trash-can"></i></button>
-                <button class="Header__btn -import"><i class="fa-solid fa-file-import"></i></button>
+                <!-- <button class="Header__btn -import"><i class="fa-solid fa-file-import"></i></button> -->
+
+                <div class="PopoverList -bottom-left Header__btn">
+                    <div class="PopoverList__container">
+                        <button class="PopoverList__btn" id="import-btn"><i class="fa-solid fa-file-import"></i></button>
+
+                        <div class="PopoverList__panel">
+                            <ul class="PopoverList__list">
+                                <li class="PopoverList__item" id="import-trigger">
+                                    <span>ファイルを選択</span>
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -300,6 +315,7 @@
         <p class="Notification__textarea"></p>
      </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     <script type="module" src="main.js"></script>
 </body>
 </html>

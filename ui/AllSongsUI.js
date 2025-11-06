@@ -10,7 +10,9 @@ export class AllSongsUI extends BaseUI {
     constructor(root) {
         super(root);
         this.deleteModeBtn = root.querySelector(".Header__btn.-delete-mode");
-        this.importBtn = root.querySelector(".Header__btn.-import");
+        this.importBtn = root.querySelector("#import-btn");
+        this.importTrigger = root.querySelector("#import-trigger");
+        this.importPopoverPanel = root.querySelector(".PopoverList__panel");
         this.fileInput = root.querySelector("#file-input");
         this.searchInput = root.querySelector(".SearchBox__input");
         this.searchClearBtn = root.querySelector(".SearchBox__clear-btn");
