@@ -523,6 +523,25 @@ img:not([src]), img[src=""], img[src=null] {
     opacity: 0;
 }
 
+.drag-ghost,
+.drag-ghost * {
+    visibility: hidden;
+}
+
+.drag-chosen {
+    border: 1px solid rgb(var(--white));
+    background-color: transparent;
+}
+
+.drag-chosen .song-list__length,
+.drag-chosen .song-list__remove-btn {
+    color: transparent;
+}
+
+.drag-chosen .song-list__icon {
+    opacity: 1;
+}
+
 /* プレイリスト情報編集シート */
 .info-edit-sheet__content {
     width: 90%;

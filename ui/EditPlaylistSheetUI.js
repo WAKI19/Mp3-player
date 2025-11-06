@@ -21,7 +21,7 @@ export class EditPlaylistSheetUI extends BaseUI {
             const li = document.createElement('li');
             li.classList.add("song-list__item");
             li.innerHTML = `
-                <i class="song-list__icon fa-solid fa-music"></i>
+                <i class="song-list__icon drag-handler fa-solid fa-sort"></i>
                 <div class="song-list__info">
                     <p class="song-list__title">${song.title}</p>
                     <p class="song-list__length">${formatAudioDuration(song.duration)}</p>

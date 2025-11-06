@@ -6,6 +6,7 @@
   <title>MP3プレイヤー</title>
   <link rel="stylesheet" href="fontawesome/all.min.css">
   <link rel="stylesheet" href="styles/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 </head>
 <body>
     <audio id="audio" autoplay></audio> <!-- 曲再生用audioタグ -->
@@ -315,7 +316,10 @@
         <p class="Notification__textarea"></p>
      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+    <script>
+        const list = document.getElementById('edit-playlist-sheet__song-list');
+        var sortable = Sortable.create(list, {handle: '.drag-handler',fallbackClass: 'drag-ghost', chosenClass: 'drag-chosen'});
+    </script>
     <script type="module" src="main.js"></script>
 </body>
 </html>
