@@ -294,7 +294,7 @@ playlistDetailUI.editBtn.addEventListener('click', () => {
   const playlist = playlistManager.getPlaylist(playlistDetailUI.loadingPlaylistId());
   const songs = playlist.songs;
 
-  editPlaylistSheetUI.renderSongs(songs, playlistManager);
+  editPlaylistSheetUI.renderSongs(songs);
   editPlaylistSheetUI.show();
 });
 
@@ -367,8 +367,10 @@ addSongSheetUI.searchClearBtn.addEventListener('click', async () => {
 // ==================================================
 // 🎶プレイリストページ　＞　プレイリスト詳細ページ　＞　プレイリスト編集シート
 // ==================================================
-editPlaylistSheetUI.closeBtn.addEventListener('click', () => {
+editPlaylistSheetUI.closeBtn.addEventListener('click', async () => {
   const id = playlistDetailUI.loadingPlaylistId();
+  const songs = editPlaylistSheetUI.returnSongList();
+  await playlistManager.setSongs(id, songs);
   const playlist = playlistManager.getPlaylist(id);
 
   playlistDetailUI.init(playlist);

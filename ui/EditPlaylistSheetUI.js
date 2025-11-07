@@ -14,7 +14,7 @@ export class EditPlaylistSheetUI extends BaseUI {
         this.songList = root.querySelector(".song-list");
     }
 
-    renderSongs(songs, playlistManager) {
+    renderSongs(songs) {
         this.songList.innerHTML = "";
 
         songs.forEach(song => {
@@ -28,19 +28,28 @@ export class EditPlaylistSheetUI extends BaseUI {
                 </div>
                 <button class="song-list__remove-btn"><i class="fa-solid fa-circle-minus"></i></button>
             `;
-            li.dataset.title = song.title;
+            li.dataset.data = JSON.stringify(song);
 
             li.querySelector(".song-list__remove-btn").addEventListener('click', async () => {
-                const playlistId = document.getElementById("playlist-detail").dataset.id;
-
                 li.classList.add("removed");
                 setTimeout(() => li.remove(), 250);
-                await playlistManager.removeSongFromPlaylist(playlistId, song.title);
                 notificationUI.notify(`「${song.title}」を削除しました`, "normal");
             });
 
             this.songList.appendChild(li);
         });
+    }
+
+    returnSongList() {
+        const songs = [];
+        const items = this.songList.querySelectorAll("li");
+
+        items.forEach(li => {
+            const json = JSON.parse(li.dataset.data);
+            songs.push(json);
+        });
+
+        return songs;
     }
 
     filterList(keyword) {
@@ -51,7 +60,7 @@ export class EditPlaylistSheetUI extends BaseUI {
         const items = this.songList.querySelectorAll('li');
 
         items.forEach(li => {
-            const title = li.dataset.title.toLowerCase();
+            const title = JSON.parse(li.dataset.data).title.toLowerCase();
             // キーワードを含むかどうかで表示・非表示を切り替え
             if (title.includes(query)) {
                 li.style.display = '';  // 表示

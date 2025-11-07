@@ -74,6 +74,15 @@ export class PlaylistManager {
     }
   }
 
+  async setSongs(playlistId, songs) {
+    const playlist = this.playlists.find(p => p.id === playlistId);
+
+    if (playlist) {
+      playlist.songs = songs;
+      await this.savePlaylists();
+    }
+  }
+
   async setImage(playlistId, file) {
     const playlist = this.playlists.find(p => p.id === playlistId);
     const base64 = await this.#fileToBase64(file);
