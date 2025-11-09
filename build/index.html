@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>MP3プレイヤー</title>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+  <script type="module" crossorigin src="./assets/index-DuSI-T7q.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-y7U3WFEY.css">
+</head>
+<body>
+    <audio id="audio" autoplay></audio> <!-- 曲再生用audioタグ -->
+
+    <!-- トップページ（曲一覧）ページ -->
+    <section id="all-songs" class="tab-content active">
+        <header class="Header">
+            <h2 class="Header__title">全曲</h2>
+            <div class="Header__btns">
+                <button class="Header__btn -delete-mode"><i class="fa-solid fa-trash-can"></i></button>
+                <!-- <button class="Header__btn -import"><i class="fa-solid fa-file-import"></i></button> -->
+
+                <div class="PopoverList -bottom-left Header__btn">
+                    <div class="PopoverList__container">
+                        <button class="PopoverList__btn" id="import-btn"><i class="fa-solid fa-file-import"></i></button>
+
+                        <div class="PopoverList__panel">
+                            <ul class="PopoverList__list">
+                                <li class="PopoverList__item" id="import-trigger">
+                                    <span>ファイルを選択</span>
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <input id="file-input" type="file" accept="audio/mpeg" multiple style="display: none;">
+
+        <div class="SearchBox">
+            <input class="SearchBox__input" type="text" id="all-songs-search-input" placeholder="検索：" autocomplete="off">
+            <button class="SearchBox__clear-btn clear-btn" id="all-songs-search-clear-btn" type="button">×</button>
+        </div>
+
+        <ul id="all-songs-song-list" class="song-list">
+          <!-- <li class="song-list__item">
+            <button class="song-list__delete-btn fa-solid fa-circle-minus"></button>
+            <i class="song-list__icon fa-solid fa-music"></i>
+            <div>
+                <p class="song-list__title">ハピラブルー！</p>
+                <p class="song-list__length">3:24</p>
+            </div>
+          </li> -->
+        </ul>
+    </section>
+
+
+    <!-- プレイリストページ -->
+    <section id="playlist" class="tab-content">
+        <header class="Header">
+            <h2 class="Header__title">プレイリスト</h2>
+            <div class="Header__btns">
+                <button id="modal-open-btn" class="Header__btn"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </header>
+
+        <ul class="playlist-list">
+            <!-- <li>
+                <div class="playlist-list__img-area">
+                    <img class="playlist-list__img">
+                </div>
+                <p class="playlist-list__name">とき宣</p>
+            </li> -->
+        </ul>
+
+
+        <!-- プレイリスト詳細画面 -->
+        <div class="playlist-detail" id="playlist-detail">
+            <div class="playlist-detail__header">
+                <button class="playlist-detail__back-btn"><i class="fa-solid fa-angle-left"></i></button>
+                <h3 class="playlist-detail__title">Playlist Title</h3>
+
+                <div class="PopoverList -bottom-left" id="playlist-detail__popover">
+                    <div class="PopoverList__container">
+                        <button class="PopoverList__btn"><i class="fa-solid fa-ellipsis"></i></button>
+
+                        <div class="PopoverList__panel">
+                            <ul class="PopoverList__list">
+                                <li class="PopoverList__item" id="playlist-detail__delete-btn" style="color: red;">
+                                    <span>プレイリスト削除</span>
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="playlist-detail__info">
+                <div class="playlist-detail__img-area">
+                    <img class="playlist-detail__img" src="" alt="">
+                </div>
+                <h3 class="playlist-detail__title">Playlist Title</h3>
+                <p class="playlist-detail__length">--曲、 -時間--分</p>
+
+                <button class="playlist-detail__play-btn"><i class="fa-solid fa-circle-play"></i></button>
+                <div class="playlist-detail__actions">
+                    <button class="playlist-detail__action playlist-detail__action--add"><i class="fa-solid fa-plus"></i> 追加</button>
+                    <button class="playlist-detail__action playlist-detail__action--edit"><i class="fa-solid fa-bars"></i> 編集</button>
+                    <button class="playlist-detail__action playlist-detail__action--info"><i class="fa-solid fa-pen"></i> 情報</button>
+                </div>
+            </div>
+
+            <ul class="song-list">
+                <!-- <li class="song-list__item">
+                    <i class="song-list__icon fa-solid fa-music"></i>
+                    <div>
+                        <p class="song-list__title">ハピラブルー！</p>
+                        <p class="song-list__length">3:24</p>
+                    </div>
+                </li> -->
+            </ul>
+        </div>
+    </section>
+    <!-- 曲追加用ボトムシート -->
+    <div class="bottom-sheet__backdrop" id="add-song-sheet">
+        <div class="bottom-sheet">
+            <div class="bottom-sheet__container">
+                <header class="bottom-sheet__header">
+                    <button class="bottom-sheet__close-btn">キャンセル</button>
+                    <h3 class="bottom-sheet__title">曲を追加</h3>
+                </header>
+
+                <div class="add-song-sheet__content">
+                    <div class="SearchBox" id="add-song-sheet__search-box">
+                        <input class="SearchBox__input" type="text" placeholder="検索：" autocomplete="off">
+                        <button class="SearchBox__clear-btn" type="button">×</button>
+                    </div>
+
+                    <ul class="song-list" id="add-song-sheet__song-list">
+                        <!-- <li class="song-list__item">
+                            <i class="song-list__icon fa-solid fa-music"></i>
+                            <div>
+                                <p class="song-list__title">ハピラブルー！</p>
+                                <p class="song-list__length">3:24</p>
+                            </div>
+                            <button class="song-list__add-btn"><i class="fa-solid fa-plus"></i></button>
+                        </li> -->
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 編集用ボトムシート -->
+     <div class="bottom-sheet__backdrop" id="edit-playlist-sheet">
+        <div class="bottom-sheet">
+            <div class="bottom-sheet__container">
+                <header class="bottom-sheet__header">
+                    <button class="bottom-sheet__close-btn">キャンセル</button>
+                    <h3 class="bottom-sheet__title">プレイリスト編集</h3>
+                </header>
+                
+                <div class="edit-playlist-sheet__content">
+                    <div class="SearchBox" id="edit-playlist-sheet__search-box">
+                        <input class="SearchBox__input" type="text" placeholder="検索：" autocomplete="off">
+                        <button class="SearchBox__clear-btn" type="button">×</button>
+                    </div>
+
+                    <ul class="song-list" id="edit-playlist-sheet__song-list">
+                        <!-- <li class="song-list__item">
+                            <i class="song-list__icon fa-solid fa-music"></i>
+                            <div>
+                                <p class="song-list__title">ハピラブルー！</p>
+                                <p class="song-list__length">3:24</p>
+                            </div>
+                            <button class="song-list__remove-btn"><i class="fa-solid fa-circle-minus"></i></button>
+                        </li> -->
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- プレイリスト情報編集用ボトムシート -->
+     <div class="bottom-sheet__backdrop" id="info-edit-sheet">
+        <div class="bottom-sheet">
+            <div class="bottom-sheet__container">
+                <header class="bottom-sheet__header">
+                    <button class="bottom-sheet__close-btn">キャンセル</button>
+                    <h3 class="bottom-sheet__title">情報を編集</h3>
+                    <button class="bottom-sheet__action-btn">保存</button>
+                </header>
+
+                <input id="playlist-img-input" type="file" accept=".jpg, .jpeg, .png, image/jpeg, image/png" style="display: none;">
+
+                <div class="info-edit-sheet__content">
+                    <div class="info-edit__img-area">
+                        <img class="info-edit__img" src="" alt="">
+                        <div class="info-edit__popover-wrapper">
+                            <div class="PopoverList -bottom-center">
+                                <div class="PopoverList__container">
+                                    <button class="PopoverList__btn" id="info-edit__camera-btn"><i class="fa-solid fa-camera"></i></button>
+
+                                    <div class="PopoverList__panel">
+                                        <ul class="PopoverList__list">
+                                            <li class="PopoverList__item" id="img-input-trigger">
+                                                <span>ファイルを選択</span>
+                                                <i class="fa-solid fa-folder"></i>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input id="playlist-name-input" placeholder="タイトル" type="text" autocomplete="off">
+                </div>
+    
+            </div>
+        </div>
+    </div>
+    <!-- プレイリスト作成モーダル -->
+    <div class="Modal">
+        <div class="Modal__content">
+            <button class="Modal__close-btn"><i class="fa-solid fa-xmark"></i></button>
+            <h3>新規プレイリスト</h3>
+            <input class="Modal__input" type="text" autocomplete="off" placeholder="プレイリスト名を入力..." />
+            <button class="Modal__create-btn">作成する</button>
+        </div>
+    </div>
+
+    <!-- 設定ページ -->
+    <section id="setting" class="tab-content">
+        <header class="Header">
+            <h2 class="Header__title">設定</h2>
+        </header>
+
+        <p class="setting-genre">設定項目</p>
+        <ul class="setting-list">
+            <li class="setting-item">
+                <span>カラーテーマ</span>
+            </li>
+        </ul>
+    </section>
+
+    <!-- ミニプレーヤー -->
+    <div class="MiniPlayer">
+        <i class="MiniPlayer__icon fa-solid fa-music"></i>
+        <div class="MiniPlayer__song-info">
+            <p class="MiniPlayer__song-title">Song Title</p>
+            <p class="MiniPlayer__song-length">00:00</p>
+        </div>
+        <button class="MiniPlayer__play-btn"><i class="fa-solid fa-play"></i></button>
+    </div>
+
+    <!-- フルプレーヤー -->
+    <div class="FullPlayer">
+        <button class="FullPlayer__close-btn"><i class="fa-solid fa-chevron-down"></i></button>
+        <div class="FullPlayer__content-wrapper">
+            <div class="FullPlayer__img-area">
+                <canvas id="vCanvas" width="800" height="500"></canvas>
+                <div class="FullPlayer__record">
+                    <div class="FullPlayer__label">
+                        ♬
+                    </div>
+                </div>
+            </div>
+            <h3 class="FullPlayer__song-title">Song Title</h3>
+            <div class="FullPlayer__progress">
+                <input class="FullPlayer__progress-bar" type="range" step="0.1">
+                <div class="FullPlayer__time-info">
+                    <span class="FullPlayer__current-time">--:--</span>
+                    <span class="FullPlayer__remaining-time">--:--</span>
+                </div>
+            </div>
+            <div class="FullPlayer__controlls">
+                <button class="FullPlayer__prev-btn"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="FullPlayer__play-btn"><i class="fa-solid fa-play"></i></button>
+                <button class="FullPlayer__next-btn"><i class="fa-solid fa-forward-step"></i></button>
+            </div>
+        </div>
+    </div> 
+
+    <!-- タブバー -->
+    <nav class="TabBar">
+        <button class="TabBar__btn active" data-target="all-songs">
+            <i class="TabBar__icon fa-solid fa-music"></i>
+            <span class="TabBar__tab-name">全曲</span>
+        </button>
+        <button class="TabBar__btn" data-target="playlist">
+            <i class="TabBar__icon fa-solid fa-folder"></i>
+            <span class="TabBar__tab-name">プレイリスト</span>
+        </button>
+        <button class="TabBar__btn" data-target="setting">
+            <i class="TabBar__icon fa-solid fa-gear"></i>
+            <span class="TabBar__tab-name">設定</span>
+        </button>
+    </nav>
+
+    <!-- アクションシート -->
+    <div class="ActionSheetBackdrop">
+        <div class="ActionSheet">
+            <div class="ActionSheet__group ActionSheet__actions">
+                <!-- <button class="ActionSheet__btn ActionSheet_action">写真を撮る</button> -->
+            </div>
+            <div class="ActionSheet__group">
+                <button class="ActionSheet__btn ActionSheet__cancel">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知 -->
+     <div class="Notification">
+        <p class="Notification__textarea"></p>
+     </div>
+
+    <script>
+        const list = document.getElementById('edit-playlist-sheet__song-list');
+        var sortable = Sortable.create(list, {handle: '.drag-handler',fallbackClass: 'drag-ghost', chosenClass: 'drag-chosen'});
+    </script>
+</body>
+</html>

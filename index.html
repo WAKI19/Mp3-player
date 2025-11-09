@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>MP3プレイヤー</title>
-  <link rel="stylesheet" href="fontawesome/all.min.css">
-  <link rel="stylesheet" href="styles/style.css">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 </head>
 <body>
@@ -40,7 +38,7 @@
 
         <div class="SearchBox">
             <input class="SearchBox__input" type="text" id="all-songs-search-input" placeholder="検索：" autocomplete="off">
-            <button class="SearchBox__clear-btn" id="all-songs-search-clear-btn" class="clear-btn" type="button">×</button>
+            <button class="SearchBox__clear-btn clear-btn" id="all-songs-search-clear-btn" type="button">×</button>
         </div>
 
         <ul id="all-songs-song-list" class="song-list">
@@ -76,7 +74,7 @@
 
 
         <!-- プレイリスト詳細画面 -->
-        <div id="playlist-detail" id="playlist-detail">
+        <div class="playlist-detail" id="playlist-detail">
             <div class="playlist-detail__header">
                 <button class="playlist-detail__back-btn"><i class="fa-solid fa-angle-left"></i></button>
                 <h3 class="playlist-detail__title">Playlist Title</h3>
@@ -320,6 +318,6 @@
         const list = document.getElementById('edit-playlist-sheet__song-list');
         var sortable = Sortable.create(list, {handle: '.drag-handler',fallbackClass: 'drag-ghost', chosenClass: 'drag-chosen'});
     </script>
-    <script type="module" src="main.js"></script>
+    <script type="module" src="./src/main.js"></script>
 </body>
 </html>
